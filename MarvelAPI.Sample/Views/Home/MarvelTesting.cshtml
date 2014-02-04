@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "MarvelTesting";
+}
+
+<h2>Marvel Testing</h2>
+
+@using (Html.BeginForm("GetComics", "Home"))
+{
+    <h2>Get Comics</h2>
+    <input type="submit" value="Submit" />
+}
+@if (ViewBag.Comics != null)
+{
+    <h2>Comics</h2>
+    var comics = ViewBag.Comics as IEnumerable<MarvelAPI.Comic>;
+    <ul>
+        @foreach(MarvelAPI.Comic comic in comics)
+        {
+            <li>
+                <span class="comicTitle">@comic.Title</span><br />
+                <span class="comicDescription">@Html.Raw(comic.Description)</span><br />
+                <span class="comicId">@comic.Id</span><br />
+            </li>
+        }
+    </ul>
+}
+@using (Html.BeginForm("GetComic", "Home"))
+{
+    <h2>Get Comic</h2>
+    <label for="comicId">Comic Id</label><input type="text" name="comicId" id="comicId" />
+    <input type="submit" value="Submit" />
+}
+@if (ViewBag.Comic != null)
+{
+    <h2>Comic</h2>
+    
+    var comic = ViewBag.Comic as MarvelAPI.Comic;
+    
+    <span class="comicTitle">@comic.Title</span><br />
+    <span class="comicDescription">@Html.Raw(comic.Description)</span><br />
+    <span class="comicId">@comic.Id</span><br />
+}

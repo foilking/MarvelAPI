@@ -1,0 +1,2541 @@
+﻿using RestSharp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MarvelAPI
+{
+    /* TODO SECTION
+     * 
+     * TODO: Refactor client and request creation
+     * TODO: TESTS
+     * TODO: Handle Etags
+     * TODO: Handle when only give one end of date range (maybe defaults?)
+     * TODO: Do not allow limits < 1 or > 100
+     * TOOD: Handle 409 "Too many values sent to a multi-value list filter"
+     * TODO: Handle 409 "Invalid value passed to filter"
+     * TODO: Handle 404 "* not found"
+     * TODO: Create messages when using invalid OrderBy options
+     * 
+    */
+
+    public class Marvel
+    {
+        private const string BASE_URL = "http://gateway.marvel.com/v1/public";
+        private string PublicApiKey { get; set; }
+        private string PrivateApiKey { get; set; }
+
+        public Marvel(string publicApiKey, string privateApiKey)
+        {
+            PublicApiKey = publicApiKey;
+            PrivateApiKey = privateApiKey;
+        }
+
+        private string CreateHash(string input)
+        {
+            var hash = String.Empty;
+            using (MD5 md5Hash = MD5.Create())
+            {
+                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+                StringBuilder sBuilder = new StringBuilder();
+
+                for (int i = 0; i < data.Length; i++)
+                {
+                    sBuilder.Append(data[i].ToString("x2"));
+                }
+
+                hash = sBuilder.ToString();
+            }
+            return hash;
+        }
+
+        #region Characters
+        public IEnumerable<Character> GetCharacters(string Name = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Events = null,
+                                            IEnumerable<int> Stories = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest("/comics", Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                request.AddParameter("name", Name);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Order.HasValue)
+            {
+                switch(Order.Value)
+                {
+                    case OrderBy.Name:
+                    case OrderBy.NameDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<CharacterDataWrapper> response = client.Execute<CharacterDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+
+        public Character GetCharacter(int CharacterId)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest("/characters", Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            request.AddParameter("characterId", CharacterId);
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<CharacterDataWrapper> response = client.Execute<CharacterDataWrapper>(request);
+
+            return response.Data.Data.Results.FirstOrDefault(character => character.Id == CharacterId);
+        }
+
+        public IEnumerable<Comic> GetComicsForCharacter(int CharacterId,
+                                                        ComicFormat? Format = null,
+                                                        ComicFormatType? FormatType = null,
+                                                        bool? NoVariants = null,
+                                                        DateDescriptor? DateDescript = null,
+                                                        DateTime? DateRangeBegin = null,
+                                                        DateTime? DateRangeEnd = null,
+                                                        bool? HasDigitalIssue = null,
+                                                        DateTime? ModifiedSince = null,
+                                                        IEnumerable<int> Creators = null,
+                                                        IEnumerable<int> Series = null,
+                                                        IEnumerable<int> Events = null,
+                                                        IEnumerable<int> Stories = null,
+                                                        IEnumerable<int> SharedAppearences = null,
+                                                        IEnumerable<int> Collaborators = null,
+                                                        OrderBy? Order = null,
+                                                        int? Limit = null,
+                                                        int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/characters/{0}/comics", CharacterId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (Format.HasValue)
+            {
+                request.AddParameter("format", Format.Value.ToParameter());
+            }
+            if (FormatType.HasValue)
+            {
+                request.AddParameter("formatType", FormatType.Value.ToParameter());
+            }
+            if (NoVariants.HasValue)
+            {
+                request.AddParameter("noVariants", NoVariants.Value.ToString().ToLower());
+            }
+            if (DateDescript.HasValue)
+            {
+                request.AddParameter("dateDescriptor", DateDescript.Value.ToParameter());
+            }
+            if (DateRangeBegin.HasValue && DateRangeEnd.HasValue)
+            {
+                request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("YYYY-MM-DD"), DateRangeEnd.Value.ToString("YYYY-MM-DD")));
+            }
+            else if (DateRangeBegin.HasValue || DateRangeEnd.HasValue)
+            {
+                // Give error message here, need both start and end for range
+            }
+            if (HasDigitalIssue.HasValue)
+            {
+                request.AddParameter("hasDigitalIssue", HasDigitalIssue.Value.ToString().ToLower());
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("creators", string.Join<int>(",", Creators));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (SharedAppearences != null && SharedAppearences.Any())
+            {
+                request.AddParameter("sharedAppearences", string.Join<int>(",", SharedAppearences));
+            }
+            if (Collaborators != null && Collaborators.Any())
+            {
+                request.AddParameter("collaborators", string.Join<int>(",", Collaborators));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                { 
+                    case OrderBy.FocDate:
+                    case OrderBy.FocDateDesc:
+                    case OrderBy.OnSaleDate:
+                    case OrderBy.OnSaleDateDesc:
+                    case OrderBy.Title:
+                    case OrderBy.TitleDesc:
+                    case OrderBy.IssueNumber:
+                    case OrderBy.IssueNumberDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<ComicDataWrapper> response = client.Execute<ComicDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Event> GetEventsForCharacter(int CharacterId, 
+                                            string Name = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Creators = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Stories = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/characters/{0}/events/", CharacterId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                request.AddParameter("name", Name);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("creators", string.Join<int>(",", Creators));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Order.HasValue)
+            {
+                switch(Order.Value)
+                { 
+                    case OrderBy.Name:
+                    case OrderBy.NameDesc:
+                    case OrderBy.StartDate:
+                    case OrderBy.StartDateDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<EventDataWrapper> response = client.Execute<EventDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Story> GetStoriessForCharacter(int CharacterId,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Events = null,
+                                            IEnumerable<int> Creators = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/characters/{0}/stories/", CharacterId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("creators", string.Join<int>(",", Creators));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.Id:
+                    case OrderBy.IdDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+                
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<StoryDataWrapper> response = client.Execute<StoryDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+        #endregion
+
+        #region Comics
+        public IEnumerable<Comic> GetComics(ComicFormat? Format = null,
+                                            ComicFormatType? FormatType = null,
+                                            bool? NoVariants = null,
+                                            DateDescriptor? DateDescript = null,
+                                            DateTime? DateRangeBegin = null,
+                                            DateTime? DateRangeEnd = null,
+                                            bool? HasDigitalIssue = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Creators = null,
+                                            IEnumerable<int> Characters = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Events = null,
+                                            IEnumerable<int> Stories = null,
+                                            IEnumerable<int> SharedAppearences = null,
+                                            IEnumerable<int> Collaborators = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest("/comics", Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (Format.HasValue)
+            {
+                request.AddParameter("format", Format.Value.ToParameter());
+            }
+            if (FormatType.HasValue)
+            {
+                request.AddParameter("formatType", FormatType.Value.ToParameter());
+            }
+            if (NoVariants.HasValue)
+            {
+                request.AddParameter("noVariants", NoVariants.Value.ToString().ToLower());
+            }
+            if (DateDescript.HasValue)
+            {
+                request.AddParameter("dateDescriptor", DateDescript.Value.ToParameter());
+            }
+            if (DateRangeBegin.HasValue && DateRangeEnd.HasValue)
+            {
+                request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("YYYY-MM-DD"), DateRangeEnd.Value.ToString("YYYY-MM-DD")));
+            }
+            else if (DateRangeBegin.HasValue || DateRangeEnd.HasValue)
+            {
+                // Give error message here, need both start and end for range
+            }
+            if (HasDigitalIssue.HasValue)
+            {
+                request.AddParameter("hasDigitalIssue", HasDigitalIssue.Value.ToString().ToLower());
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("creators", string.Join<int>(",", Creators));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (SharedAppearences != null && SharedAppearences.Any())
+            {
+                request.AddParameter("sharedAppearences", string.Join<int>(",", SharedAppearences));
+            }
+            if (Collaborators != null && Collaborators.Any())
+            {
+                request.AddParameter("collaborators", string.Join<int>(",", Collaborators));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.FocDate:
+                    case OrderBy.FocDateDesc:
+                    case OrderBy.OnSaleDate:
+                    case OrderBy.OnSaleDateDesc:
+                    case OrderBy.Title:
+                    case OrderBy.TitleDesc:
+                    case OrderBy.IssueNumber:
+                    case OrderBy.IssueNumberDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<ComicDataWrapper> response = client.Execute<ComicDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public Comic GetComic(int ComicId)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest("/comics", Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            request.AddParameter("comicId", ComicId);
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<ComicDataWrapper> response = client.Execute<ComicDataWrapper>(request);
+
+            return response.Data.Data.Results.FirstOrDefault(comic => comic.Id == ComicId);
+        }
+
+        public IEnumerable<Character> GetCharactersForComic(int ComicId,
+                                            string Name = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Events = null,
+                                            IEnumerable<int> Stories = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/comics/{0}/characters", ComicId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                request.AddParameter("name", Name);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                { 
+                    case OrderBy.Name:
+                    case OrderBy.NameDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                    request.AddParameter("orderBy", Order.Value.ToParameter());
+                    break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<CharacterDataWrapper> response = client.Execute<CharacterDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Creator> GetCreatorsForComic(int ComicId,
+                                            string FirstName = null,
+                                            string MiddleName = null,
+                                            string LastName = null,
+                                            string Suffix = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Stories = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/comics/{0}/characters", ComicId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(FirstName))
+            {
+                request.AddParameter("firstName", FirstName);
+            }
+            if (!String.IsNullOrWhiteSpace(MiddleName))
+            {
+                request.AddParameter("middleName", MiddleName);
+            }
+            if (!String.IsNullOrWhiteSpace(LastName))
+            {
+                request.AddParameter("lastName", LastName);
+            }
+            if (!String.IsNullOrWhiteSpace(Suffix))
+            {
+                request.AddParameter("suffix", Suffix);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Comics));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.FirstName:
+                    case OrderBy.FirstNameDesc:
+                    case OrderBy.MiddleName:
+                    case OrderBy.MiddleNameDesc:
+                    case OrderBy.LastName:
+                    case OrderBy.LastNameDesc:
+                    case OrderBy.Suffix:
+                    case OrderBy.SuffixDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<CreatorDataWrapper> response = client.Execute<CreatorDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Event> GetEventsForComic(int ComicId,
+                                            string Name = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Creators = null,
+                                            IEnumerable<int> Characters = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Stories = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/comics/{0}/events/", ComicId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                request.AddParameter("name", Name);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("creators", string.Join<int>(",", Creators));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Order.HasValue)
+            {
+                switch(Order.Value)
+                { 
+                    case OrderBy.Name:
+                    case OrderBy.NameDesc:
+                    case OrderBy.StartDate:
+                    case OrderBy.StartDateDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<EventDataWrapper> response = client.Execute<EventDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Story> GetStoriesForComic(int ComicId,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Events = null,
+                                            IEnumerable<int> Creators = null,
+                                            IEnumerable<int> Characters = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/comics/{0}/events/", ComicId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("creators", string.Join<int>(",", Creators));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.Id:
+                    case OrderBy.IdDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<StoryDataWrapper> response = client.Execute<StoryDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        #endregion
+
+        #region Creators
+        public IEnumerable<Creator> GetCreators(string FirstName = null,
+                                                string MiddleName = null,
+                                                string LastName = null,
+                                                string Suffix = null,
+                                                DateTime? ModifiedSince = null,
+                                                IEnumerable<int> Comics = null,
+                                                IEnumerable<int> Series = null,
+                                                IEnumerable<int> Events = null,
+                                                IEnumerable<int> Stories = null,
+                                                OrderBy? Order = null,
+                                                int? Limit = null,
+                                                int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest("/creators", Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(FirstName))
+            {
+                request.AddParameter("firstName", FirstName);
+            }
+            if (!String.IsNullOrWhiteSpace(MiddleName))
+            {
+                request.AddParameter("middleName", MiddleName);
+            }
+            if (!String.IsNullOrWhiteSpace(LastName))
+            {
+                request.AddParameter("lastName", LastName);
+            }
+            if (!String.IsNullOrWhiteSpace(Suffix))
+            {
+                request.AddParameter("suffix", Suffix);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.FirstName:
+                    case OrderBy.FirstNameDesc:
+                    case OrderBy.MiddleName:
+                    case OrderBy.MiddleNameDesc:
+                    case OrderBy.LastName:
+                    case OrderBy.LastNameDesc:
+                    case OrderBy.Suffix:
+                    case OrderBy.SuffixDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<CreatorDataWrapper> response = client.Execute<CreatorDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public Creator GetCreator(int CreatorId)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/creators/{0}", CreatorId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<CreatorDataWrapper> response = client.Execute<CreatorDataWrapper>(request);
+
+            return response.Data.Data.Results.FirstOrDefault(creator => creator.Id == CreatorId);
+        }
+
+        public IEnumerable<Comic> GetComicsForCreator(int CreatorId, 
+                                                        ComicFormat? Format = null, 
+                                                        ComicFormatType? FormatType = null, 
+                                                        bool? NoVariants = null,
+                                                        DateDescriptor? DateDescript = null,
+                                                        DateTime? DateRangeBegin = null, 
+                                                        DateTime? DateRangeEnd = null,
+                                                        bool? HasDigitalIssue = null,
+                                                        DateTime? ModifiedSince = null,
+                                                        IEnumerable<int> Characters = null,
+                                                        IEnumerable<int> Series = null,
+                                                        IEnumerable<int> Events = null,
+                                                        IEnumerable<int> Stories = null,
+                                                        IEnumerable<int> SharedAppearences = null,
+                                                        IEnumerable<int> Collaborators = null,
+                                                        OrderBy? Order = null,
+                                                        int? Limit = null,
+                                                        int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/creators/{0}/comics", CreatorId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (Format.HasValue)
+            {
+                request.AddParameter("format", Format.Value.ToParameter());
+            }
+            if (FormatType.HasValue)
+            {
+                request.AddParameter("formatType", FormatType.Value.ToParameter());
+            }
+            if (NoVariants.HasValue)
+            {
+                request.AddParameter("noVariants", NoVariants.Value.ToString().ToLower());
+            }
+            if (DateDescript.HasValue)
+            {
+                request.AddParameter("dateDescriptor", DateDescript.Value.ToParameter());
+            }
+            if (DateRangeBegin.HasValue && DateRangeEnd.HasValue)
+            {
+                request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("YYYY-MM-DD"), DateRangeEnd.Value.ToString("YYYY-MM-DD")));
+            }
+            else if (DateRangeBegin.HasValue || DateRangeEnd.HasValue)
+            {
+                // Give error message here, need both start and end for range
+            }
+            if (HasDigitalIssue.HasValue)
+            {
+                request.AddParameter("hasDigitalIssue", HasDigitalIssue.Value.ToString().ToLower());
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (SharedAppearences != null && SharedAppearences.Any())
+            {
+                request.AddParameter("sharedAppearences", string.Join<int>(",", SharedAppearences));
+            }
+            if (Collaborators != null && Collaborators.Any())
+            {
+                request.AddParameter("collaborators", string.Join<int>(",", Collaborators));
+            }
+            if (Order.HasValue)
+            {
+                switch(Order.Value)
+                { 
+                    case OrderBy.FocDate:
+                    case OrderBy.FocDateDesc:
+                    case OrderBy.OnSaleDate:
+                    case OrderBy.OnSaleDateDesc:
+                    case OrderBy.Title:
+                    case OrderBy.TitleDesc:
+                    case OrderBy.IssueNumber:
+                    case OrderBy.IssueNumberDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<ComicDataWrapper> response = client.Execute<ComicDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Event> GetEventsForCreator(int CreatorId,
+                                            string Name = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Characters = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Stories = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/creators/{0}/events/", CreatorId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                request.AddParameter("name", Name);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                { 
+                    case OrderBy.Name:
+                    case OrderBy.NameDesc:
+                    case OrderBy.StartDate:
+                    case OrderBy.StartDateDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<EventDataWrapper> response = client.Execute<EventDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Story> GetStoriesForCreator(int CreatorId,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Events = null,
+                                            IEnumerable<int> Characters = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/creators/{0}/events/", CreatorId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Events));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                { 
+                    case OrderBy.Id:
+                    case OrderBy.IdDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }   
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<StoryDataWrapper> response = client.Execute<StoryDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+        #endregion
+
+        #region Events
+
+        public IEnumerable<Event> GetEvents(string Name = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Creators = null,
+                                            IEnumerable<int> Characters = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Stories = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest("/events/", Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                request.AddParameter("name", Name);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("creators", string.Join<int>(",", Creators));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.Name:
+                    case OrderBy.NameDesc:
+                    case OrderBy.StartDate:
+                    case OrderBy.StartDateDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<EventDataWrapper> response = client.Execute<EventDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public Event GetEvent(int EventId)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/events/{0}", EventId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<EventDataWrapper> response = client.Execute<EventDataWrapper>(request);
+
+            return response.Data.Data.Results.FirstOrDefault(ev => ev.Id == EventId);
+        }
+
+        public IEnumerable<Character> GetCharactersForEvent(int EventId,
+                                            string Name = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Stories = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/events/{0}/characters", EventId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                request.AddParameter("name", Name);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.Name:
+                    case OrderBy.NameDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<CharacterDataWrapper> response = client.Execute<CharacterDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Comic> GetComicsForEvent(int EventId,
+                                                        ComicFormat? Format = null,
+                                                        ComicFormatType? FormatType = null,
+                                                        bool? NoVariants = null,
+                                                        DateDescriptor? DateDescript = null,
+                                                        DateTime? DateRangeBegin = null,
+                                                        DateTime? DateRangeEnd = null,
+                                                        bool? HasDigitalIssue = null,
+                                                        DateTime? ModifiedSince = null,
+                                                        IEnumerable<int> Creators = null,
+                                                        IEnumerable<int> Characters = null,
+                                                        IEnumerable<int> Series = null,
+                                                        IEnumerable<int> Events = null, // Weird to see this here
+                                                        IEnumerable<int> Stories = null,
+                                                        IEnumerable<int> SharedAppearences = null,
+                                                        IEnumerable<int> Collaborators = null,
+                                                        OrderBy? Order = null,
+                                                        int? Limit = null,
+                                                        int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/events/{0}/comics", EventId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (Format.HasValue)
+            {
+                request.AddParameter("format", Format.Value.ToParameter());
+            }
+            if (FormatType.HasValue)
+            {
+                request.AddParameter("formatType", FormatType.Value.ToParameter());
+            }
+            if (NoVariants.HasValue)
+            {
+                request.AddParameter("noVariants", NoVariants.Value.ToString().ToLower());
+            }
+            if (DateDescript.HasValue)
+            {
+                request.AddParameter("dateDescriptor", DateDescript.Value.ToParameter());
+            }
+            if (DateRangeBegin.HasValue && DateRangeEnd.HasValue)
+            {
+                request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("YYYY-MM-DD"), DateRangeEnd.Value.ToString("YYYY-MM-DD")));
+            }
+            else if (DateRangeBegin.HasValue || DateRangeEnd.HasValue)
+            {
+                // Give error message here, need both start and end for range
+            }
+            if (HasDigitalIssue.HasValue)
+            {
+                request.AddParameter("hasDigitalIssue", HasDigitalIssue.Value.ToString().ToLower());
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("creators", string.Join<int>(",", Creators));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (SharedAppearences != null && SharedAppearences.Any())
+            {
+                request.AddParameter("sharedAppearences", string.Join<int>(",", SharedAppearences));
+            }
+            if (Collaborators != null && Collaborators.Any())
+            {
+                request.AddParameter("collaborators", string.Join<int>(",", Collaborators));
+            }
+            if (Order.HasValue)
+            {
+                switch(Order.Value)
+                {
+                    case OrderBy.FocDate:
+                    case OrderBy.FocDateDesc:
+                    case OrderBy.OnSaleDate:
+                    case OrderBy.OnSaleDateDesc:
+                    case OrderBy.Title:
+                    case OrderBy.TitleDesc:
+                    case OrderBy.IssueNumber:
+                    case OrderBy.IssueNumberDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<ComicDataWrapper> response = client.Execute<ComicDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Creator> GetCreatorsForEvent(int EventId,
+                                            string FirstName = null,
+                                            string MiddleName = null,
+                                            string LastName = null,
+                                            string Suffix = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Stories = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/events/{0}/creators", EventId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(FirstName))
+            {
+                request.AddParameter("firstName", FirstName);
+            }
+            if (!String.IsNullOrWhiteSpace(MiddleName))
+            {
+                request.AddParameter("middleName", MiddleName);
+            }
+            if (!String.IsNullOrWhiteSpace(LastName))
+            {
+                request.AddParameter("lastName", LastName);
+            }
+            if (!String.IsNullOrWhiteSpace(Suffix))
+            {
+                request.AddParameter("suffix", Suffix);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.FirstName:
+                    case OrderBy.FirstNameDesc:
+                    case OrderBy.MiddleName:
+                    case OrderBy.MiddleNameDesc:
+                    case OrderBy.LastName:
+                    case OrderBy.LastNameDesc:
+                    case OrderBy.Suffix:
+                    case OrderBy.SuffixDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<CreatorDataWrapper> response = client.Execute<CreatorDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Story> GetStoriesForEvent(int EventId,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Creators = null,
+                                            IEnumerable<int> Characters = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/events/{0}/stories", EventId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("creators", string.Join<int>(",", Creators));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.Id:
+                    case OrderBy.IdDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<StoryDataWrapper> response = client.Execute<StoryDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+        #endregion
+
+        #region Series
+        public IEnumerable<Series> GetSeries(string Title = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Stories = null,
+                                            IEnumerable<int> Events = null,
+                                            IEnumerable<int> Creators = null,
+                                            IEnumerable<int> Characters = null,
+                                            SeriesType? Type = null,
+                                            ComicFormat? Contains = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest("/series", Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(Title))
+            {
+                request.AddParameter("title", Title);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("creators", string.Join<int>(",", Creators));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Type.HasValue)
+            {
+                request.AddParameter("seriesType", Type.Value.ToParameter());
+            }
+            if (Contains.HasValue)
+            {
+                request.AddParameter("contains", Contains.Value.ToParameter());
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.Title:
+                    case OrderBy.TitleDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                    case OrderBy.StartYear:
+                    case OrderBy.StartYearDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<SeriesDataWrapper> response = client.Execute<SeriesDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public Series GetSeries(int SeriesId)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/series/{0}", SeriesId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<SeriesDataWrapper> response = client.Execute<SeriesDataWrapper>(request);
+
+            return response.Data.Data.Results.FirstOrDefault(series => series.Id == SeriesId);
+        }
+
+        public IEnumerable<Character> GetCharactersForSeries(int SeriesId,
+                                            string Name = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Events = null,
+                                            IEnumerable<int> Stories = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/series/{0}/characters", SeriesId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                request.AddParameter("name", Name);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.Name:
+                    case OrderBy.NameDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<CharacterDataWrapper> response = client.Execute<CharacterDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Comic> GetComicsForSeries(int SeriesId,
+                                                        ComicFormat? Format = null,
+                                                        ComicFormatType? FormatType = null,
+                                                        bool? NoVariants = null,
+                                                        DateDescriptor? DateDescript = null,
+                                                        DateTime? DateRangeBegin = null,
+                                                        DateTime? DateRangeEnd = null,
+                                                        bool? HasDigitalIssue = null,
+                                                        DateTime? ModifiedSince = null,
+                                                        IEnumerable<int> Creators = null,
+                                                        IEnumerable<int> Characters = null,
+                                                        IEnumerable<int> Events = null,
+                                                        IEnumerable<int> Stories = null,
+                                                        IEnumerable<int> SharedAppearences = null,
+                                                        IEnumerable<int> Collaborators = null,
+                                                        OrderBy? Order = null,
+                                                        int? Limit = null,
+                                                        int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/series/{0}/comics", SeriesId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (Format.HasValue)
+            {
+                request.AddParameter("format", Format.Value.ToParameter());
+            }
+            if (FormatType.HasValue)
+            {
+                request.AddParameter("formatType", FormatType.Value.ToParameter());
+            }
+            if (NoVariants.HasValue)
+            {
+                request.AddParameter("noVariants", NoVariants.Value.ToString().ToLower());
+            }
+            if (DateDescript.HasValue)
+            {
+                request.AddParameter("dateDescriptor", DateDescript.Value.ToParameter());
+            }
+            if (DateRangeBegin.HasValue && DateRangeEnd.HasValue)
+            {
+                request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("YYYY-MM-DD"), DateRangeEnd.Value.ToString("YYYY-MM-DD")));
+            }
+            else if (DateRangeBegin.HasValue || DateRangeEnd.HasValue)
+            {
+                // Give error message here, need both start and end for range
+            }
+            if (HasDigitalIssue.HasValue)
+            {
+                request.AddParameter("hasDigitalIssue", HasDigitalIssue.Value.ToString().ToLower());
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("creators", string.Join<int>(",", Creators));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (SharedAppearences != null && SharedAppearences.Any())
+            {
+                request.AddParameter("sharedAppearences", string.Join<int>(",", SharedAppearences));
+            }
+            if (Collaborators != null && Collaborators.Any())
+            {
+                request.AddParameter("collaborators", string.Join<int>(",", Collaborators));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.FocDate:
+                    case OrderBy.FocDateDesc:
+                    case OrderBy.OnSaleDate:
+                    case OrderBy.OnSaleDateDesc:
+                    case OrderBy.Title:
+                    case OrderBy.TitleDesc:
+                    case OrderBy.IssueNumber:
+                    case OrderBy.IssueNumberDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<ComicDataWrapper> response = client.Execute<ComicDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Creator> GetCreatorsForSeries(int SeriesId,
+                                            string FirstName = null,
+                                            string MiddleName = null,
+                                            string LastName = null,
+                                            string Suffix = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Events = null,
+                                            IEnumerable<int> Stories = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/series/{0}/creators", SeriesId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(FirstName))
+            {
+                request.AddParameter("firstName", FirstName);
+            }
+            if (!String.IsNullOrWhiteSpace(MiddleName))
+            {
+                request.AddParameter("middleName", MiddleName);
+            }
+            if (!String.IsNullOrWhiteSpace(LastName))
+            {
+                request.AddParameter("lastName", LastName);
+            }
+            if (!String.IsNullOrWhiteSpace(Suffix))
+            {
+                request.AddParameter("suffix", Suffix);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.FirstName:
+                    case OrderBy.FirstNameDesc:
+                    case OrderBy.MiddleName:
+                    case OrderBy.MiddleNameDesc:
+                    case OrderBy.LastName:
+                    case OrderBy.LastNameDesc:
+                    case OrderBy.Suffix:
+                    case OrderBy.SuffixDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<CreatorDataWrapper> response = client.Execute<CreatorDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Event> GetEventsForSeries(int SeriesId,
+                                            string Name = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Creators = null,
+                                            IEnumerable<int> Characters = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Stories = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/series/{0}/events", SeriesId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                request.AddParameter("name", Name);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Creators));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Stories != null && Stories.Any())
+            {
+                request.AddParameter("stories", string.Join<int>(",", Stories));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.Name:
+                    case OrderBy.NameDesc:
+                    case OrderBy.StartDate:
+                    case OrderBy.StartDateDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<EventDataWrapper> response = client.Execute<EventDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Story> GetStoriesForSeries(int SeriesId,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Events = null,
+                                            IEnumerable<int> Creators = null,
+                                            IEnumerable<int> Characters = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/series/{0}/stories", SeriesId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Creators));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.Id:
+                    case OrderBy.IdDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<StoryDataWrapper> response = client.Execute<StoryDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+        #endregion
+
+        #region Stories
+        public IEnumerable<Story> GetStories(DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Events = null,
+                                            IEnumerable<int> Creators = null,
+                                            IEnumerable<int> Characters = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest("/stories", Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("creators", string.Join<int>(",", Creators));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Order.HasValue)
+            {
+                switch(Order.Value)
+                {
+                    case OrderBy.Id:
+                    case OrderBy.IdDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<StoryDataWrapper> response = client.Execute<StoryDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public Story GetStory(int StoryId)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/stories/{0}", StoryId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<StoryDataWrapper> response = client.Execute<StoryDataWrapper>(request);
+
+            return response.Data.Data.Results.FirstOrDefault(story => story.Id == StoryId);
+        }
+
+        public IEnumerable<Character> GetCharactersForStory(int StoryId,
+                                            string Name = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Comics = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Events = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/stories/{0}/characters", StoryId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                request.AddParameter("name", Name);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.Name:
+                    case OrderBy.NameDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<CharacterDataWrapper> response = client.Execute<CharacterDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Comic> GetComicsForStory(int StoryId,
+                                                        ComicFormat? Format = null,
+                                                        ComicFormatType? FormatType = null,
+                                                        bool? NoVariants = null,
+                                                        DateDescriptor? DateDescript = null,
+                                                        DateTime? DateRangeBegin = null,
+                                                        DateTime? DateRangeEnd = null,
+                                                        bool? HasDigitalIssue = null,
+                                                        DateTime? ModifiedSince = null,
+                                                        IEnumerable<int> Creators = null,
+                                                        IEnumerable<int> Characters = null,
+                                                        IEnumerable<int> Series = null,
+                                                        IEnumerable<int> Events = null,
+                                                        IEnumerable<int> SharedAppearences = null,
+                                                        IEnumerable<int> Collaborators = null,
+                                                        OrderBy? Order = null,
+                                                        int? Limit = null,
+                                                        int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/stories/{0}/comics", StoryId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (Format.HasValue)
+            {
+                request.AddParameter("format", Format.Value.ToParameter());
+            }
+            if (FormatType.HasValue)
+            {
+                request.AddParameter("formatType", FormatType.Value.ToParameter());
+            }
+            if (NoVariants.HasValue)
+            {
+                request.AddParameter("noVariants", NoVariants.Value.ToString().ToLower());
+            }
+            if (DateDescript.HasValue)
+            {
+                request.AddParameter("dateDescriptor", DateDescript.Value.ToParameter());
+            }
+            if (DateRangeBegin.HasValue && DateRangeEnd.HasValue)
+            {
+                request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("YYYY-MM-DD"), DateRangeEnd.Value.ToString("YYYY-MM-DD")));
+            }
+            else if (DateRangeBegin.HasValue || DateRangeEnd.HasValue)
+            {
+                // Give error message here, need both start and end for range
+            }
+            if (HasDigitalIssue.HasValue)
+            {
+                request.AddParameter("hasDigitalIssue", HasDigitalIssue.Value.ToString().ToLower());
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("creators", string.Join<int>(",", Creators));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (SharedAppearences != null && SharedAppearences.Any())
+            {
+                request.AddParameter("sharedAppearences", string.Join<int>(",", SharedAppearences));
+            }
+            if (Collaborators != null && Collaborators.Any())
+            {
+                request.AddParameter("collaborators", string.Join<int>(",", Collaborators));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.FocDate:
+                    case OrderBy.FocDateDesc:
+                    case OrderBy.OnSaleDate:
+                    case OrderBy.OnSaleDateDesc:
+                    case OrderBy.Title:
+                    case OrderBy.TitleDesc:
+                    case OrderBy.IssueNumber:
+                    case OrderBy.IssueNumberDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<ComicDataWrapper> response = client.Execute<ComicDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Creator> GetCreatorsForStory(int StoryId,
+                                                        string FirstName = null,
+                                                        string MiddleName = null,
+                                                        string LastName = null,
+                                                        string Suffix = null,
+                                                        DateTime? ModifiedSince = null,
+                                                        IEnumerable<int> Comics = null,
+                                                        IEnumerable<int> Series = null,
+                                                        IEnumerable<int> Events = null,
+                                                        OrderBy? Order = null,
+                                                        int? Limit = null,
+                                                        int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/stories/{0}/creators", StoryId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(FirstName))
+            {
+                request.AddParameter("firstName", FirstName);
+            }
+            if (!String.IsNullOrWhiteSpace(MiddleName))
+            {
+                request.AddParameter("middleName", MiddleName);
+            }
+            if (!String.IsNullOrWhiteSpace(LastName))
+            {
+                request.AddParameter("lastName", LastName);
+            }
+            if (!String.IsNullOrWhiteSpace(Suffix))
+            {
+                request.AddParameter("suffix", Suffix);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Events != null && Events.Any())
+            {
+                request.AddParameter("events", string.Join<int>(",", Events));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.FirstName:
+                    case OrderBy.FirstNameDesc:
+                    case OrderBy.MiddleName:
+                    case OrderBy.MiddleNameDesc:
+                    case OrderBy.LastName:
+                    case OrderBy.LastNameDesc:
+                    case OrderBy.Suffix:
+                    case OrderBy.SuffixDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<CreatorDataWrapper> response = client.Execute<CreatorDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+
+        public IEnumerable<Event> GetEventsForStories(int StoryId,
+                                            string Name = null,
+                                            DateTime? ModifiedSince = null,
+                                            IEnumerable<int> Creators = null,
+                                            IEnumerable<int> Characters = null,
+                                            IEnumerable<int> Series = null,
+                                            IEnumerable<int> Comics = null,
+                                            OrderBy? Order = null,
+                                            int? Limit = null,
+                                            int? Offset = null)
+        {
+            var client = new RestClient(BASE_URL);
+            var request = new RestRequest(String.Format("/stories/{0}/events/", StoryId), Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                request.AddParameter("name", Name);
+            }
+            if (ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+            }
+            if (Creators != null && Creators.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Creators));
+            }
+            if (Characters != null && Characters.Any())
+            {
+                request.AddParameter("characters", string.Join<int>(",", Characters));
+            }
+            if (Series != null && Series.Any())
+            {
+                request.AddParameter("series", string.Join<int>(",", Series));
+            }
+            if (Comics != null && Comics.Any())
+            {
+                request.AddParameter("comics", string.Join<int>(",", Comics));
+            }
+            if (Order.HasValue)
+            {
+                switch (Order.Value)
+                {
+                    case OrderBy.Name:
+                    case OrderBy.NameDesc:
+                    case OrderBy.StartDate:
+                    case OrderBy.StartDateDesc:
+                    case OrderBy.Modified:
+                    case OrderBy.ModifiedDesc:
+                        request.AddParameter("orderBy", Order.Value.ToParameter());
+                        break;
+                }
+            }
+            if (Limit.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("limit", Limit.Value.ToString());
+            }
+            if (Offset.HasValue && Limit.Value > 0)
+            {
+                request.AddParameter("offset", Offset.Value.ToString());
+            }
+
+            request.AddHeader("Accept", "*/*");
+
+            IRestResponse<EventDataWrapper> response = client.Execute<EventDataWrapper>(request);
+
+            return response.Data.Data.Results;
+        }
+        #endregion
+    }
+
+    #region Extras
+    public class MarvelUrl
+    {
+        public string Type { get; set; }
+        public string UrlString { get; set; }
+    }
+
+    public class MarvelImage
+    {
+        public string Path { get; set; }
+        public string Extension { get; set; }
+    }
+
+    public class TextObject
+    {
+        public string Type { get; set; }
+        public string Language { get; set; }
+        public string Text { get; set; }
+    }
+    #endregion
+}

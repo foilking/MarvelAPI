@@ -1,0 +1,75 @@
+﻿@using MarvelAPI.Sample.Models
+@using MarvelAPI
+@model GetComicsForCharacterViewModel
+@{
+    IEnumerable<ComicFormat> comicFormats = Enum.GetValues(typeof(ComicFormat)).Cast<ComicFormat>();
+    IList<SelectListItem> comicFormatSelectList = comicFormats.Select(format => new SelectListItem { Text = format.ToParameter(), Value = format.ToString(), Selected = false }).ToList();
+    comicFormatSelectList.Insert(0, new SelectListItem { Text = "", Value = "", Selected = true });
+    IEnumerable<ComicFormatType> comicFormatTypes = Enum.GetValues(typeof(ComicFormatType)).Cast<ComicFormatType>();
+    IList<SelectListItem> comicFormatTypeSelectList = comicFormatTypes.Select(format => new SelectListItem { Text = format.ToParameter(), Value = format.ToString(), Selected = false }).ToList();
+    comicFormatTypeSelectList.Insert(0, new SelectListItem { Text = "", Value = "", Selected = true });
+    IEnumerable<DateDescriptor> dateDescriptors = Enum.GetValues(typeof(DateDescriptor)).Cast<DateDescriptor>();
+    IList<SelectListItem> dateDescriptorsSelectList = dateDescriptors.Select(format => new SelectListItem { Text = format.ToParameter(), Value = format.ToString(), Selected = false }).ToList();
+    dateDescriptorsSelectList.Insert(0, new SelectListItem { Text = "", Value = "", Selected = true });
+    IEnumerable<OrderBy> orderByOptions = Enum.GetValues(typeof(OrderBy)).Cast<OrderBy>();
+    IList<SelectListItem> orderByOptionsSelectList = orderByOptions.Select(format => new SelectListItem { Text = format.ToParameter(), Value = format.ToString(), Selected = false }).ToList();
+    orderByOptionsSelectList.Insert(0, new SelectListItem { Text = "", Value = "", Selected = true });
+}
+
+<h2>Get Comics For Character</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.CharacterId)
+    <h2>Comic Format</h2>
+    @Html.DropDownListFor(model => model.Format, comicFormatSelectList)
+    <h2>Comic Format Type</h2>
+    @Html.DropDownListFor(model => model.FormatType, comicFormatTypeSelectList)
+    <h2>No Variants ?</h2>
+    @Html.DropDownListFor(model => model.NoVariants, new SelectList(
+        new[]
+        {
+            new { Value = "", Text = "(none)" },
+            new { Value = "true", Text = "Yes" },
+            new { Value = "false", Text = "No" },
+        },
+        "Value",
+        "Text",
+        Model
+    ))
+    <h2>Date Descriptor</h2>
+    @Html.DropDownListFor(model => model.Descriptor, dateDescriptorsSelectList)
+    <h2>Has Digital Issue?</h2>
+    @Html.DropDownListFor(model => model.HasDigitalIssue, new SelectList(
+        new[]
+        {
+            new { Value = "", Text = "(none)" },
+            new { Value = "true", Text = "Yes" },
+            new { Value = "false", Text = "No" },
+        },
+        "Value",
+        "Text",
+        Model
+    ))
+    <h2>Order By</h2>
+    @Html.DropDownListFor(model => model.Descriptor, orderByOptionsSelectList)
+    <h2>Limit</h2>
+    @Html.TextBoxFor(model => model.Limit)
+    <h2>Offset</h2>
+    @Html.TextBoxFor(model => model.Offset)
+    <input type="submit" value="Submit" />
+}
+@if (Model.ResultComics != null)
+{
+    <h2>Comics</h2>
+    <ul>
+        @foreach (MarvelAPI.Comic comic in Model.ResultComics)
+        {
+            <li>
+                <span class="comicTitle">@comic.Title</span><br />
+                <span class="comicDescription">@Html.Raw(comic.Description)</span><br />
+                <span class="comicId">@comic.Id</span><br />
+            </li>
+        }
+    </ul>
+}

@@ -1,0 +1,12 @@
+﻿@using MarvelAPI.Sample.Models
+@using MarvelAPI
+@model GetComicViewModel
+@{
+    ViewBag.Title = "Get Comic";
+}
+
+<h2>Get Comic</h2>
+<span class="comicTitle">@Model.Comic.Title</span><br />
+<span class="comicDescription">@Html.Raw(Model.Comic.Description)</span><br />
+<span class="comicId">@Model.Comic.Id</span><br />
+
