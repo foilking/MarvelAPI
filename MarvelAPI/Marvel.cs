@@ -14,10 +14,8 @@ namespace MarvelAPI
      * TODO: TESTS
      * TODO: Handle Etags
      * TODO: Handle when only give one end of date range (maybe defaults?)
-     * TODO: Do not allow limits < 1 or > 100
-     * TOOD: Handle 409 "Too many values sent to a multi-value list filter"
-     * TODO: Handle 409 "Invalid value passed to filter"
-     * TODO: Handle 404 "* not found"
+     * TOOD: Handle 409
+     * TODO: Handle 404
      * TODO: Create messages when using invalid OrderBy options
      * 
     */
@@ -812,6 +810,13 @@ namespace MarvelAPI
             return response.Data.Data.Results;
         }
 
+        /// <summary>
+        /// Fetches a single comic resource
+        /// </summary>
+        /// <param name="ComicId">A single comic.</param>
+        /// <returns>
+        /// Single comic resource
+        /// </returns>
         public Comic GetComic(int ComicId)
         {
             var client = new RestClient(BASE_URL);
@@ -825,16 +830,36 @@ namespace MarvelAPI
 
             IRestResponse<ComicDataWrapper> response = client.Execute<ComicDataWrapper>(request);
 
+            if (response.Data.Code == 409)
+            {
+                throw new ArgumentException(response.Data.Status);
+            }
+
             return response.Data.Data.Results.FirstOrDefault(comic => comic.Id == ComicId);
         }
 
+        /// <summary>
+        /// Fetches lists of characters who appear in a specific comic with optional filters.
+        /// </summary>
+        /// <param name="ComicId">The comic id.</param>
+        /// <param name="Name">Return only characters matching the specified full character name (e.g. Spider-Man).</param>
+        /// <param name="ModifiedSince">Return only characters which have been modified since the specified date.</param>
+        /// <param name="Series">Return only characters which appear the specified series.</param>
+        /// <param name="Events">Return only characters which appear comics that took place in the specified events.</param>
+        /// <param name="Stories">Return only characters which appear the specified stories .</param>
+        /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
+        /// <param name="Limit">Limit the result set to the specified number of resources.</param>
+        /// <param name="Offset">Skip the specified number of resources in the result set.</param>
+        /// <returns>
+        /// Lists of characters who appear in a specific comic
+        /// </returns>
         public IEnumerable<Character> GetCharactersForComic(int ComicId,
                                             string Name = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Series = null,
                                             IEnumerable<int> Events = null,
                                             IEnumerable<int> Stories = null,
-                                            OrderBy? Order = null,
+                                            IEnumerable<OrderBy> Order = null,
                                             int? Limit = null,
                                             int? Offset = null)
         {
@@ -864,16 +889,28 @@ namespace MarvelAPI
             {
                 request.AddParameter("stories", string.Join<int>(",", Stories));
             }
-            if (Order.HasValue)
+            if (Order != null && Order.Any())
             {
-                switch (Order.Value)
-                { 
-                    case OrderBy.Name:
-                    case OrderBy.NameDesc:
-                    case OrderBy.Modified:
-                    case OrderBy.ModifiedDesc:
-                    request.AddParameter("orderBy", Order.Value.ToParameter());
-                    break;
+                StringBuilder orderString = new StringBuilder();
+                foreach (var orderOption in Order)
+                {
+                    switch (orderOption)
+                    {
+                        case OrderBy.Name:
+                        case OrderBy.NameDesc:
+                        case OrderBy.Modified:
+                        case OrderBy.ModifiedDesc:
+                            if (orderString.Length > 0)
+                            {
+                                orderString.Append(",");
+                            }
+                            orderString.Append(orderOption.ToParameter());
+                            break;
+                    }
+                }
+                if (orderString.Length > 0)
+                {
+                    request.AddParameter("orderBy", orderString.ToString());
                 }
             }
             if (Limit.HasValue && Limit.Value > 0)
