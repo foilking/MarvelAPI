@@ -1,0 +1,120 @@
+﻿Character[0] = Character:  
+  Id: 1011334
+  Name: 3-D Man
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/8/a0/4c002e4aa7e27.jpg
+Character[1] = Character:  
+  Id: 1017100
+  Name: A-Bomb (HAS)
+  Description: Rick Jones has been Hulk's best bud since day one, but now he's more than a friend...he's a teammate! Transformed by a Gamma energy explosion, A-Bomb's thick, armored skin is just as strong and powerful as it is blue. And when he curls into action, he uses it like a giant bowling ball of destruction! 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/3/20/5232158de5b16.jpg
+Character[2] = Character:  
+  Id: 1009144
+  Name: A.I.M.
+  Description: AIM is a terrorist organization bent on destroying the world.
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/6/20/52602f21f29ec.jpg
+Character[3] = Character:  
+  Id: 1009146
+  Name: Abomination (Emil Blonsky)
+  Description: Formerly known as Emil Blonsky, a spy of Soviet Yugoslavian origin working for the KGB, the Abomination gained his powers after receiving a dose of gamma radiation similar to that which transformed Bruce Banner into the incredible Hulk.
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/9/50/4ce18691cbf04.jpg
+Character[4] = Character:  
+  Id: 1016823
+  Name: Abomination (Ultimate)
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg
+Character[5] = Character:  
+  Id: 1009148
+  Name: Absorbing Man
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/1/b0/5269678709fb7.jpg
+Character[6] = Character:  
+  Id: 1010354
+  Name: Adam Warlock
+  Description: Adam Warlock is an artificially created human who was born in a cocoon at a scientific complex called The Beehive.
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/a/f0/5202887448860.jpg
+Character[7] = Character:  
+  Id: 1011297
+  Name: Agent Brand
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/4/60/52695285d6e7e.jpg
+Character[8] = Character:  
+  Id: 1011198
+  Name: Agents of Atlas
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/9/a0/4ce18a834b7f5.jpg
+Character[9] = Character:  
+  Id: 1010836
+  Name: Alex Power
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/9/50/4ce5a385a2e82.jpg
+Character[10] = Character:  
+  Id: 1014990
+  Name: Alice
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/6/70/4cd061e6d6573.jpg
+Character[11] = Character:  
+  Id: 1010370
+  Name: Alpha Flight
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/1/60/52695277ee088.jpg
+Character[12] = Character:  
+  Id: 1011227
+  Name: Amadeus Cho
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/3/80/520288b9cb581.jpg
+Character[13] = Character:  
+  Id: 1016824
+  Name: Ancient One (Ultimate)
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg
+Character[14] = Character:  
+  Id: 1011396
+  Name: Angel (Golden Age)
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/9/40/4ce5a74ff0802.jpg
+Character[15] = Character:  
+  Id: 1009154
+  Name: Annihilus
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/5/f0/528d31f20a2f6.jpg
+Character[16] = Character:  
+  Id: 1010802
+  Name: Ant-Man (Eric O Grady)
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/1/b0/4ce5a34ca7cab.jpg
+Character[17] = Character:  
+  Id: 1010801
+  Name: Ant-Man (Scott Lang)
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/e/20/52696868356a0.jpg
+Character[18] = Character:  
+  Id: 1009156
+  Name: Apocalypse
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/f/e0/526166076a1d0.jpg
+Character[19] = Character:  
+  Id: 1017438
+  Name: Araña
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg

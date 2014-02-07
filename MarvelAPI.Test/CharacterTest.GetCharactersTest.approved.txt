@@ -1,0 +1,120 @@
+﻿Character[0] = Character:  
+  Id: 1009521
+  Name:  Hank Pym
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/8/c0/4ce5a0e31f109.jpg
+Character[1] = Character:  
+  Id: 1011334
+  Name: 3-D Man
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/8/a0/4c002e4aa7e27.jpg
+Character[2] = Character:  
+  Id: 1017100
+  Name: A-Bomb (HAS)
+  Description: Rick Jones has been Hulk's best bud since day one, but now he's more than a friend...he's a teammate! Transformed by a Gamma energy explosion, A-Bomb's thick, armored skin is just as strong and powerful as it is blue. And when he curls into action, he uses it like a giant bowling ball of destruction! 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/3/20/5232158de5b16.jpg
+Character[3] = Character:  
+  Id: 1009144
+  Name: A.I.M.
+  Description: AIM is a terrorist organization bent on destroying the world.
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/6/20/52602f21f29ec.jpg
+Character[4] = Character:  
+  Id: 1009146
+  Name: Abomination (Emil Blonsky)
+  Description: Formerly known as Emil Blonsky, a spy of Soviet Yugoslavian origin working for the KGB, the Abomination gained his powers after receiving a dose of gamma radiation similar to that which transformed Bruce Banner into the incredible Hulk.
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/9/50/4ce18691cbf04.jpg
+Character[5] = Character:  
+  Id: 1016823
+  Name: Abomination (Ultimate)
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg
+Character[6] = Character:  
+  Id: 1009148
+  Name: Absorbing Man
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/1/b0/5269678709fb7.jpg
+Character[7] = Character:  
+  Id: 1009149
+  Name: Abyss
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/e/e0/4c004214c1502.jpg
+Character[8] = Character:  
+  Id: 1011266
+  Name: Adam Destine
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg
+Character[9] = Character:  
+  Id: 1010354
+  Name: Adam Warlock
+  Description: Adam Warlock is an artificially created human who was born in a cocoon at a scientific complex called The Beehive.
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/a/f0/5202887448860.jpg
+Character[10] = Character:  
+  Id: 1010846
+  Name: Aegis (Trey Rollins)
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/5/e0/4c0035c9c425d.gif
+Character[11] = Character:  
+  Id: 1011297
+  Name: Agent Brand
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/4/60/52695285d6e7e.jpg
+Character[12] = Character:  
+  Id: 1011031
+  Name: Agent X (Nijo)
+  Description: Originally a partner of the mind-altering assassin Black Swan, Nijo spied on Deadpool as part of the Swan's plan to exact revenge for Deadpool falsely taking credit for the Swan's assassination of the Four Winds crime family, which included Nijo's brother.
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg
+Character[13] = Character:  
+  Id: 1009150
+  Name: Agent Zero
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/f/60/4c0042121d790.jpg
+Character[14] = Character:  
+  Id: 1011198
+  Name: Agents of Atlas
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/9/a0/4ce18a834b7f5.jpg
+Character[15] = Character:  
+  Id: 1011175
+  Name: Aginar
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg
+Character[16] = Character:  
+  Id: 1011136
+  Name: Air-Walker (Gabriel Lan)
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg
+Character[17] = Character:  
+  Id: 1011176
+  Name: Ajak
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/2/80/4c002f35c5215.jpg
+Character[18] = Character:  
+  Id: 1010870
+  Name: Ajaxis
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/b/70/4c0035adc7d3a.jpg
+Character[19] = Character:  
+  Id: 1011194
+  Name: Akemi
+  Description: 
+  ResourceUri: 
+  Thumnail: http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg

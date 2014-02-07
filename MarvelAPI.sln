@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarvelAPI", "MarvelAPI\Marv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarvelAPI.Sample", "MarvelAPI.Sample\MarvelAPI.Sample.csproj", "{6D802E3F-91F5-4978-9B1D-A6F67FF69102}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarvelAPI.Test", "MarvelAPI.Test\MarvelAPI.Test.csproj", "{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6D802E3F-91F5-4978-9B1D-A6F67FF69102}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D802E3F-91F5-4978-9B1D-A6F67FF69102}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D802E3F-91F5-4978-9B1D-A6F67FF69102}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
