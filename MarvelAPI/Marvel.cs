@@ -926,9 +926,32 @@ namespace MarvelAPI
 
             IRestResponse<CharacterDataWrapper> response = client.Execute<CharacterDataWrapper>(request);
 
+            if (response.Data.Code == 409)
+            {
+                throw new ArgumentException(response.Data.Status);
+            }
+
             return response.Data.Data.Results;
         }
 
+        /// <summary>
+        /// Fetches lists of comic creators whose work appears in a specific comic, with optional filters.
+        /// </summary>
+        /// <param name="ComicId">The comic id.</param>
+        /// <param name="FirstName">Filter by creator first name (e.g. brian).</param>
+        /// <param name="MiddleName">Filter by creator middle name (e.g. Michael).</param>
+        /// <param name="LastName">Filter by creator last name (e.g. Bendis).</param>
+        /// <param name="Suffix">Filter by suffix or honorific (e.g. Jr., Sr.).</param>
+        /// <param name="ModifiedSince">Return only creators which have been modified since the specified date.</param>
+        /// <param name="Comics">Return only creators who worked on in the specified comics.</param>
+        /// <param name="Series">Return only creators who worked on the specified series.</param>
+        /// <param name="Stories">Return only creators who worked on the specified stories.</param>
+        /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
+        /// <param name="Limit">Limit the result set to the specified number of resources.</param>
+        /// <param name="Offset">Skip the specified number of resources in the result set.</param>
+        /// <returns>
+        /// Lists of comic creators whose work appears in a specific comic
+        /// </returns>
         public IEnumerable<Creator> GetCreatorsForComic(int ComicId,
                                             string FirstName = null,
                                             string MiddleName = null,
@@ -938,7 +961,7 @@ namespace MarvelAPI
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Series = null,
                                             IEnumerable<int> Stories = null,
-                                            OrderBy? Order = null,
+                                            IEnumerable<OrderBy> Order = null,
                                             int? Limit = null,
                                             int? Offset = null)
         {
@@ -980,22 +1003,34 @@ namespace MarvelAPI
             {
                 request.AddParameter("stories", string.Join<int>(",", Stories));
             }
-            if (Order.HasValue)
+            if (Order != null && Order.Any())
             {
-                switch (Order.Value)
+                StringBuilder orderString = new StringBuilder();
+                foreach (var orderOption in Order)
                 {
-                    case OrderBy.FirstName:
-                    case OrderBy.FirstNameDesc:
-                    case OrderBy.MiddleName:
-                    case OrderBy.MiddleNameDesc:
-                    case OrderBy.LastName:
-                    case OrderBy.LastNameDesc:
-                    case OrderBy.Suffix:
-                    case OrderBy.SuffixDesc:
-                    case OrderBy.Modified:
-                    case OrderBy.ModifiedDesc:
-                        request.AddParameter("orderBy", Order.Value.ToParameter());
-                        break;
+                    switch (orderOption)
+                    {
+                        case OrderBy.FirstName:
+                        case OrderBy.FirstNameDesc:
+                        case OrderBy.MiddleName:
+                        case OrderBy.MiddleNameDesc:
+                        case OrderBy.LastName:
+                        case OrderBy.LastNameDesc:
+                        case OrderBy.Suffix:
+                        case OrderBy.SuffixDesc:
+                        case OrderBy.Modified:
+                        case OrderBy.ModifiedDesc:
+                            if (orderString.Length > 0)
+                            {
+                                orderString.Append(",");
+                            }
+                            orderString.Append(orderOption.ToParameter());
+                            break;
+                    }
+                }
+                if (orderString.Length > 0)
+                {
+                    request.AddParameter("orderBy", orderString.ToString());
                 }
             }
             if (Limit.HasValue && Limit.Value > 0)
@@ -1010,6 +1045,11 @@ namespace MarvelAPI
             request.AddHeader("Accept", "*/*");
 
             IRestResponse<CreatorDataWrapper> response = client.Execute<CreatorDataWrapper>(request);
+
+            if (response.Data.Code == 409)
+            {
+                throw new ArgumentException(response.Data.Status);
+            }
 
             return response.Data.Data.Results;
         }
