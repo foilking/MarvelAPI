@@ -14,7 +14,7 @@ namespace MarvelAPI.Sample.Models
         public bool? NoVariants { get; set; }
         public DateDescriptor? Descriptor { get; set; }
         public bool? HasDigitalIssue { get; set; }
-        public OrderBy? Order { get; set; }
+        public IEnumerable<OrderBy> Order { get; set; }
         public int Limit { get; set; }
         public int Offset { get; set; }
 
