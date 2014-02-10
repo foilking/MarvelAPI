@@ -13,8 +13,6 @@ namespace MarvelAPI
      * TODO: Refactor client and request creation
      * TODO: TESTS
      * TODO: Handle Etags
-     * TODO: Handle when only give one end of date range (maybe defaults?)
-     * TOOD: Handle 409
      * TODO: Handle 404
      * TODO: Create messages when using invalid OrderBy options
      * 
@@ -3335,13 +3333,28 @@ namespace MarvelAPI
         #endregion
 
         #region Stories
+        /// <summary>
+        /// Fetches lists of comic stories with optional filters.
+        /// </summary>
+        /// <param name="ModifiedSince">Return only stories which have been modified since the specified date.</param>
+        /// <param name="Comics">Return only stories contained in the specified.</param>
+        /// <param name="Series">Return only stories contained the specified series.</param>
+        /// <param name="Events">Return only stories which take place during the specified events.</param>
+        /// <param name="Creators">Return only stories which feature work by the specified creators.</param>
+        /// <param name="Characters">Return only stories which feature the specified characters.</param>
+        /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
+        /// <param name="Limit">Limit the result set to the specified number of resources.</param>
+        /// <param name="Offset">Skip the specified number of resources in the result set.</param>
+        /// <returns>
+        /// Lists of comic stories
+        /// </returns>
         public IEnumerable<Story> GetStories(DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Series = null,
                                             IEnumerable<int> Events = null,
                                             IEnumerable<int> Creators = null,
                                             IEnumerable<int> Characters = null,
-                                            OrderBy? Order = null,
+                                            IEnumerable<OrderBy> Order = null,
                                             int? Limit = null,
                                             int? Offset = null)
         {
@@ -3375,16 +3388,28 @@ namespace MarvelAPI
             {
                 request.AddParameter("characters", string.Join<int>(",", Characters));
             }
-            if (Order.HasValue)
+            if (Order != null && Order.Any())
             {
-                switch(Order.Value)
+                StringBuilder orderString = new StringBuilder();
+                foreach (var orderOption in Order)
                 {
-                    case OrderBy.Id:
-                    case OrderBy.IdDesc:
-                    case OrderBy.Modified:
-                    case OrderBy.ModifiedDesc:
-                        request.AddParameter("orderBy", Order.Value.ToParameter());
-                        break;
+                    switch (orderOption)
+                    {
+                        case OrderBy.Id:
+                        case OrderBy.IdDesc:
+                        case OrderBy.Modified:
+                        case OrderBy.ModifiedDesc:
+                            if (orderString.Length > 0)
+                            {
+                                orderString.Append(",");
+                            }
+                            orderString.Append(orderOption.ToParameter());
+                            break;
+                    }
+                }
+                if (orderString.Length > 0)
+                {
+                    request.AddParameter("orderBy", orderString.ToString());
                 }
             }
             if (Limit.HasValue && Limit.Value > 0)
@@ -3408,6 +3433,13 @@ namespace MarvelAPI
             return response.Data.Data.Results;
         }
 
+        /// <summary>
+        /// This method fetches a single comic story resource. It is the canonical URI for any comic story resource provided by the API.
+        /// </summary>
+        /// <param name="StoryId">The story ID.</param>
+        /// <returns>
+        /// A single comic story resource
+        /// </returns>
         public Story GetStory(int StoryId)
         {
             var client = new RestClient(BASE_URL);
@@ -3429,13 +3461,28 @@ namespace MarvelAPI
             return response.Data.Data.Results.FirstOrDefault(story => story.Id == StoryId);
         }
 
+        /// <summary>
+        /// Fetches lists of comic characters appearing in a single story, with optional filters.
+        /// </summary>
+        /// <param name="StoryId">The story ID.</param>
+        /// <param name="Name">Return only characters matching the specified full character name (e.g. Spider-Man).</param>
+        /// <param name="ModifiedSince">Return only characters which have been modified since the specified date.</param>
+        /// <param name="Comics">Return only characters which appear in the specified comics.</param>
+        /// <param name="Series">Return only characters which appear the specified series.</param>
+        /// <param name="Events">Return only characters which appear comics that took place in the specified events.</param>
+        /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
+        /// <param name="Limit">Limit the result set to the specified number of resources.</param>
+        /// <param name="Offset">Skip the specified number of resources in the result set.</param>
+        /// <returns>
+        /// Lists of comic characters appearing in a single story
+        /// </returns>
         public IEnumerable<Character> GetCharactersForStory(int StoryId,
                                             string Name = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Series = null,
                                             IEnumerable<int> Events = null,
-                                            OrderBy? Order = null,
+                                            IEnumerable<OrderBy> Order = null,
                                             int? Limit = null,
                                             int? Offset = null)
         {
@@ -3465,16 +3512,28 @@ namespace MarvelAPI
             {
                 request.AddParameter("series", string.Join<int>(",", Series));
             }
-            if (Order.HasValue)
+            if (Order != null && Order.Any())
             {
-                switch (Order.Value)
+                StringBuilder orderString = new StringBuilder();
+                foreach (var orderOption in Order)
                 {
-                    case OrderBy.Name:
-                    case OrderBy.NameDesc:
-                    case OrderBy.Modified:
-                    case OrderBy.ModifiedDesc:
-                        request.AddParameter("orderBy", Order.Value.ToParameter());
-                        break;
+                    switch (orderOption)
+                    {
+                        case OrderBy.Name:
+                        case OrderBy.NameDesc:
+                        case OrderBy.Modified:
+                        case OrderBy.ModifiedDesc:
+                            if (orderString.Length > 0)
+                            {
+                                orderString.Append(",");
+                            }
+                            orderString.Append(orderOption.ToParameter());
+                            break;
+                    }
+                }
+                if (orderString.Length > 0)
+                {
+                    request.AddParameter("orderBy", orderString.ToString());
                 }
             }
             if (Limit.HasValue && Limit.Value > 0)
@@ -3498,6 +3557,30 @@ namespace MarvelAPI
             return response.Data.Data.Results;
         }
 
+        /// <summary>
+        /// Fetches lists of comics in which a specific story appears, with optional filters.
+        /// </summary>
+        /// <param name="StoryId">The story ID.</param>
+        /// <param name="Format">Filter by the issue format.</param>
+        /// <param name="FormatType">Filter by the issue format type.</param>
+        /// <param name="NoVariants">Exclude variant comics from the result set.</param>
+        /// <param name="DateDescript">Return comics within a predefined date range.</param>
+        /// <param name="DateRangeBegin">Return comics within a predefined date range, this is the beginning of range.</param>
+        /// <param name="DateRangeEnd">Return comics within a predefined date range, this is the end of range.</param>
+        /// <param name="HasDigitalIssue">Include only results which are available digitally.</param>
+        /// <param name="ModifiedSince">Return only comics which have been modified since the specified date.</param>
+        /// <param name="Creators">Return only comics which feature work by the specified creators.</param>
+        /// <param name="Characters">Return only comics which feature the specified characters.</param>
+        /// <param name="Series">Return only comics which are part of the specified series.</param>
+        /// <param name="Events">Return only comics which take place in the specified events.</param>
+        /// <param name="SharedAppearences">Return only comics in which the specified characters appear together (for example in which BOTH Spider-Man and Wolverine appear).</param>
+        /// <param name="Collaborators">Return only comics in which the specified creators worked together (for example in which BOTH Stan Lee and Jack Kirby did work).</param>
+        /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
+        /// <param name="Limit">Limit the result set to the specified number of resources.</param>
+        /// <param name="Offset">Skip the specified number of resources in the result set.</param>
+        /// <returns>
+        /// Lists of comics in which a specific story appears
+        /// </returns>
         public IEnumerable<Comic> GetComicsForStory(int StoryId,
                                                         ComicFormat? Format = null,
                                                         ComicFormatType? FormatType = null,
@@ -3513,7 +3596,7 @@ namespace MarvelAPI
                                                         IEnumerable<int> Events = null,
                                                         IEnumerable<int> SharedAppearences = null,
                                                         IEnumerable<int> Collaborators = null,
-                                                        OrderBy? Order = null,
+                                                        IEnumerable<OrderBy> Order = null,
                                                         int? Limit = null,
                                                         int? Offset = null)
         {
@@ -3583,22 +3666,34 @@ namespace MarvelAPI
             {
                 request.AddParameter("collaborators", string.Join<int>(",", Collaborators));
             }
-            if (Order.HasValue)
+            if (Order != null && Order.Any())
             {
-                switch (Order.Value)
+                StringBuilder orderString = new StringBuilder();
+                foreach (var orderOption in Order)
                 {
-                    case OrderBy.FocDate:
-                    case OrderBy.FocDateDesc:
-                    case OrderBy.OnSaleDate:
-                    case OrderBy.OnSaleDateDesc:
-                    case OrderBy.Title:
-                    case OrderBy.TitleDesc:
-                    case OrderBy.IssueNumber:
-                    case OrderBy.IssueNumberDesc:
-                    case OrderBy.Modified:
-                    case OrderBy.ModifiedDesc:
-                        request.AddParameter("orderBy", Order.Value.ToParameter());
-                        break;
+                    switch (orderOption)
+                    {
+                        case OrderBy.FocDate:
+                        case OrderBy.FocDateDesc:
+                        case OrderBy.OnSaleDate:
+                        case OrderBy.OnSaleDateDesc:
+                        case OrderBy.Title:
+                        case OrderBy.TitleDesc:
+                        case OrderBy.IssueNumber:
+                        case OrderBy.IssueNumberDesc:
+                        case OrderBy.Modified:
+                        case OrderBy.ModifiedDesc:
+                            if (orderString.Length > 0)
+                            {
+                                orderString.Append(",");
+                            }
+                            orderString.Append(orderOption.ToParameter());
+                            break;
+                    }
+                }
+                if (orderString.Length > 0)
+                {
+                    request.AddParameter("orderBy", orderString.ToString());
                 }
             }
             if (Limit.HasValue && Limit.Value > 0)
@@ -3622,6 +3717,24 @@ namespace MarvelAPI
             return response.Data.Data.Results;
         }
 
+        /// <summary>
+        /// Fetches lists of comic creators whose work appears in a specific story, with optional filters.
+        /// </summary>
+        /// <param name="StoryId">The story ID.</param>
+        /// <param name="FirstName">Filter by creator first name (e.g. brian).</param>
+        /// <param name="MiddleName">Filter by creator middle name (e.g. Michael).</param>
+        /// <param name="LastName">Filter by creator last name (e.g. Bendis).</param>
+        /// <param name="Suffix">Filter by suffix or honorific (e.g. Jr., Sr.).</param>
+        /// <param name="ModifiedSince">Return only creators which have been modified since the specified date.</param>
+        /// <param name="Comics">Return only creators who worked on in the specified comics.</param>
+        /// <param name="Series">Return only creators who worked on the specified series.</param>
+        /// <param name="Events">Return only creators who worked on comics that took place in the specified events.</param>
+        /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
+        /// <param name="Limit">Limit the result set to the specified number of resources.</param>
+        /// <param name="Offset">Skip the specified number of resources in the result set.</param>
+        /// <returns>
+        /// Lists of comic creators whose work appears in a specific story
+        /// </returns>
         public IEnumerable<Creator> GetCreatorsForStory(int StoryId,
                                                         string FirstName = null,
                                                         string MiddleName = null,
@@ -3631,7 +3744,7 @@ namespace MarvelAPI
                                                         IEnumerable<int> Comics = null,
                                                         IEnumerable<int> Series = null,
                                                         IEnumerable<int> Events = null,
-                                                        OrderBy? Order = null,
+                                                        IEnumerable<OrderBy> Order = null,
                                                         int? Limit = null,
                                                         int? Offset = null)
         {
@@ -3673,22 +3786,34 @@ namespace MarvelAPI
             {
                 request.AddParameter("events", string.Join<int>(",", Events));
             }
-            if (Order.HasValue)
+            if (Order != null && Order.Any())
             {
-                switch (Order.Value)
+                StringBuilder orderString = new StringBuilder();
+                foreach (var orderOption in Order)
                 {
-                    case OrderBy.FirstName:
-                    case OrderBy.FirstNameDesc:
-                    case OrderBy.MiddleName:
-                    case OrderBy.MiddleNameDesc:
-                    case OrderBy.LastName:
-                    case OrderBy.LastNameDesc:
-                    case OrderBy.Suffix:
-                    case OrderBy.SuffixDesc:
-                    case OrderBy.Modified:
-                    case OrderBy.ModifiedDesc:
-                        request.AddParameter("orderBy", Order.Value.ToParameter());
-                        break;
+                    switch (orderOption)
+                    {
+                        case OrderBy.FirstName:
+                        case OrderBy.FirstNameDesc:
+                        case OrderBy.MiddleName:
+                        case OrderBy.MiddleNameDesc:
+                        case OrderBy.LastName:
+                        case OrderBy.LastNameDesc:
+                        case OrderBy.Suffix:
+                        case OrderBy.SuffixDesc:
+                        case OrderBy.Modified:
+                        case OrderBy.ModifiedDesc:
+                            if (orderString.Length > 0)
+                            {
+                                orderString.Append(",");
+                            }
+                            orderString.Append(orderOption.ToParameter());
+                            break;
+                    }
+                }
+                if (orderString.Length > 0)
+                {
+                    request.AddParameter("orderBy", orderString.ToString());
                 }
             }
             if (Limit.HasValue && Limit.Value > 0)
@@ -3712,6 +3837,22 @@ namespace MarvelAPI
             return response.Data.Data.Results;
         }
 
+        /// <summary>
+        /// Fetches lists of events in which a specific story appears, with optional filters.
+        /// </summary>
+        /// <param name="StoryId">The story ID.</param>
+        /// <param name="Name">Filter the event list by name.</param>
+        /// <param name="ModifiedSince">Return only events which have been modified since the specified date.</param>
+        /// <param name="Creators">Return only events which feature work by the specified creators.</param>
+        /// <param name="Characters">Return only events which feature the specified characters.</param>
+        /// <param name="Series">Return only events which are part of the specified series.</param>
+        /// <param name="Comics">Return only events which take place in the specified comics.</param>
+        /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
+        /// <param name="Limit">Limit the result set to the specified number of resources.</param>
+        /// <param name="Offset">Skip the specified number of resources in the result set.</param>
+        /// <returns>
+        /// Lists of events in which a specific story appears
+        /// </returns>
         public IEnumerable<Event> GetEventsForStories(int StoryId,
                                             string Name = null,
                                             DateTime? ModifiedSince = null,
@@ -3719,7 +3860,7 @@ namespace MarvelAPI
                                             IEnumerable<int> Characters = null,
                                             IEnumerable<int> Series = null,
                                             IEnumerable<int> Comics = null,
-                                            OrderBy? Order = null,
+                                            IEnumerable<OrderBy> Order = null,
                                             int? Limit = null,
                                             int? Offset = null)
         {
@@ -3753,18 +3894,30 @@ namespace MarvelAPI
             {
                 request.AddParameter("comics", string.Join<int>(",", Comics));
             }
-            if (Order.HasValue)
+            if (Order != null && Order.Any())
             {
-                switch (Order.Value)
+                StringBuilder orderString = new StringBuilder();
+                foreach (var orderOption in Order)
                 {
-                    case OrderBy.Name:
-                    case OrderBy.NameDesc:
-                    case OrderBy.StartDate:
-                    case OrderBy.StartDateDesc:
-                    case OrderBy.Modified:
-                    case OrderBy.ModifiedDesc:
-                        request.AddParameter("orderBy", Order.Value.ToParameter());
-                        break;
+                    switch (orderOption)
+                    {
+                        case OrderBy.Name:
+                        case OrderBy.NameDesc:
+                        case OrderBy.StartDate:
+                        case OrderBy.StartDateDesc:
+                        case OrderBy.Modified:
+                        case OrderBy.ModifiedDesc:
+                            if (orderString.Length > 0)
+                            {
+                                orderString.Append(",");
+                            }
+                            orderString.Append(orderOption.ToParameter());
+                            break;
+                    }
+                }
+                if (orderString.Length > 0)
+                {
+                    request.AddParameter("orderBy", orderString.ToString());
                 }
             }
             if (Limit.HasValue && Limit.Value > 0)
