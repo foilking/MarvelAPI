@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace MarvelAPI.Test
 {
@@ -16,66 +17,17 @@ namespace MarvelAPI.Test
         private string _MarvelPublicKey { get; set; }
         private string _MarvelPrivateKey { get; set; }
         private const int TOTAL_CHARACTERS = 1402;
+        private CompareInfo _Comparer;
 
         public CharacterTest()
         {
             _MarvelPublicKey = "67d146c4c462f0b55bf12bb7d60948af";
             _MarvelPrivateKey = "54fd1a8ac788767cc91938bcb96755186074970b";
             _Marvel = new Marvel(_MarvelPublicKey, _MarvelPrivateKey);
+            _Comparer = CompareInfo.GetCompareInfo("en-US");
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GetCharacters_Where_LimitGreaterThan100_ThrowArgumentException()
-        {
-            // Arrange
-
-            // Act
-            var characters = _Marvel.GetCharacters(Limit: 101);
-
-            // Assert
-            Assert.Fail("Exception Should Be Caught.");
-        }
-
-        [TestMethod]
-        public void GetCharacters_Where_LimitLessThan1_DoNotAddLimitParameter()
-        {
-            // Arrange
-
-            // Act
-            var characters = _Marvel.GetCharacters(Limit: 0);
-
-            // Assert
-            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
-            Assert.AreEqual(characters.Count(), 20);
-        }
-
-        [TestMethod]
-        public void GetCharacters_Where_OffsetGreaterThanTotalCharacters_ReturnNoResults()
-        {
-            // Arrange
-
-            // Act
-            var characters = _Marvel.GetCharacters(Offset: TOTAL_CHARACTERS + 1);
-
-            // Assert
-            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
-            Assert.AreEqual(characters.Count(), 0);
-        }
-
-        [TestMethod]
-        public void GetCharacters_Where_OffsetLessThan1_DoNotAddOfsetParameter()
-        {
-            // Arrange
-
-            // Act
-            var characters = _Marvel.GetCharacters(Offset: 0);
-
-            // Assert
-            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
-            Assert.AreEqual(characters.Count(), 20);
-        }
-
+        #region GetCharacters
         [TestMethod]
         public void GetCharactersTest()
         {
@@ -116,6 +68,20 @@ namespace MarvelAPI.Test
             // Assert
             Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
             Approvals.VerifyAll(characters.Select(character => JsonConvert.SerializeObject(character)), "Character");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetCharacters_TooManyValuesInComicMultiListError()
+        {
+            // Arrange
+            var comics = new List<int> { 43331, 45821, 46713, 46394, 42337, 43339, 41278, 43197, 37360, 41247, 42339 };
+
+            // Act
+            var characters = _Marvel.GetCharacters(Comics: comics);
+
+            // Assert
+            Assert.Fail("Exception Should Be Caught.");
         }
 
         [TestMethod]
@@ -175,6 +141,114 @@ namespace MarvelAPI.Test
         }
 
         [TestMethod]
+        public void GetCharactersOrderByName()
+        {
+            // Arrange
+            
+            // Act
+            var characters = _Marvel.GetCharacters(Order: new List<OrderBy> { OrderBy.Name });
+
+            // Assert
+            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
+            var inOrder = true;
+            var character = characters.FirstOrDefault();
+            foreach (var nextCharacter in characters.Skip(1))
+            {
+                if (_Comparer.Compare(character.Name, nextCharacter.Name, CompareOptions.StringSort) < 0)
+                {
+                    character = nextCharacter;
+                }
+                else
+                {
+                    inOrder = false;
+                    break;
+                }
+            }
+            Assert.IsTrue(inOrder, "Characters are out of name order.");
+        }
+
+        [TestMethod]
+        public void GetCharactersOrderByNameDescending()
+        {
+            // Arrange
+            
+            // Act
+            var characters = _Marvel.GetCharacters(Order: new List<OrderBy> { OrderBy.NameDesc });
+
+            // Assert
+            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
+            var inOrder = true;
+            var character = characters.FirstOrDefault();
+            foreach (var nextCharacter in characters.Skip(1))
+            {
+                if (_Comparer.Compare(character.Name, nextCharacter.Name, CompareOptions.StringSort) > 0)
+                {
+                    character = nextCharacter;
+                }
+                else
+                {
+                    inOrder = false;
+                    break;
+                }
+            }
+            Assert.IsTrue(inOrder, "Characters are out of name descending order.");
+        }
+
+        [TestMethod]
+        public void GetCharactersOrderByModified()
+        {
+            // Arrange
+
+            // Act
+            var characters = _Marvel.GetCharacters(Order: new List<OrderBy> { OrderBy.Modified });
+
+            // Assert
+            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
+            var inOrder = true;
+            var character = characters.FirstOrDefault();
+            foreach (var nextCharacter in characters.Skip(1))
+            {
+                if (character.Modified <= nextCharacter.Modified)
+                {
+                    character = nextCharacter;
+                }
+                else
+                {
+                    inOrder = false;
+                    break;
+                }
+            }
+            Assert.IsTrue(inOrder, "Characters are out of name descending order.");
+        }
+
+        [TestMethod]
+        public void GetCharactersOrderByModifiedDescending()
+        {
+            // Arrange
+
+            // Act
+            var characters = _Marvel.GetCharacters(Order: new List<OrderBy> { OrderBy.ModifiedDesc });
+
+            // Assert
+            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
+            var inOrder = true;
+            var character = characters.FirstOrDefault();
+            foreach (var nextCharacter in characters.Skip(1))
+            {
+                if (character.Modified >= nextCharacter.Modified)
+                {
+                    character = nextCharacter;
+                }
+                else
+                {
+                    inOrder = false;
+                    break;
+                }
+            }
+            Assert.IsTrue(inOrder, "Characters are out of name descending order.");
+        }
+
+        [TestMethod]
         public void GetCharactersWithLimitTest()
         {
             // Arrange
@@ -186,6 +260,32 @@ namespace MarvelAPI.Test
             // Assert
             Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
             Assert.AreEqual(limit, characters.Count());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetCharacters_Where_LimitGreaterThan100_ThrowArgumentException()
+        {
+            // Arrange
+
+            // Act
+            var characters = _Marvel.GetCharacters(Limit: 101);
+
+            // Assert
+            Assert.Fail("Exception Should Be Caught.");
+        }
+
+        [TestMethod]
+        public void GetCharacters_Where_LimitLessThan1_DoNotAddLimitParameter()
+        {
+            // Arrange
+
+            // Act
+            var characters = _Marvel.GetCharacters(Limit: 0);
+
+            // Assert
+            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
+            Assert.AreEqual(characters.Count(), 20);
         }
 
         [TestMethod]
@@ -208,5 +308,61 @@ namespace MarvelAPI.Test
             Assert.IsTrue(String.CompareOrdinal(firstListLastCharacterName, secondListFirstCharacterName) < 0);
         }
 
+        [TestMethod]
+        public void GetCharacters_Where_OffsetGreaterThanTotalCharacters_ReturnNoResults()
+        {
+            // Arrange
+
+            // Act
+            var characters = _Marvel.GetCharacters(Offset: TOTAL_CHARACTERS + 1);
+
+            // Assert
+            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
+            Assert.AreEqual(characters.Count(), 0);
+        }
+
+        [TestMethod]
+        public void GetCharacters_Where_OffsetLessThan1_DoNotAddOfsetParameter()
+        {
+            // Arrange
+
+            // Act
+            var characters = _Marvel.GetCharacters(Offset: 0);
+
+            // Assert
+            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
+            Assert.AreEqual(characters.Count(), 20);
+        }
+
+        #endregion
+
+        #region GetCharacter
+        [TestMethod]
+        public void GetCharacterTest()
+        {
+            // Arrange
+            var characterId = 1009268;
+
+            // Act
+            var character = _Marvel.GetCharacter(characterId);
+
+            // Assert
+            Approvals.Verify(JsonConvert.SerializeObject(character));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetCharacter_InvalidCharacterId()
+        {
+            // Arrange
+            var invalidCharacterId = 0;
+
+            // Act
+            var character = _Marvel.GetCharacter(invalidCharacterId);
+
+            // Assert
+            Assert.Fail("Exception Should Be Caught.");
+        }
+        #endregion
     }
 }

@@ -49,6 +49,20 @@ namespace MarvelAPI
             return hash;
         }
 
+        private RestRequest CreateRequest(string urlFormat, string urlParameter = null)
+        {
+            var requestUrl = String.IsNullOrWhiteSpace(urlParameter) ? urlFormat : String.Format(urlFormat, urlParameter);
+            var request = new RestRequest(requestUrl, Method.GET);
+            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
+            
+            request.AddParameter("apikey", PublicApiKey);
+            request.AddParameter("ts", timestamp);
+            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
+            request.AddHeader("Accept", "*/*");
+            
+            return request;
+        }
+
         #region Characters
         /// <summary>
         /// Fetches lists of comic characters with optional filters.
@@ -158,12 +172,11 @@ namespace MarvelAPI
         public Character GetCharacter(int CharacterId)
         {
             var client = new RestClient(BASE_URL);
-            var request = new RestRequest("/characters", Method.GET);
+            var request = new RestRequest(String.Format("/characters/{0}", CharacterId), Method.GET);
             var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
             request.AddParameter("apikey", PublicApiKey);
             request.AddParameter("ts", timestamp);
             request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, PrivateApiKey, PublicApiKey)));
-            request.AddParameter("characterId", CharacterId);
             request.AddHeader("Accept", "*/*");
 
             IRestResponse<CharacterDataWrapper> response = client.Execute<CharacterDataWrapper>(request);
