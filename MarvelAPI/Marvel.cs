@@ -260,7 +260,10 @@ namespace MarvelAPI
                 {
                     request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("YYYY-MM-DD"), DateRangeEnd.Value.ToString("YYYY-MM-DD")));
                 }
-                throw new ArgumentException("DateRangeBegin must be greater than DateRangeEnd");
+                else
+                {
+                    throw new ArgumentException("DateRangeBegin must be greater than DateRangeEnd");
+                }
             }
             else if (DateRangeBegin.HasValue || DateRangeEnd.HasValue)
             {
@@ -733,7 +736,10 @@ namespace MarvelAPI
                 {
                     request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("YYYY-MM-DD"), DateRangeEnd.Value.ToString("YYYY-MM-DD")));
                 }
-                throw new ArgumentException("DateRangeBegin must be greater than DateRangeEnd");
+                else
+                {
+                    throw new ArgumentException("DateRangeBegin must be greater than DateRangeEnd");
+                }
             }
             else if (DateRangeBegin.HasValue || DateRangeEnd.HasValue)
             {
@@ -1485,7 +1491,10 @@ namespace MarvelAPI
                 {
                     request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("YYYY-MM-DD"), DateRangeEnd.Value.ToString("YYYY-MM-DD")));
                 }
-                throw new ArgumentException("DateRangeBegin must be greater than DateRangeEnd");
+                else
+                {
+                    throw new ArgumentException("DateRangeBegin must be greater than DateRangeEnd");
+                }
             }
             else if (DateRangeBegin.HasValue || DateRangeEnd.HasValue)
             {
@@ -2193,7 +2202,10 @@ namespace MarvelAPI
                 {
                     request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("YYYY-MM-DD"), DateRangeEnd.Value.ToString("YYYY-MM-DD")));
                 }
-                throw new ArgumentException("DateRangeBegin must be greater than DateRangeEnd");
+                else
+                {
+                    throw new ArgumentException("DateRangeBegin must be greater than DateRangeEnd");
+                }
             }
             else if (DateRangeBegin.HasValue || DateRangeEnd.HasValue)
             {
@@ -2935,7 +2947,10 @@ namespace MarvelAPI
                 {
                     request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("YYYY-MM-DD"), DateRangeEnd.Value.ToString("YYYY-MM-DD")));
                 }
-                throw new ArgumentException("DateRangeBegin must be greater than DateRangeEnd");
+                else
+                {
+                    throw new ArgumentException("DateRangeBegin must be greater than DateRangeEnd");
+                }
             }
             else if (DateRangeBegin.HasValue || DateRangeEnd.HasValue)
             {
@@ -3641,7 +3656,10 @@ namespace MarvelAPI
                 {
                     request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("YYYY-MM-DD"), DateRangeEnd.Value.ToString("YYYY-MM-DD")));
                 }
-                throw new ArgumentException("DateRangeBegin must be greater than DateRangeEnd");
+                else
+                {
+                    throw new ArgumentException("DateRangeBegin must be greater than DateRangeEnd");
+                }
             }
             else if (DateRangeBegin.HasValue || DateRangeEnd.HasValue)
             {

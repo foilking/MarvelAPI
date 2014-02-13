@@ -91,7 +91,7 @@ namespace MarvelAPI
                 case ComicFormat.Magazine:
                     return "magazine";
                 case ComicFormat.TradePaperback:
-                    return "paperback";
+                    return "trade paperback";
                 default:
                     return String.Empty;
             }

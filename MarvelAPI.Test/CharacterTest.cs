@@ -363,6 +363,192 @@ namespace MarvelAPI.Test
             // Assert
             Assert.Fail("Exception Should Be Caught.");
         }
+
+        #endregion
+
+        #region GetComicsForCharacter
+        [TestMethod]
+        public void GetComicsForCharacterTest()
+        {
+            // Arrange
+            var characterId = 1009268;
+
+            // Act
+            var comics = _Marvel.GetComicsForCharacter(characterId);
+
+            // Assert
+            Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
+            Approvals.VerifyAll(comics.Select(comic => JsonConvert.SerializeObject(comic)), "Comics");
+        }
+
+        [TestMethod]
+        public void GetComicsForCharacterByComicFormatTest()
+        {
+            // Arrange
+            var characterId = 1009268;
+            var comicFormat = ComicFormat.GraphicNovel;
+
+            // Act
+            var comics = _Marvel.GetComicsForCharacter(characterId, Format: comicFormat);
+
+            // Assert
+            Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
+            Assert.IsTrue(comics.All(comic => comic.Format.ToLower().Equals(comicFormat.ToParameter())));
+        }
+
+        [TestMethod]
+        public void GetComicsForCharacterByComicFormatType_Comic_Test()
+        {
+            // Arrange
+            var characterId = 1009268;
+            var comicFormatType = ComicFormatType.Comic;
+
+            // Act
+            var comics = _Marvel.GetComicsForCharacter(characterId, FormatType: comicFormatType);
+
+            // Assert
+            Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
+            Assert.IsTrue(
+                comics.All(
+                    comic => comic.Format.ToLower().Equals(ComicFormat.Comic.ToParameter())
+                        || comic.Format.ToLower().Equals(ComicFormat.Digest.ToParameter())
+                        || comic.Format.ToLower().Equals(ComicFormat.DigitalComic.ToParameter())
+                        || comic.Format.ToLower().Equals(ComicFormat.InfiniteComic.ToParameter())
+                        || comic.Format.ToLower().Equals(ComicFormat.Magazine.ToParameter())
+                        ));
+        }
+
+        [TestMethod]
+        public void GetComicsForCharacterByComicFormatType_Collection_Test()
+        {
+            // Arrange
+            var characterId = 1009268;
+            var comicFormatType = ComicFormatType.Collection;
+
+            // Act
+            var comics = _Marvel.GetComicsForCharacter(characterId, FormatType: comicFormatType);
+
+            // Assert
+            Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
+            Assert.IsTrue(
+                comics.All(
+                    comic => comic.Format.ToLower().Equals(ComicFormat.GraphicNovel.ToParameter())
+                        || comic.Format.ToLower().Equals(ComicFormat.Hardcover.ToParameter())
+                        || comic.Format.ToLower().Equals(ComicFormat.TradePaperback.ToParameter())));
+        }
+
+        [TestMethod]
+        public void GetComicsForCharacterNoVariantsTest()
+        {
+            // Arrange
+            var characterId = 1009268;
+
+            // Act
+            var comics = _Marvel.GetComicsForCharacter(characterId, NoVariants: true);
+
+            // Assert
+            Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
+            Assert.IsTrue(comics.All(comic => String.IsNullOrWhiteSpace(comic.VariantDescription)));
+        }
+
+        /* 
+         * GetComicsForCharacterByDateDescriptor 
+         * ^ Can't seem to find comics using the DateDescriptor field with characters
+        */
+
+        [TestMethod]
+        public void GetComicsForCharacterByDateRange()
+        {
+            // Arrange
+            var characterId = 1009268;
+            var dateBeginning = new DateTime(2000, 1, 1);
+            var dateEnding = new DateTime(2001, 1, 1);
+
+            // Act
+            var comics = _Marvel.GetComicsForCharacter(characterId, DateRangeBegin: dateBeginning, DateRangeEnd: dateEnding);
+
+            // Assert
+            Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
+            Assert.IsTrue(comics.All(comic => 
+                comic.Dates.All(date => 
+                    date.Type == "onsaleDate" && date.Date >= dateBeginning && date.Date <= dateEnding)));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetComicsForCharacterByDateRange_DateEndingBeforeDateBeginning()
+        {
+            // Arrange
+            var characterId = 1009268;
+            var dateBeginning = new DateTime(2001, 1, 1);
+            var dateEnding = new DateTime(2000, 1, 1);
+
+            // Act
+            var comics = _Marvel.GetComicsForCharacter(characterId, DateRangeBegin: dateBeginning, DateRangeEnd: dateEnding);
+
+            // Assert
+            Assert.Fail("Exception Should Be Caught.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetComicsForCharacterByDateRange_DateEndingMissing()
+        {
+            // Arrange
+            var characterId = 1009268;
+            var dateBeginning = new DateTime(2001, 1, 1);
+
+            // Act
+            var comics = _Marvel.GetComicsForCharacter(characterId, DateRangeBegin: dateBeginning);
+
+            // Assert
+            Assert.Fail("Exception Should Be Caught.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetComicsForCharacterByDateRange_DateBeginningMissing()
+        {
+            // Arrange
+            var characterId = 1009268;
+            var dateEnding = new DateTime(2000, 1, 1);
+
+            // Act
+            var comics = _Marvel.GetComicsForCharacter(characterId, DateRangeEnd: dateEnding);
+
+            // Assert
+            Assert.Fail("Exception Should Be Caught.");
+        }
+
+        [TestMethod]
+        public void GetComicsForCharacterHasDigitalIssue()
+        {
+            // Arrange
+            var characterId = 1009268;
+            var hasDigitalIssue = true;
+
+            // Act
+            var comics = _Marvel.GetComicsForCharacter(characterId, HasDigitalIssue: hasDigitalIssue);
+
+            // Assert
+            Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
+            Assert.IsTrue(comics.All(comic => comic.DigitalId > 0));
+        }
+
+        [TestMethod]
+        public void GetComicsForCharacterByModifiedSinceTest()
+        {
+            // Arrange
+            var characterId = 1009268;
+            var modifiedDate = new DateTime(2000, 1, 1);
+
+            // Act
+            var comics = _Marvel.GetComicsForCharacter(characterId, ModifiedSince: modifiedDate);
+
+            // Assert
+            Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
+            Assert.IsTrue(comics.All(comic => comic.Modified >= modifiedDate));
+        }
         #endregion
     }
 }
