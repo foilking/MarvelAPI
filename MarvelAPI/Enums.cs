@@ -70,7 +70,7 @@ namespace MarvelAPI
         StartYearDesc
     }
 
-    public static class Extensions
+    public static class EnumExtensions
     {
         public static string ToParameter(this ComicFormat Format)
         {

@@ -56,75 +56,75 @@ namespace MarvelAPI.Test
             Approvals.VerifyAll(characters.Select(character => JsonConvert.SerializeObject(character)), "Character");
         }
 
-        [TestMethod]
-        public void GetCharactersByComicsTest()
-        {
-            // Arrange
-            var comics = new List<int> {35297, 38028, 36153};
+        //[TestMethod]
+        //public void GetCharactersByComicsTest()
+        //{
+        //    // Arrange
+        //    var comics = new List<int> {35297, 38028, 36153};
 
-            // Act
-            var characters = _Marvel.GetCharacters(Comics: comics);
+        //    // Act
+        //    var characters = _Marvel.GetCharacters(Comics: comics);
 
-            // Assert
-            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
-            Approvals.VerifyAll(characters.Select(character => JsonConvert.SerializeObject(character)), "Character");
-        }
+        //    // Assert
+        //    Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
+        //    Approvals.VerifyAll(characters.Select(character => JsonConvert.SerializeObject(character)), "Character");
+        //}
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GetCharacters_TooManyValuesInComicMultiListError()
-        {
-            // Arrange
-            var comics = new List<int> { 43331, 45821, 46713, 46394, 42337, 43339, 41278, 43197, 37360, 41247, 42339 };
+        //[TestMethod]
+        //[ExpectedException(typeof(ArgumentException))]
+        //public void GetCharacters_TooManyValuesInComicMultiListError()
+        //{
+        //    // Arrange
+        //    var comics = new List<int> { 43331, 45821, 46713, 46394, 42337, 43339, 41278, 43197, 37360, 41247, 42339 };
 
-            // Act
-            var characters = _Marvel.GetCharacters(Comics: comics);
+        //    // Act
+        //    var characters = _Marvel.GetCharacters(Comics: comics);
 
-            // Assert
-            Assert.Fail("Exception Should Be Caught.");
-        }
+        //    // Assert
+        //    Assert.Fail("Exception Should Be Caught.");
+        //}
 
-        [TestMethod]
-        public void GetCharactersBySeriesTest()
-        {
-            // Arrange
-            var series = new List<int> { 15276, 12429 };
+        //[TestMethod]
+        //public void GetCharactersBySeriesTest()
+        //{
+        //    // Arrange
+        //    var series = new List<int> { 15276, 12429 };
 
-            // Act
-            var characters = _Marvel.GetCharacters(Series: series);
+        //    // Act
+        //    var characters = _Marvel.GetCharacters(Series: series);
 
-            // Assert
-            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
-            Approvals.VerifyAll(characters.Select(character => JsonConvert.SerializeObject(character)), "Character");
-        }
+        //    // Assert
+        //    Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
+        //    Approvals.VerifyAll(characters.Select(character => JsonConvert.SerializeObject(character)), "Character");
+        //}
 
-        [TestMethod]
-        public void GetCharactersByEventsTest()
-        {
-            // Arrange
-            var events = new List<int> { 227, 238, 318 };
+        //[TestMethod]
+        //public void GetCharactersByEventsTest()
+        //{
+        //    // Arrange
+        //    var events = new List<int> { 227, 238, 318 };
 
-            // Act
-            var characters = _Marvel.GetCharacters(Events: events);
+        //    // Act
+        //    var characters = _Marvel.GetCharacters(Events: events);
 
-            // Assert
-            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
-            Approvals.VerifyAll(characters.Select(character => JsonConvert.SerializeObject(character)), "Character");
-        }
+        //    // Assert
+        //    Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
+        //    Approvals.VerifyAll(characters.Select(character => JsonConvert.SerializeObject(character)), "Character");
+        //}
 
-        [TestMethod]
-        public void GetCharactersByStoriesTest()
-        {
-            // Arrange
-            var stories = new List<int> { 2464, 2484, 2489 };
+        //[TestMethod]
+        //public void GetCharactersByStoriesTest()
+        //{
+        //    // Arrange
+        //    var stories = new List<int> { 2464, 2484, 2489 };
 
-            // Act
-            var characters = _Marvel.GetCharacters(Stories: stories);
+        //    // Act
+        //    var characters = _Marvel.GetCharacters(Stories: stories);
 
-            // Assert
-            Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
-            Approvals.VerifyAll(characters.Select(character => JsonConvert.SerializeObject(character)), "Character");
-        }
+        //    // Assert
+        //    Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
+        //    Approvals.VerifyAll(characters.Select(character => JsonConvert.SerializeObject(character)), "Character");
+        //}
 
         [TestMethod]
         public void GetCharactersByDateModifiedTest()
