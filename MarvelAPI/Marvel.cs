@@ -906,56 +906,27 @@ namespace MarvelAPI
                                             int? Limit = null,
                                             int? Offset = null)
         {
-            var client = new RestClient(BASE_URL);
-            var request = new RestRequest(String.Format("/comics/{0}/events/", ComicId), Method.GET);
-            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
-            request.AddParameter("apikey", _publicApiKey);
-            request.AddParameter("ts", timestamp);
-            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, _privateApiKey, _publicApiKey)));
+            var request = CreateRequest(String.Format("/comics/{0}/events/", ComicId));
+            
             if (ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
             }
-            if (Series != null && Series.Any())
+
+            request.AddParameterList(Series, "series");
+            request.AddParameterList(Events, "events");
+            request.AddParameterList(Creators, "creators");
+            request.AddParameterList(Characters, "characters");
+
+            var availableOrderBy = new List<OrderBy> 
             {
-                request.AddParameter("series", string.Join<int>(",", Series));
-            }
-            if (Events != null && Events.Any())
-            {
-                request.AddParameter("events", string.Join<int>(",", Events));
-            }
-            if (Creators != null && Creators.Any())
-            {
-                request.AddParameter("creators", string.Join<int>(",", Creators));
-            }
-            if (Characters != null && Characters.Any())
-            {
-                request.AddParameter("characters", string.Join<int>(",", Characters));
-            }
-            if (Order != null && Order.Any())
-            {
-                StringBuilder orderString = new StringBuilder();
-                foreach (var orderOption in Order)
-                {
-                    switch (orderOption)
-                    {
-                        case OrderBy.Id:
-                        case OrderBy.IdDesc:
-                        case OrderBy.Modified:
-                        case OrderBy.ModifiedDesc:
-                            if (orderString.Length > 0)
-                            {
-                                orderString.Append(",");
-                            }
-                            orderString.Append(orderOption.ToParameter());
-                            break;
-                    }
-                }
-                if (orderString.Length > 0)
-                {
-                    request.AddParameter("orderBy", orderString.ToString());
-                }
-            }
+                OrderBy.Id,
+                OrderBy.IdDesc,
+                OrderBy.Modified,
+                OrderBy.ModifiedDesc
+            };
+            request.AddOrderByParameterList(Order, availableOrderBy);
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -965,9 +936,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            request.AddHeader("Accept", "*/*");
-
-            IRestResponse<StoryDataWrapper> response = client.Execute<StoryDataWrapper>(request);
+            IRestResponse<StoryDataWrapper> response = _client.Execute<StoryDataWrapper>(request);
 
             return response.Data.Data.Results;
         }
@@ -1006,12 +975,8 @@ namespace MarvelAPI
                                                 int? Limit = null,
                                                 int? Offset = null)
         {
-            var client = new RestClient(BASE_URL);
-            var request = new RestRequest("/creators", Method.GET);
-            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
-            request.AddParameter("apikey", _publicApiKey);
-            request.AddParameter("ts", timestamp);
-            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, _privateApiKey, _publicApiKey)));
+            var request = CreateRequest("/creators");
+            
             if (!String.IsNullOrWhiteSpace(FirstName))
             {
                 request.AddParameter("firstName", FirstName);
@@ -1032,52 +997,27 @@ namespace MarvelAPI
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
             }
-            if (Comics != null && Comics.Any())
+
+            request.AddParameterList(Comics, "comics");
+            request.AddParameterList(Series, "series");
+            request.AddParameterList(Events, "events");
+            request.AddParameterList(Stories, "stories");
+
+            var availableOrderBy = new List<OrderBy>
             {
-                request.AddParameter("comics", string.Join<int>(",", Comics));
-            }
-            if (Series != null && Series.Any())
-            {
-                request.AddParameter("series", string.Join<int>(",", Series));
-            }
-            if (Events != null && Events.Any())
-            {
-                request.AddParameter("events", string.Join<int>(",", Events));
-            }
-            if (Stories != null && Stories.Any())
-            {
-                request.AddParameter("stories", string.Join<int>(",", Stories));
-            }
-            if (Order != null && Order.Any())
-            {
-                StringBuilder orderString = new StringBuilder();
-                foreach (var orderOption in Order)
-                {
-                    switch (orderOption)
-                    {
-                        case OrderBy.FirstName:
-                        case OrderBy.FirstNameDesc:
-                        case OrderBy.MiddleName:
-                        case OrderBy.MiddleNameDesc:
-                        case OrderBy.LastName:
-                        case OrderBy.LastNameDesc:
-                        case OrderBy.Suffix:
-                        case OrderBy.SuffixDesc:
-                        case OrderBy.Modified:
-                        case OrderBy.ModifiedDesc:
-                            if (orderString.Length > 0)
-                            {
-                                orderString.Append(",");
-                            }
-                            orderString.Append(orderOption.ToParameter());
-                            break;
-                    }
-                }
-                if (orderString.Length > 0)
-                {
-                    request.AddParameter("orderBy", orderString.ToString());
-                }
-            }
+                OrderBy.FirstName,
+                OrderBy.FirstNameDesc,
+                OrderBy.MiddleName,
+                OrderBy.MiddleNameDesc,
+                OrderBy.LastName,
+                OrderBy.LastNameDesc,
+                OrderBy.Suffix,
+                OrderBy.SuffixDesc,
+                OrderBy.Modified,
+                OrderBy.ModifiedDesc
+            };
+            request.AddOrderByParameterList(Order, availableOrderBy);
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -1087,9 +1027,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            request.AddHeader("Accept", "*/*");
-
-            IRestResponse<CreatorDataWrapper> response = client.Execute<CreatorDataWrapper>(request);
+            IRestResponse<CreatorDataWrapper> response = _client.Execute<CreatorDataWrapper>(request);
 
             if (response.Data.Code == 409)
             {
@@ -1108,15 +1046,14 @@ namespace MarvelAPI
         /// </returns>
         public Creator GetCreator(int CreatorId)
         {
-            var client = new RestClient(BASE_URL);
-            var request = new RestRequest(String.Format("/creators/{0}", CreatorId), Method.GET);
-            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
-            request.AddParameter("apikey", _publicApiKey);
-            request.AddParameter("ts", timestamp);
-            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, _privateApiKey, _publicApiKey)));
-            request.AddHeader("Accept", "*/*");
+            var request = CreateRequest(String.Format("/creators/{0}", CreatorId));
+            
+            IRestResponse<CreatorDataWrapper> response = _client.Execute<CreatorDataWrapper>(request);
 
-            IRestResponse<CreatorDataWrapper> response = client.Execute<CreatorDataWrapper>(request);
+            if (response.Data.Code == 409)
+            {
+                throw new ArgumentException(response.Data.Status);
+            }
 
             return response.Data.Data.Results.FirstOrDefault(creator => creator.Id == CreatorId);
         }
@@ -1164,12 +1101,8 @@ namespace MarvelAPI
                                                         int? Limit = null,
                                                         int? Offset = null)
         {
-            var client = new RestClient(BASE_URL);
-            var request = new RestRequest(String.Format("/creators/{0}/comics", CreatorId), Method.GET);
-            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
-            request.AddParameter("apikey", _publicApiKey);
-            request.AddParameter("ts", timestamp);
-            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, _privateApiKey, _publicApiKey)));
+            var request = CreateRequest(String.Format("/creators/{0}/comics", CreatorId));
+            
             if (Format.HasValue)
             {
                 request.AddParameter("format", Format.Value.ToParameter());
@@ -1209,60 +1142,29 @@ namespace MarvelAPI
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
             }
-            if (Characters != null && Characters.Any())
+
+            request.AddParameterList(Characters, "characters");
+            request.AddParameterList(Series, "series");
+            request.AddParameterList(Events, "events");
+            request.AddParameterList(Stories, "stories");
+            request.AddParameterList(SharedAppearences, "sharedAppearances");
+            request.AddParameterList(Collaborators, "collaborators");
+
+            var availableOrderBy = new List<OrderBy>
             {
-                request.AddParameter("characters", string.Join<int>(",", Characters));
-            }
-            if (Series != null && Series.Any())
-            {
-                request.AddParameter("series", string.Join<int>(",", Series));
-            }
-            if (Events != null && Events.Any())
-            {
-                request.AddParameter("events", string.Join<int>(",", Events));
-            }
-            if (Stories != null && Stories.Any())
-            {
-                request.AddParameter("stories", string.Join<int>(",", Stories));
-            }
-            if (SharedAppearences != null && SharedAppearences.Any())
-            {
-                request.AddParameter("sharedAppearences", string.Join<int>(",", SharedAppearences));
-            }
-            if (Collaborators != null && Collaborators.Any())
-            {
-                request.AddParameter("collaborators", string.Join<int>(",", Collaborators));
-            }
-            if (Order != null && Order.Any())
-            {
-                StringBuilder orderString = new StringBuilder();
-                foreach (var orderOption in Order)
-                {
-                    switch (orderOption)
-                    {
-                        case OrderBy.FocDate:
-                        case OrderBy.FocDateDesc:
-                        case OrderBy.OnSaleDate:
-                        case OrderBy.OnSaleDateDesc:
-                        case OrderBy.Title:
-                        case OrderBy.TitleDesc:
-                        case OrderBy.IssueNumber:
-                        case OrderBy.IssueNumberDesc:
-                        case OrderBy.Modified:
-                        case OrderBy.ModifiedDesc:
-                            if (orderString.Length > 0)
-                            {
-                                orderString.Append(",");
-                            }
-                            orderString.Append(orderOption.ToParameter());
-                            break;
-                    }
-                }
-                if (orderString.Length > 0)
-                {
-                    request.AddParameter("orderBy", orderString.ToString());
-                }
-            }
+                OrderBy.FocDate,
+                OrderBy.FocDateDesc,
+                OrderBy.OnSaleDate,
+                OrderBy.OnSaleDateDesc,
+                OrderBy.Title,
+                OrderBy.TitleDesc,
+                OrderBy.IssueNumber,
+                OrderBy.IssueNumberDesc,
+                OrderBy.Modified,
+                OrderBy.ModifiedDesc
+            };
+            request.AddOrderByParameterList(Order, availableOrderBy);
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -1272,9 +1174,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            request.AddHeader("Accept", "*/*");
-
-            IRestResponse<ComicDataWrapper> response = client.Execute<ComicDataWrapper>(request);
+            IRestResponse<ComicDataWrapper> response = _client.Execute<ComicDataWrapper>(request);
 
             if (response.Data.Code == 409)
             {
@@ -1311,12 +1211,8 @@ namespace MarvelAPI
                                             int? Limit = null,
                                             int? Offset = null)
         {
-            var client = new RestClient(BASE_URL);
-            var request = new RestRequest(String.Format("/creators/{0}/events/", CreatorId), Method.GET);
-            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
-            request.AddParameter("apikey", _publicApiKey);
-            request.AddParameter("ts", timestamp);
-            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, _privateApiKey, _publicApiKey)));
+            var request = CreateRequest(String.Format("/creators/{0}/events/", CreatorId));
+            
             if (!String.IsNullOrWhiteSpace(Name))
             {
                 request.AddParameter("name", Name);
@@ -1325,6 +1221,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
             }
+            
             if (Characters != null && Characters.Any())
             {
                 request.AddParameter("characters", string.Join<int>(",", Characters));
@@ -1341,32 +1238,18 @@ namespace MarvelAPI
             {
                 request.AddParameter("stories", string.Join<int>(",", Stories));
             }
-            if (Order != null && Order.Any())
-            {
-                StringBuilder orderString = new StringBuilder();
-                foreach (var orderOption in Order)
-                {
-                    switch (orderOption)
-                    {
-                        case OrderBy.Name:
-                        case OrderBy.NameDesc:
-                        case OrderBy.StartDate:
-                        case OrderBy.StartDateDesc:
-                        case OrderBy.Modified:
-                        case OrderBy.ModifiedDesc:
-                            if(orderString.Length > 0)
-                            {
-                                orderString.Append(",");
-                            }
-                            orderString.Append(orderOption.ToParameter());
-                            break;
-                    }
-                }
-                if (orderString.Length > 0)
-                {
-                    request.AddParameter("orderBy", orderString.ToString());
-                }
-            }
+
+            var availableOrderBy = new List<OrderBy> 
+            { 
+                OrderBy.Name,
+                OrderBy.NameDesc,
+                OrderBy.StartDate,
+                OrderBy.StartDateDesc,
+                OrderBy.Modified,
+                OrderBy.ModifiedDesc
+            };
+            request.AddOrderByParameterList(Order, availableOrderBy);
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -1376,9 +1259,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            request.AddHeader("Accept", "*/*");
-
-            IRestResponse<EventDataWrapper> response = client.Execute<EventDataWrapper>(request);
+            IRestResponse<EventDataWrapper> response = _client.Execute<EventDataWrapper>(request);
 
             if (response.Data.Code == 409)
             {
@@ -1419,12 +1300,8 @@ namespace MarvelAPI
                                             int? Limit = null,
                                             int? Offset = null)
         {
-            var client = new RestClient(BASE_URL);
-            var request = new RestRequest(String.Format("/creators/{0}/series/", CreatorId), Method.GET);
-            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
-            request.AddParameter("apikey", _publicApiKey);
-            request.AddParameter("ts", timestamp);
-            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, _privateApiKey, _publicApiKey)));
+            var request = CreateRequest(String.Format("/creators/{0}/series/", CreatorId));
+            
             if (!String.IsNullOrWhiteSpace(Title))
             {
                 request.AddParameter("title", Title);
@@ -1433,22 +1310,12 @@ namespace MarvelAPI
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
             }
-            if (Comics != null && Comics.Any())
-            {
-                request.AddParameter("comics", string.Join<int>(",", Comics));
-            }
-            if (Stories != null && Stories.Any())
-            {
-                request.AddParameter("stories", string.Join<int>(",", Stories));
-            }
-            if (Events != null && Events.Any())
-            {
-                request.AddParameter("events", string.Join<int>(",", Events));
-            }
-            if (Characters != null && Characters.Any())
-            {
-                request.AddParameter("characters", string.Join<int>(",", Characters));
-            }
+
+            request.AddParameterList(Comics, "comics");
+            request.AddParameterList(Stories, "stories");
+            request.AddParameterList(Events, "events");
+            request.AddParameterList(Characters, "characters");
+            
             if (SeriesType.HasValue)
             {
                 request.AddParameter("seriesType", SeriesType.Value.ToParameter());
@@ -1458,32 +1325,18 @@ namespace MarvelAPI
                 var containsParameters = Contains.Select(contain => contain.ToParameter());
                 request.AddParameter("contains", string.Join(",", containsParameters));
             }
-            if (Order != null && Order.Any())
+
+            var availableOrderBy = new List<OrderBy>
             {
-                StringBuilder orderString = new StringBuilder();
-                foreach (var orderOption in Order)
-                {
-                    switch (orderOption)
-                    {
-                        case OrderBy.Title:
-                        case OrderBy.TitleDesc:
-                        case OrderBy.StartYear:
-                        case OrderBy.StartYearDesc:
-                        case OrderBy.Modified:
-                        case OrderBy.ModifiedDesc:
-                            if (orderString.Length > 0)
-                            {
-                                orderString.Append(",");
-                            }
-                            orderString.Append(orderOption.ToParameter());
-                            break;
-                    }
-                }
-                if (orderString.Length > 0)
-                {
-                    request.AddParameter("orderBy", orderString.ToString());
-                }
-            }
+                OrderBy.Title,
+                OrderBy.TitleDesc,
+                OrderBy.StartYear,
+                OrderBy.StartYearDesc,
+                OrderBy.Modified,
+                OrderBy.ModifiedDesc
+            };
+            request.AddOrderByParameterList(Order, availableOrderBy);
+            
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -1493,9 +1346,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            request.AddHeader("Accept", "*/*");
-
-            IRestResponse<SeriesDataWrapper> response = client.Execute<SeriesDataWrapper>(request);
+            IRestResponse<SeriesDataWrapper> response = _client.Execute<SeriesDataWrapper>(request);
 
             if (response.Data.Code == 409)
             {
@@ -1530,56 +1381,27 @@ namespace MarvelAPI
                                             int? Limit = null,
                                             int? Offset = null)
         {
-            var client = new RestClient(BASE_URL);
-            var request = new RestRequest(String.Format("/creators/{0}/events/", CreatorId), Method.GET);
-            var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
-            request.AddParameter("apikey", _publicApiKey);
-            request.AddParameter("ts", timestamp);
-            request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, _privateApiKey, _publicApiKey)));
+            var request = CreateRequest(String.Format("/creators/{0}/events/", CreatorId));
+            
             if (ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
             }
-            if (Comics != null && Comics.Any())
+
+            request.AddParameterList(Comics, "comics");
+            request.AddParameterList(Series, "series");
+            request.AddParameterList(Events, "events");
+            request.AddParameterList(Characters, "characters");
+
+            var availableOrderBy = new List<OrderBy>
             {
-                request.AddParameter("comics", string.Join<int>(",", Comics));
-            }
-            if (Series != null && Series.Any())
-            {
-                request.AddParameter("series", string.Join<int>(",", Series));
-            }
-            if (Events != null && Events.Any())
-            {
-                request.AddParameter("stories", string.Join<int>(",", Events));
-            }
-            if (Characters != null && Characters.Any())
-            {
-                request.AddParameter("characters", string.Join<int>(",", Characters));
-            }
-            if (Order != null && Order.Any())
-            {
-                StringBuilder orderString = new StringBuilder();
-                foreach (var orderOption in Order)
-                {
-                    switch (orderOption)
-                    {
-                        case OrderBy.Id:
-                        case OrderBy.IdDesc:
-                        case OrderBy.Modified:
-                        case OrderBy.ModifiedDesc:
-                            if (orderString.Length > 0)
-                            {
-                                orderString.Append(",");
-                            }
-                            orderString.Append(orderOption.ToParameter());
-                            break;
-                    }
-                }
-                if (orderString.Length > 0)
-                {
-                    request.AddParameter("orderBy", orderString.ToString());
-                }
-            }
+                OrderBy.Id,
+                OrderBy.IdDesc,
+                OrderBy.Modified,
+                OrderBy.ModifiedDesc
+            };
+            request.AddOrderByParameterList(Order, availableOrderBy);
+            
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -1589,9 +1411,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            request.AddHeader("Accept", "*/*");
-
-            IRestResponse<StoryDataWrapper> response = client.Execute<StoryDataWrapper>(request);
+            IRestResponse<StoryDataWrapper> response = _client.Execute<StoryDataWrapper>(request);
 
             if (response.Data.Code == 409)
             {
