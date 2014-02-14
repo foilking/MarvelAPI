@@ -549,6 +549,42 @@ namespace MarvelAPI.Test
             Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
             Assert.IsTrue(comics.All(comic => comic.Modified >= modifiedDate));
         }
+
+        [TestMethod]
+        public void GetComicsForCharacterLimitTest()
+        {
+            // Arrange
+            var characterId = 1009268;
+            var limit = 50;
+
+            // Act
+            var comics = _Marvel.GetComicsForCharacter(characterId, Limit: limit);
+
+            // Assert
+            Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
+            Assert.IsTrue(comics.Count() == limit);
+        }
+
+        [TestMethod]
+        public void GetComicsForCharacterOffsetTest()
+        {
+            // Arrange
+            var characterId = 1009268;
+            var offset = 20;
+
+            // Act
+            var firstComics = _Marvel.GetComicsForCharacter(characterId, Limit: offset);
+            var firstListLastComicTitle = firstComics.Last().Title;
+            var secondComics = _Marvel.GetComicsForCharacter(characterId, Offset: offset);
+            var secondListFirstComicTitle = secondComics.FirstOrDefault().Title;
+            var exempt = secondComics.Except(firstComics);
+
+            // Assert
+            Assert.IsInstanceOfType(firstComics, typeof(IEnumerable<Comic>));
+            Assert.IsInstanceOfType(secondComics, typeof(IEnumerable<Comic>));
+            Assert.IsTrue(exempt.Count() == 20);
+            Assert.IsTrue(String.CompareOrdinal(firstListLastComicTitle, secondListFirstComicTitle) < 0);
+        }
         #endregion
     }
 }
