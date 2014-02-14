@@ -218,7 +218,7 @@ namespace MarvelAPI.Test
                     break;
                 }
             }
-            Assert.IsTrue(inOrder, "Characters are out of name descending order.");
+            Assert.IsTrue(inOrder, "Characters are out of modified order.");
         }
 
         [TestMethod]
@@ -245,7 +245,7 @@ namespace MarvelAPI.Test
                     break;
                 }
             }
-            Assert.IsTrue(inOrder, "Characters are out of name descending order.");
+            Assert.IsTrue(inOrder, "Characters are out of modified descending order.");
         }
 
         [TestMethod]
@@ -451,8 +451,7 @@ namespace MarvelAPI.Test
             Assert.IsTrue(comics.All(comic => String.IsNullOrWhiteSpace(comic.VariantDescription)));
         }
 
-        /* 
-         * GetComicsForCharacterByDateDescriptor 
+        /*  GetComicsForCharacterByDateDescriptor 
          * ^ Can't seem to find comics using the DateDescriptor field with characters
         */
 
@@ -549,6 +548,49 @@ namespace MarvelAPI.Test
             Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
             Assert.IsTrue(comics.All(comic => comic.Modified >= modifiedDate));
         }
+
+        // GetComicsForCharacterByCreators
+
+        // GetComicsForCharacterBySeries
+
+        // GetComicsForCharacterByEvents
+
+        // GetComicsForCharacterByStories
+
+        // GetComicsForCharacterBySharedAppearences
+
+        // GetComicsForCharacterByCollaborators
+
+        // Not ordered properly
+        //[TestMethod]
+        //public void GetComicsForCharacterOrderByFocDateTest()
+        //{
+        //    // Arrange
+        //    var characterId = 1009268;
+
+        //    // Act
+        //    var comics = _Marvel.GetComicsForCharacter(characterId, Order: new List<OrderBy> { OrderBy.FocDate });
+
+        //    // Assert
+        //    Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
+        //    var inOrder = true;
+        //    var comic = comics.FirstOrDefault();
+        //    foreach (var nextComic in comics.Skip(1))
+        //    {
+        //        var currentDate = comic.Dates.FirstOrDefault(date => date.Type.Equals("focDate"));
+        //        var nextDate = nextComic.Dates.FirstOrDefault(date => date.Type.Equals("focDate"));
+        //        if (currentDate != null && nextDate != null && currentDate.Date >= nextDate.Date)
+        //        {
+        //            comic = nextComic;
+        //        }
+        //        else
+        //        {
+        //            inOrder = false;
+        //            break;
+        //        }
+        //    }
+        //    Assert.IsTrue(inOrder, "Comics are out of foc date order.");
+        //}
 
         [TestMethod]
         public void GetComicsForCharacterLimitTest()

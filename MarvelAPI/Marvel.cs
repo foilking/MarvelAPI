@@ -439,7 +439,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -556,7 +556,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -651,7 +651,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -815,7 +815,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -939,7 +939,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -1059,7 +1059,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -1163,7 +1163,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -1259,7 +1259,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -1381,7 +1381,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -1566,7 +1566,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -1670,7 +1670,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -1787,7 +1787,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -1883,7 +1883,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -1993,7 +1993,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -2112,7 +2112,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -2281,7 +2281,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -2401,7 +2401,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -2518,7 +2518,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -2614,7 +2614,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -2736,7 +2736,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -2859,7 +2859,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -3022,7 +3022,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -3142,7 +3142,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -3246,7 +3246,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -3342,7 +3342,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -3444,7 +3444,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -3568,7 +3568,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -3731,7 +3731,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -3851,7 +3851,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
@@ -3955,7 +3955,7 @@ namespace MarvelAPI
             {
                 request.AddParameter("limit", Limit.Value.ToString());
             }
-            if (Offset.HasValue && Limit.Value > 0)
+            if (Offset.HasValue && Offset.Value > 0)
             {
                 request.AddParameter("offset", Offset.Value.ToString());
             }
