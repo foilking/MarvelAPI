@@ -37,13 +37,23 @@
 <p>Simple way to access Marvel's REST API. For full details on getting started with the Marvel API, go check out the <a href="https://developer.marvel.com/">official website</a>.</p>
 
 <h2>
-<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Walkthrough Example</h2>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
 
-<h3>Create connection:</h3>
-<p><code>var _Marvel = new Marvel(_MarvelPublicKey, _MarvelPrivateKey)</code> </p>
-<h3>Get an individual character</h3>
-<p><code>var characterId = 1009268; // Deadpool</code><br />
-  <code>var character = _Marvel.GetCharacter(characterId);</code></p>
+<h3>
+<a name="create-connection" class="anchor" href="#create-connection"><span class="octicon octicon-link"></span></a>Create connection:</h3>
+
+<p><code>_Marvel = new Marvel(_MarvelPublicKey, _MarvelPrivateKey)</code> </p>
+
+<h3>
+<a name="get-an-individual-character" class="anchor" href="#get-an-individual-character"><span class="octicon octicon-link"></span></a>Get an individual character</h3>
+
+<p><code>var characterId = 1009268; // Deadpool</code>
+<code>var character = _Marvel.GetCharacter(characterId);</code></p>
+
+<h3>
+<a name="get-filtered-list-of-characters" class="anchor" href="#get-filtered-list-of-characters"><span class="octicon octicon-link"></span></a>Get filtered list of characters</h3>
+
+<p><code>var characters = _Marvel.GetCharacters();</code></p>
       </section>
     </div>
 
