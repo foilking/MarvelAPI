@@ -37,13 +37,13 @@
 <p>Simple way to access Marvel's REST API. For full details on getting started with the Marvel API, go check out the <a href="https://developer.marvel.com/">official website</a>.</p>
 
 <h2>
-<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Walkthrough Example</h2>
 
-<p>Create connection:
-<code>_Marvel = new Marvel(_MarvelPublicKey, _MarvelPrivateKey)</code> </p>
-
-<p>Get an individual character
-<code>var character = _Marvel.GetCharacter(characterId);</code></p>
+<h3>Create connection:</h3>
+<p><code>var _Marvel = new Marvel(_MarvelPublicKey, _MarvelPrivateKey)</code> </p>
+<h3>Get an individual character</h3>
+<p><code>var characterId = 1009268; // Deadpool</code><br />
+  <code>var character = _Marvel.GetCharacter(characterId);</code></p>
       </section>
     </div>
 
