@@ -19,7 +19,7 @@ namespace MarvelAPI.Sample.Controllers
             _MarvelPublicKey = ConfigurationManager.AppSettings["MarvelPublicApiKey"];
             _MarvelPrivateKey = ConfigurationManager.AppSettings["MarvelPrivateApiKey"];
 
-            _Marvel = new Marvel(_MarvelPublicKey, _MarvelPrivateKey);
+            _Marvel = new Marvel(_MarvelPublicKey, _MarvelPrivateKey, true);
         }
 
         //

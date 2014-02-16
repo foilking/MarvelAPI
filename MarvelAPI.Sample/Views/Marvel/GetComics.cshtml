@@ -51,7 +51,7 @@
         Model
     ))
     <h2>Order By</h2>
-    @Html.DropDownListFor(model => model.Descriptor, orderByOptionsSelectList)
+    @Html.ListBoxFor(model => model.Descriptor, orderByOptionsSelectList)
     <h2>Limit</h2>
     @Html.TextBoxFor(model => model.Limit)
     <h2>Offset</h2>
