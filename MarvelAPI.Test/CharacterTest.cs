@@ -21,8 +21,8 @@ namespace MarvelAPI.Test
 
         public CharacterTest()
         {
-            _MarvelPublicKey = "67d146c4c462f0b55bf12bb7d60948af";
-            _MarvelPrivateKey = "54fd1a8ac788767cc91938bcb96755186074970b";
+            _MarvelPublicKey = "PublicAPIKey";
+            _MarvelPrivateKey = "PrivateAPIKey";
             _Marvel = new Marvel(_MarvelPublicKey, _MarvelPrivateKey);
             _Comparer = CompareInfo.GetCompareInfo("en-US");
         }
