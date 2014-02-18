@@ -125,6 +125,7 @@
     <Compile Include="Models\GetComicsForCreatorViewModel.cs" />
     <Compile Include="Models\GetComicsViewModel.cs" />
     <Compile Include="Models\GetComicViewModel.cs" />
+    <Compile Include="Models\MarvelViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +143,8 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

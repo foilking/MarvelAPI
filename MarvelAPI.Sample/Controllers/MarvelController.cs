@@ -26,45 +26,42 @@ namespace MarvelAPI.Sample.Controllers
         // GET: /Marvel/
         public ActionResult Index()
         {
-            return View();
-        }
+            var model = new MarvelViewModel();
+            IEnumerable<ComicFormat> comicFormats = Enum.GetValues(typeof(ComicFormat)).Cast<ComicFormat>();
+            model.ComicFormatSelectList = comicFormats.Select(format => new SelectListItem { Text = format.ToParameter(), Value = format.ToString(), Selected = false }).ToList();
+            model.ComicFormatSelectList.Insert(0, new SelectListItem { Text = "", Value = "", Selected = true });
+            
+            IEnumerable<ComicFormatType> comicFormatTypes = Enum.GetValues(typeof(ComicFormatType)).Cast<ComicFormatType>();
+            model.ComicFormatTypeSelectList = comicFormatTypes.Select(format => new SelectListItem { Text = format.ToParameter(), Value = format.ToString(), Selected = false }).ToList();
+            model.ComicFormatTypeSelectList.Insert(0, new SelectListItem { Text = "", Value = "", Selected = true });
 
-        //
-        // GET: /Marvel/GetComics
-        public ActionResult GetComics()
-        {
-            return View(new GetComicsViewModel());
+            IEnumerable<DateDescriptor> dateDescriptors = Enum.GetValues(typeof(DateDescriptor)).Cast<DateDescriptor>();
+            model.DateDescriptorsSelectList = dateDescriptors.Select(format => new SelectListItem { Text = format.ToParameter(), Value = format.ToString(), Selected = false }).ToList();
+            model.DateDescriptorsSelectList.Insert(0, new SelectListItem { Text = "", Value = "", Selected = true });
+
+            IEnumerable<OrderBy> orderByOptions = Enum.GetValues(typeof(OrderBy)).Cast<OrderBy>();
+            model.OrderByOptionsSelectList = orderByOptions.Select(format => new SelectListItem { Text = format.ToParameter(), Value = format.ToString(), Selected = false }).ToList();
+            model.OrderByOptionsSelectList.Insert(0, new SelectListItem { Text = "", Value = "", Selected = true });
+
+            return View(model);
         }
 
         //
         // POST: /Marvel/GetComics
         [HttpPost]
-        public ActionResult GetComics(GetComicsViewModel model)
+        public JsonResult GetComics(GetComicsViewModel model)
         {
             IEnumerable<Comic> comics = _Marvel.GetComics(Format: model.Format, FormatType: model.FormatType, NoVariants: model.NoVariants, DateDescript: model.Descriptor, HasDigitalIssue: model.HasDigitalIssue, Order: model.Order, Limit: model.Limit, Offset: model.Offset);
-            model.ResultComics = comics;
-            return View(model);
+            return Json(comics);
         }
 
         //
-        // GET: /Marvel/GetComic
-        public ActionResult GetComic(int id)
+        // POST: /Marvel/GetComic
+        [HttpPost]
+        public JsonResult GetComic(int id)
         {
-            var model = new GetComicViewModel();
-            model.Comic = _Marvel.GetComic(id);
-            return View(model);
-        }
-
-
-        //
-        // GET: /Marvel/GetComicsForCharacter
-        public ActionResult GetComicsForCharacter(int id)
-        {
-            IEnumerable<Comic> comics = _Marvel.GetComicsForCharacter(id);
-            var model = new GetComicsForCharacterViewModel();
-            model.CharacterId = id;
-            model.ResultComics = comics;
-            return View(model);
+            var comic = _Marvel.GetComic(id);
+            return Json(comic);
         }
 
         //
@@ -73,17 +70,6 @@ namespace MarvelAPI.Sample.Controllers
         public ActionResult GetComicsForCharacter(GetComicsForCharacterViewModel model)
         {
             IEnumerable<Comic> comics = _Marvel.GetComicsForCharacter(CharacterId: model.CharacterId, Format: model.Format, FormatType: model.FormatType, NoVariants: model.NoVariants, DateDescript: model.Descriptor, HasDigitalIssue: model.HasDigitalIssue, Order: model.Order, Limit: model.Limit, Offset: model.Offset);
-            model.ResultComics = comics;
-            return View(model);
-        }
-
-        //
-        // GET: /Marvel/GetComicsForCreator
-        public ActionResult GetComicsForCreator(int id)
-        {
-            IEnumerable<Comic> comics = _Marvel.GetComicsForCreator(id);
-            var model = new GetComicsForCreatorViewModel();
-            model.CreatorId = id;
             model.ResultComics = comics;
             return View(model);
         }
