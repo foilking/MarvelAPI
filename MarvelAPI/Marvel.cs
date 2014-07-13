@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.IdentityModel;
 
 namespace MarvelAPI
 {
@@ -88,6 +89,14 @@ namespace MarvelAPI
                         code = 401;
                         status = content.Message;
                         break;
+                    case "RequestThrottled":
+                        code = 429;
+                        status = content.Message;
+                        break;
+                    default:
+                        code = 404;
+                        status = content.Message;
+                        break;
                 }
             }
             else
@@ -134,6 +143,8 @@ namespace MarvelAPI
                     throw new ApplicationException(status, response.ErrorException);
                 case 401:
                     throw new InvalidCredentialException(status);
+                case 429:
+                    throw new LimitExceededException(status);
 
             }
         }
@@ -2920,7 +2931,7 @@ namespace MarvelAPI
     public class MarvelUrl
     {
         public string Type { get; set; }
-        public string UrlString { get; set; }
+        public string Url { get; set; }
     }
 
     public class MarvelImage

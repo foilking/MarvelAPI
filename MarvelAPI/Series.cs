@@ -28,7 +28,7 @@ namespace MarvelAPI
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string ResourceUri { get; set; }
+        public string ResourceURI { get; set; }
         public List<MarvelUrl> Urls { get; set; }
         public int StartYear { get; set; }
         public int EndYear { get; set; }
@@ -46,7 +46,7 @@ namespace MarvelAPI
 
     public class SeriesSummary
     {
-        public string ResourceUri { get; set; }
+        public string ResourceURI { get; set; }
         public string Name { get; set; }
     }
 
@@ -54,7 +54,7 @@ namespace MarvelAPI
     {
         public int Available { get; set; }
         public int Returned { get; set; }
-        public string CollectionUri { get; set; }
+        public string CollectionURI { get; set; }
         public List<SeriesSummary> Items { get; set; }
     }
 }

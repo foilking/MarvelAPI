@@ -28,7 +28,7 @@ namespace MarvelAPI
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string ResourceUri { get; set; }
+        public string ResourceURI { get; set; }
         public string Type { get; set; }
         public DateTime Modified { get; set; }
         public MarvelImage Thumbnail { get; set; }
@@ -44,13 +44,13 @@ namespace MarvelAPI
     {
         public int Available { get; set; }
         public int Returned { get; set; }
-        public string CollectionUri { get; set; }
+        public string CollectionURI { get; set; }
         public List<StorySummary> Items { get; set; }
     }
     
     public class StorySummary
     {
-        public string ResourceUri { get; set; }
+        public string ResourceURI { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
     }

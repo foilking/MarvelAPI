@@ -59,7 +59,7 @@ namespace MarvelAPI
 
     public class ComicSummary
     {
-        public string ResourceUri { get; set; }
+        public string ResourceURI { get; set; }
         public string Name { get; set; }
     }
 
@@ -79,7 +79,7 @@ namespace MarvelAPI
     {
         public int Available { get; set; }
         public int Returned { get; set; }
-        public string CollectionUri { get; set; }
+        public string CollectionURI { get; set; }
         public List<ComicSummary> Items { get; set; }
     }
 }
