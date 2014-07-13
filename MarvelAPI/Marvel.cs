@@ -236,7 +236,7 @@ namespace MarvelAPI
         /// <param name="Series">Return only comics which are part of the specified series.</param>
         /// <param name="Events">Return only comics which take place in the specified events.</param>
         /// <param name="Stories">Return only comics which contain the specified stories.</param>
-        /// <param name="SharedAppearences">Return only comics in which the specified characters appear together (for example in which BOTH Spider-Man and Wolverine appear).</param>
+        /// <param name="SharedAppearances">Return only comics in which the specified characters appear together (for example in which BOTH Spider-Man and Wolverine appear).</param>
         /// <param name="Collaborators">Return only comics in which the specified creators worked together (for example in which BOTH Stan Lee and Jack Kirby did work).</param>
         /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
         /// <param name="Limit">Limit the result set to the specified number of resources.</param>
@@ -257,7 +257,7 @@ namespace MarvelAPI
                                                         IEnumerable<int> Series = null,
                                                         IEnumerable<int> Events = null,
                                                         IEnumerable<int> Stories = null,
-                                                        IEnumerable<int> SharedAppearences = null,
+                                                        IEnumerable<int> SharedAppearances = null,
                                                         IEnumerable<int> Collaborators = null,
                                                         IEnumerable<OrderBy> Order = null,
                                                         int? Limit = null,
@@ -307,7 +307,7 @@ namespace MarvelAPI
             request.AddParameterList(Series, "series");
             request.AddParameterList(Events, "events");
             request.AddParameterList(Stories, "stories");
-            request.AddParameterList(SharedAppearences, "sharedAppearences");
+            request.AddParameterList(SharedAppearances, "sharedAppearances");
             request.AddParameterList(Collaborators, "collaborators");
 
             var availableOrderBy = new List<OrderBy> 
@@ -573,7 +573,7 @@ namespace MarvelAPI
         /// <param name="Series">Return only comics which are part of the specified series.</param>
         /// <param name="Events">Return only comics which take place in the specified events.</param>
         /// <param name="Stories">Return only comics which contain the specified stories.</param>
-        /// <param name="SharedAppearences">Return only comics in which the specified characters appear together (for example in which BOTH Spider-Man and Wolverine appear).</param>
+        /// <param name="SharedAppearances">Return only comics in which the specified characters appear together (for example in which BOTH Spider-Man and Wolverine appear).</param>
         /// <param name="Collaborators">Return only comics in which the specified creators worked together (for example in which BOTH Stan Lee and Jack Kirby did work).</param>
         /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
         /// <param name="Limit">Limit the result set to the specified number of resources.</param>
@@ -594,7 +594,7 @@ namespace MarvelAPI
                                             IEnumerable<int> Series = null,
                                             IEnumerable<int> Events = null,
                                             IEnumerable<int> Stories = null,
-                                            IEnumerable<int> SharedAppearences = null,
+                                            IEnumerable<int> SharedAppearances = null,
                                             IEnumerable<int> Collaborators = null,
                                             IEnumerable<OrderBy> Order = null,
                                             int? Limit = null,
@@ -647,7 +647,7 @@ namespace MarvelAPI
             request.AddParameterList(Series, "series");
             request.AddParameterList(Events, "events");
             request.AddParameterList(Stories, "stories");
-            request.AddParameterList(SharedAppearences, "sharedAppearences");
+            request.AddParameterList(SharedAppearances, "sharedAppearances");
             request.AddParameterList(Collaborators, "collaborators");
 
             var availableOrder = new List<OrderBy>
@@ -1112,7 +1112,7 @@ namespace MarvelAPI
         /// <param name="Series">Return only comics which are part of the specified series.</param>
         /// <param name="Events">Return only comics which take place in the specified events.</param>
         /// <param name="Stories">Return only comics which contain the specified stories.</param>
-        /// <param name="SharedAppearences">Return only comics in which the specified characters appear together (for example in which BOTH Spider-Man and Wolverine appear).</param>
+        /// <param name="SharedAppearances">Return only comics in which the specified characters appear together (for example in which BOTH Spider-Man and Wolverine appear).</param>
         /// <param name="Collaborators">Return only comics in which the specified creators worked together (for example in which BOTH Stan Lee and Jack Kirby did work).</param>
         /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
         /// <param name="Limit">Limit the result set to the specified number of resources.</param>
@@ -1133,7 +1133,7 @@ namespace MarvelAPI
                                                         IEnumerable<int> Series = null,
                                                         IEnumerable<int> Events = null,
                                                         IEnumerable<int> Stories = null,
-                                                        IEnumerable<int> SharedAppearences = null,
+                                                        IEnumerable<int> SharedAppearances = null,
                                                         IEnumerable<int> Collaborators = null,
                                                         IEnumerable<OrderBy> Order = null,
                                                         int? Limit = null,
@@ -1185,7 +1185,7 @@ namespace MarvelAPI
             request.AddParameterList(Series, "series");
             request.AddParameterList(Events, "events");
             request.AddParameterList(Stories, "stories");
-            request.AddParameterList(SharedAppearences, "sharedAppearances");
+            request.AddParameterList(SharedAppearances, "sharedAppearances");
             request.AddParameterList(Collaborators, "collaborators");
 
             var availableOrderBy = new List<OrderBy>
@@ -1621,7 +1621,7 @@ namespace MarvelAPI
         /// <param name="Series">Return only comics which are part of the specified series.</param>
         /// <param name="Events">Return only comics which take place in the specified events.</param>
         /// <param name="Stories">Return only comics which contain the specified stories.</param>
-        /// <param name="SharedAppearences">Return only comics in which the specified characters appear together (for example in which BOTH Spider-Man and Wolverine appear).</param>
+        /// <param name="SharedAppearances">Return only comics in which the specified characters appear together (for example in which BOTH Spider-Man and Wolverine appear).</param>
         /// <param name="Collaborators">Return only comics in which the specified creators worked together (for example in which BOTH Stan Lee and Jack Kirby did work).</param>
         /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
         /// <param name="Limit">Limit the result set to the specified number of resources.</param>
@@ -1643,7 +1643,7 @@ namespace MarvelAPI
                                                         IEnumerable<int> Series = null,
                                                         IEnumerable<int> Events = null, // Weird to see this here
                                                         IEnumerable<int> Stories = null,
-                                                        IEnumerable<int> SharedAppearences = null,
+                                                        IEnumerable<int> SharedAppearances = null,
                                                         IEnumerable<int> Collaborators = null,
                                                         IEnumerable<OrderBy> Order = null,
                                                         int? Limit = null,
@@ -1696,7 +1696,7 @@ namespace MarvelAPI
             request.AddParameterList(Series, "series");
             request.AddParameterList(Events, "events");
             request.AddParameterList(Stories, "stories");
-            request.AddParameterList(SharedAppearences, "sharedAppearences");
+            request.AddParameterList(SharedAppearances, "sharedAppearances");
             request.AddParameterList(Collaborators, "collaborators");
 
             var availableOrderBy = new List<OrderBy>
@@ -2150,7 +2150,7 @@ namespace MarvelAPI
         /// <param name="Characters">Return only comics which feature the specified characters.</param>
         /// <param name="Events">Return only comics which take place in the specified events.</param>
         /// <param name="Stories">Return only comics which contain the specified stories.</param>
-        /// <param name="SharedAppearences">Return only comics in which the specified characters appear together (for example in which BOTH Spider-Man and Wolverine appear).</param>
+        /// <param name="SharedAppearances">Return only comics in which the specified characters appear together (for example in which BOTH Spider-Man and Wolverine appear).</param>
         /// <param name="Collaborators">Return only comics in which the specified creators worked together (for example in which BOTH Stan Lee and Jack Kirby did work).</param>
         /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
         /// <param name="Limit">Limit the result set to the specified number of resources.</param>
@@ -2171,7 +2171,7 @@ namespace MarvelAPI
                                                         IEnumerable<int> Characters = null,
                                                         IEnumerable<int> Events = null,
                                                         IEnumerable<int> Stories = null,
-                                                        IEnumerable<int> SharedAppearences = null,
+                                                        IEnumerable<int> SharedAppearances = null,
                                                         IEnumerable<int> Collaborators = null,
                                                         IEnumerable<OrderBy> Order = null,
                                                         int? Limit = null,
@@ -2223,7 +2223,7 @@ namespace MarvelAPI
             request.AddParameterList(Characters, "characters");
             request.AddParameterList(Events, "events");
             request.AddParameterList(Stories, "stories");
-            request.AddParameterList(SharedAppearences, "sharedAppearences");
+            request.AddParameterList(SharedAppearances, "sharedAppearances");
             request.AddParameterList(Collaborators, "collaborators");
 
             var availableOrderBy = new List<OrderBy>
@@ -2642,7 +2642,7 @@ namespace MarvelAPI
         /// <param name="Characters">Return only comics which feature the specified characters.</param>
         /// <param name="Series">Return only comics which are part of the specified series.</param>
         /// <param name="Events">Return only comics which take place in the specified events.</param>
-        /// <param name="SharedAppearences">Return only comics in which the specified characters appear together (for example in which BOTH Spider-Man and Wolverine appear).</param>
+        /// <param name="SharedAppearances">Return only comics in which the specified characters appear together (for example in which BOTH Spider-Man and Wolverine appear).</param>
         /// <param name="Collaborators">Return only comics in which the specified creators worked together (for example in which BOTH Stan Lee and Jack Kirby did work).</param>
         /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
         /// <param name="Limit">Limit the result set to the specified number of resources.</param>
@@ -2663,7 +2663,7 @@ namespace MarvelAPI
                                                         IEnumerable<int> Characters = null,
                                                         IEnumerable<int> Series = null,
                                                         IEnumerable<int> Events = null,
-                                                        IEnumerable<int> SharedAppearences = null,
+                                                        IEnumerable<int> SharedAppearances = null,
                                                         IEnumerable<int> Collaborators = null,
                                                         IEnumerable<OrderBy> Order = null,
                                                         int? Limit = null,
@@ -2715,7 +2715,7 @@ namespace MarvelAPI
             request.AddParameterList(Characters, "characters");
             request.AddParameterList(Series, "series");
             request.AddParameterList(Events, "events");
-            request.AddParameterList(SharedAppearences, "sharedAppearences");
+            request.AddParameterList(SharedAppearances, "sharedAppearances");
             request.AddParameterList(Collaborators, "collaborators");
 
             var availableOrderBy = new List<OrderBy>

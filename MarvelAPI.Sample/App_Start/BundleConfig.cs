@@ -16,13 +16,18 @@ namespace MarvelAPI.Sample
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+            // Ember bundle
+            bundles.Add(new ScriptBundle("~/bundles/ember")
+                .Include("~/Scripts/handlebars-1.1.2.js")
+                .Include("~/Scripts/ember-1.4.0.js")
+                .Include("~/Scripts/ember-data.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+            //bundles.Add(new ScriptBundle("~/bundles/app")
+            //    .Include("~/Scripts/app.js")
+            //    .Include("~/Scripts/store.js")
+            //    .Include("~/Scripts/router.js")
+            //    .IncludeDirectory("~/Scripts/models", "*.js")
+            //    .IncludeDirectory("~/Scripts/routes", "*.js"));
         }
     }
 }

@@ -1,0 +1,13 @@
+﻿{{#unless controller.currentResults.length}}
+<h3>Comics</h3>
+<ul>
+    {{#each comic in controller.currentResults}}
+        <li>
+            <span class="comicTitle">{{comic.title}}</span><br />
+            <span class="comicDescription">{{comic.description}}</span><br />
+            <span class="comicId">{{comic.id}}</span><br />
+        </li>
+    {{/each}}
+</ul>
+{{/unless}}
+

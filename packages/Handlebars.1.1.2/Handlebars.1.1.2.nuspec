@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Handlebars</id>
+    <version>1.1.2</version>
+    <authors>Yehuda Katz</authors>
+    <owners>Yehuda Katz</owners>
+    <licenseUrl>https://github.com/wycats/handlebars.js/blob/master/LICENSE</licenseUrl>
+    <projectUrl>http://www.handlebarsjs.com/</projectUrl>
+    <iconUrl>https://raw.github.com/ntotten/NuGetPackages/master/images/handlebars.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Handlebars provides the power necessary to let you build semantic templates effectively with no frustration.</description>
+    <releaseNotes>https://github.com/wycats/handlebars.js/blob/master/release-notes.md</releaseNotes>
+    <copyright>Copyright (C) 2011 by Yehuda Katz</copyright>
+    <tags>handlebars handlebarsjs handlebars.js javascript</tags>
+  </metadata>
+</package>

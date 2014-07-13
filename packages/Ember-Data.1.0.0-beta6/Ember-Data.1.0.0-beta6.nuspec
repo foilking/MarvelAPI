@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>Ember-Data</id>
+    <version>1.0.0-beta6</version>
+    <authors>Yehuda Katz, Tom Dale, Charles Jolley, Ember.js contributors</authors>
+    <owners>ntotten</owners>
+    <licenseUrl>https://github.com/emberjs/data/blob/master/LICENSE</licenseUrl>
+    <projectUrl>http://emberjs.com</projectUrl>
+    <iconUrl>https://raw.github.com/ntotten/NuGetPackages/master/images/emberjs.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Ember Data is a library for loading data from a persistence layer (such as a JSON API), mapping this data to a set of models within your client application, updating those models, then saving the changes back to a persistence layer.</description>
+    <releaseNotes>https://github.com/emberjs/data/blob/master/CHANGELOG.md</releaseNotes>
+    <copyright>Copyright (C) 2011 by LivingSocial, Inc.</copyright>
+    <tags>ember ember.js emberjs ember.data ember-data data javascript</tags>
+    <dependencies>
+      <dependency id="Ember" version="1.3" />
+    </dependencies>
+  </metadata>
+</package>
