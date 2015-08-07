@@ -442,6 +442,7 @@ namespace MarvelAPI
         /// </summary>
         /// <param name="CharacterId">The character ID</param>
         /// <param name="Title">Filter by series title.</param>
+        /// <param name="TitleStartsWith">Return titles that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only series which have been modified since the specified date.</param>
         /// <param name="Comics">Return only series which contain the specified comics.</param>
         /// <param name="Stories">Return only series which contain the specified stories.</param>
@@ -457,6 +458,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Series> GetSeriesForCharacter(int CharacterId,
                                             string Title = null,
+                                            string TitleStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Stories = null,
@@ -473,6 +475,10 @@ namespace MarvelAPI
             if (!String.IsNullOrWhiteSpace(Title))
             {
                 request.AddParameter("title", Title);
+            }
+            if (!String.IsNullOrWhiteSpace(TitleStartsWith))
+            {
+                request.AddParameter("titleStartsWith", TitleStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -1396,6 +1402,7 @@ namespace MarvelAPI
         /// </summary>
         /// <param name="CreatorId">The creator ID.</param>
         /// <param name="Title">Filter by series title.</param>
+        /// <param name="TitleStartsWith">Return titles that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only series which have been modified since the specified date.</param>
         /// <param name="Comics">Return only series which contain the specified comics.</param>
         /// <param name="Stories">Return only series which contain the specified stories.</param>
@@ -1411,6 +1418,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Series> GetSeriesForCreator(int CreatorId,
                                             string Title = null,
+                                            string TitleStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Stories = null,
@@ -1427,6 +1435,10 @@ namespace MarvelAPI
             if (!String.IsNullOrWhiteSpace(Title))
             {
                 request.AddParameter("title", Title);
+            }
+            if (!String.IsNullOrWhiteSpace(TitleStartsWith))
+            {
+                request.AddParameter("titleStartsWith", TitleStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -1950,6 +1962,7 @@ namespace MarvelAPI
         /// </summary>
         /// <param name="EventId">The event ID.</param>
         /// <param name="Title">Filter by series title.</param>
+        /// <param name="TitleStartsWith">Return titles that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only series which have been modified since the specified date.</param>
         /// <param name="Comics">Return only series which contain the specified comics.</param>
         /// <param name="Stories">Return only series which contain the specified stories.</param>
@@ -1965,6 +1978,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Series> GetSeriesForEvent(int EventId,
                                             string Title = null,
+                                            string TitleStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Stories = null,
@@ -1981,6 +1995,10 @@ namespace MarvelAPI
             if (!String.IsNullOrWhiteSpace(Title))
             {
                 request.AddParameter("title", Title);
+            }
+            if (!String.IsNullOrWhiteSpace(TitleStartsWith))
+            {
+                request.AddParameter("titleStartsWith", TitleStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -2097,6 +2115,7 @@ namespace MarvelAPI
         /// Fetches lists of comic series with optional filters.
         /// </summary>
         /// <param name="Title">Return only series matching the specified title.</param>
+        /// <param name="TitleStartsWith">Return titles that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only series which have been modified since the specified date.</param>
         /// <param name="Comics">Return only series which contain the specified comics.</param>
         /// <param name="Stories">Return only series which contain the specified stories.</param>
@@ -2112,6 +2131,7 @@ namespace MarvelAPI
         /// Lists of comic series
         /// </returns>
         public IEnumerable<Series> GetSeries(string Title = null,
+                                            string TitleStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Stories = null,
@@ -2129,6 +2149,10 @@ namespace MarvelAPI
             if (!String.IsNullOrWhiteSpace(Title))
             {
                 request.AddParameter("title", Title);
+            }
+            if (!String.IsNullOrWhiteSpace(TitleStartsWith))
+            {
+                request.AddParameter("titleStartsWith", TitleStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
