@@ -58,7 +58,7 @@ namespace MarvelAPI
         {
             var request = new RestRequest(requestUrl, Method.GET);
             var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
-            
+
             request.AddParameter("apikey", _publicApiKey);
             request.AddParameter("ts", timestamp);
             request.AddParameter("hash", CreateHash(String.Format("{0}{1}{2}", timestamp, _privateApiKey, _publicApiKey)));
@@ -71,11 +71,11 @@ namespace MarvelAPI
             {
                 request.AddHeader("Accept", "*/*");
             }
-            
+
             return request;
         }
 
-        private void HandleResponseErrors<T> (IRestResponse<T> response)
+        private void HandleResponseErrors<T>(IRestResponse<T> response)
         {
             var code = 0;
             var status = String.Empty;
@@ -135,7 +135,7 @@ namespace MarvelAPI
                 }
             }
 
-            switch(code)
+            switch (code)
             {
                 case 409:
                     throw new ArgumentException(status);
@@ -154,6 +154,7 @@ namespace MarvelAPI
         /// Fetches lists of comic characters with optional filters.
         /// </summary>
         /// <param name="Name">Return only characters matching the specified full character name (e.g. Spider-Man).</param>
+        /// <param name="NameStartsWith">Return characters with names that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only characters which have been modified since the specified date.</param>
         /// <param name="Comics">Return only characters which appear in the specified comics.</param>
         /// <param name="Series">Return only characters which appear the specified series.</param>
@@ -166,6 +167,7 @@ namespace MarvelAPI
         /// List of comic characters
         /// </returns>
         public IEnumerable<Character> GetCharacters(string Name = null,
+                                            string NameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Series = null,
@@ -180,6 +182,10 @@ namespace MarvelAPI
             {
                 request.AddParameter("name", Name);
             }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
+            }
             if (ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
@@ -190,7 +196,7 @@ namespace MarvelAPI
             request.AddParameterList(Events, "events");
             request.AddParameterList(Stories, "stories");
 
-            var availableOrderBy = new List<OrderBy> 
+            var availableOrderBy = new List<OrderBy>
             {
                 OrderBy.Name,
                 OrderBy.NameDesc,
@@ -321,7 +327,7 @@ namespace MarvelAPI
             request.AddParameterList(SharedAppearances, "sharedAppearances");
             request.AddParameterList(Collaborators, "collaborators");
 
-            var availableOrderBy = new List<OrderBy> 
+            var availableOrderBy = new List<OrderBy>
             {
                 OrderBy.FocDate,
                 OrderBy.FocDateDesc,
@@ -357,6 +363,7 @@ namespace MarvelAPI
         /// </summary>
         /// <param name="CharacterId">The character id</param>
         /// <param name="Name">Filter the event list by name.</param>
+        /// <param name="NameStartsWith">Return characters with names that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only events which have been modified since the specified date.</param>
         /// <param name="Creators">Return only events which feature work by the specified creators.</param>
         /// <param name="Series">Return only events which are part of the specified series.</param>
@@ -368,8 +375,9 @@ namespace MarvelAPI
         /// <returns>
         /// Lists of events
         /// </returns>
-        public IEnumerable<Event> GetEventsForCharacter(int CharacterId, 
+        public IEnumerable<Event> GetEventsForCharacter(int CharacterId,
                                             string Name = null,
+                                            string NameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Creators = null,
                                             IEnumerable<int> Series = null,
@@ -384,6 +392,11 @@ namespace MarvelAPI
             if (!String.IsNullOrWhiteSpace(Name))
             {
                 request.AddParameter("name", Name);
+            }
+
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
             }
 
             if (ModifiedSince.HasValue)
@@ -429,6 +442,7 @@ namespace MarvelAPI
         /// </summary>
         /// <param name="CharacterId">The character ID</param>
         /// <param name="Title">Filter by series title.</param>
+        /// <param name="TitleStartsWith">Return titles that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only series which have been modified since the specified date.</param>
         /// <param name="Comics">Return only series which contain the specified comics.</param>
         /// <param name="Stories">Return only series which contain the specified stories.</param>
@@ -444,6 +458,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Series> GetSeriesForCharacter(int CharacterId,
                                             string Title = null,
+                                            string TitleStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Stories = null,
@@ -456,16 +471,20 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/characters/{0}/series/", CharacterId));
-            
+
             if (!String.IsNullOrWhiteSpace(Title))
             {
                 request.AddParameter("title", Title);
+            }
+            if (!String.IsNullOrWhiteSpace(TitleStartsWith))
+            {
+                request.AddParameter("titleStartsWith", TitleStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
             }
-            
+
             request.AddParameterList(Comics, "comics");
             request.AddParameterList(Stories, "stories");
             request.AddParameterList(Events, "events");
@@ -531,7 +550,7 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/characters/{0}/stories/", CharacterId));
-            
+
             if (ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
@@ -612,7 +631,7 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest("/comics");
-            
+
             if (Format.HasValue)
             {
                 request.AddParameter("format", Format.Value.ToParameter());
@@ -711,10 +730,11 @@ namespace MarvelAPI
         }
 
         /// <summary>
-        /// Fetches lists of characters who appear in a specific comic with optional filters.
+        /// Fetches lists of characters which appear in a specific comic with optional filters.
         /// </summary>
         /// <param name="ComicId">The comic id.</param>
         /// <param name="Name">Return only characters matching the specified full character name (e.g. Spider-Man).</param>
+        /// <param name="NameStartsWith">Return characters with names that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only characters which have been modified since the specified date.</param>
         /// <param name="Series">Return only characters which appear the specified series.</param>
         /// <param name="Events">Return only characters which appear comics that took place in the specified events.</param>
@@ -727,6 +747,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Character> GetCharactersForComic(int ComicId,
                                             string Name = null,
+                                            string NameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Series = null,
                                             IEnumerable<int> Events = null,
@@ -740,6 +761,10 @@ namespace MarvelAPI
             if (!String.IsNullOrWhiteSpace(Name))
             {
                 request.AddParameter("name", Name);
+            }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -783,6 +808,10 @@ namespace MarvelAPI
         /// <param name="MiddleName">Filter by creator middle name (e.g. Michael).</param>
         /// <param name="LastName">Filter by creator last name (e.g. Bendis).</param>
         /// <param name="Suffix">Filter by suffix or honorific (e.g. Jr., Sr.).</param>
+        /// <param name="NameStartsWith">Filter by creator names that match critera (e.g. B, St L).</param>
+        /// <param name="FirstNameStartsWith">Filter by creator first names that match critera (e.g. B, St L).</param>
+        /// <param name="MiddleNameStartsWith">Filter by creator middle names that match critera (e.g. Mi).</param>
+        /// <param name="LastNameStartsWith">Filter by creator last names that match critera (e.g. Ben).</param>
         /// <param name="ModifiedSince">Return only creators which have been modified since the specified date.</param>
         /// <param name="Comics">Return only creators who worked on in the specified comics.</param>
         /// <param name="Series">Return only creators who worked on the specified series.</param>
@@ -798,6 +827,10 @@ namespace MarvelAPI
                                             string MiddleName = null,
                                             string LastName = null,
                                             string Suffix = null,
+                                            string NameStartsWith = null,
+                                            string FirstNameStartsWith = null,
+                                            string MiddleNameStartsWith = null,
+                                            string LastNameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Series = null,
@@ -807,7 +840,7 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/comics/{0}/characters", ComicId));
-            
+
             if (!String.IsNullOrWhiteSpace(FirstName))
             {
                 request.AddParameter("firstName", FirstName);
@@ -824,11 +857,27 @@ namespace MarvelAPI
             {
                 request.AddParameter("suffix", Suffix);
             }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(FirstNameStartsWith))
+            {
+                request.AddParameter("firstNameStartsWith", FirstNameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(MiddleNameStartsWith))
+            {
+                request.AddParameter("middleNameStartsWith", MiddleNameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(LastNameStartsWith))
+            {
+                request.AddParameter("lastNameStartsWith", LastNameStartsWith);
+            }
             if (ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
             }
-            
+
             request.AddParameterList(Series, "series");
             request.AddParameterList(Comics, "comics");
             request.AddParameterList(Stories, "stories");
@@ -869,6 +918,7 @@ namespace MarvelAPI
         /// </summary>
         /// <param name="ComicId">The comic ID.</param>
         /// <param name="Name">Filter the event list by name.</param>
+        /// <param name="NameStartsWith">Return characters with names that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only events which have been modified since the specified date.</param>
         /// <param name="Creators">Return only events which feature work by the specified creators.</param>
         /// <param name="Characters">Return only events which feature the specified characters.</param>
@@ -882,6 +932,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Event> GetEventsForComic(int ComicId,
                                             string Name = null,
+                                            string NameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Creators = null,
                                             IEnumerable<int> Characters = null,
@@ -892,10 +943,14 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/comics/{0}/events/", ComicId));
-            
+
             if (!String.IsNullOrWhiteSpace(Name))
             {
                 request.AddParameter("name", Name);
+            }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -960,7 +1015,7 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/comics/{0}/events/", ComicId));
-            
+
             if (ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
@@ -971,7 +1026,7 @@ namespace MarvelAPI
             request.AddParameterList(Creators, "creators");
             request.AddParameterList(Characters, "characters");
 
-            var availableOrderBy = new List<OrderBy> 
+            var availableOrderBy = new List<OrderBy>
             {
                 OrderBy.Id,
                 OrderBy.IdDesc,
@@ -1006,6 +1061,10 @@ namespace MarvelAPI
         /// <param name="MiddleName">Filter by creator middle name (e.g. Michael).</param>
         /// <param name="LastName">Filter by creator last name (e.g. Bendis).</param>
         /// <param name="Suffix">Filter by suffix or honorific (e.g. Jr., Sr.).</param>
+        /// <param name="NameStartsWith">Filter by creator names that match critera (e.g. B, St L).</param>
+        /// <param name="FirstNameStartsWith">Filter by creator first names that match critera (e.g. B, St L).</param>
+        /// <param name="MiddleNameStartsWith">Filter by creator middle names that match critera (e.g. Mi).</param>
+        /// <param name="LastNameStartsWith">Filter by creator last names that match critera (e.g. Ben).</param>
         /// <param name="ModifiedSince">Return only creators which have been modified since the specified date.</param>
         /// <param name="Comics">Return only creators who worked on in the specified comics.</param>
         /// <param name="Series">Return only creators who worked on the specified series.</param>
@@ -1021,6 +1080,10 @@ namespace MarvelAPI
                                                 string MiddleName = null,
                                                 string LastName = null,
                                                 string Suffix = null,
+                                                string NameStartsWith = null,
+                                                string FirstNameStartsWith = null,
+                                                string MiddleNameStartsWith = null,
+                                                string LastNameStartsWith = null,
                                                 DateTime? ModifiedSince = null,
                                                 IEnumerable<int> Comics = null,
                                                 IEnumerable<int> Series = null,
@@ -1031,7 +1094,7 @@ namespace MarvelAPI
                                                 int? Offset = null)
         {
             var request = CreateRequest("/creators");
-            
+
             if (!String.IsNullOrWhiteSpace(FirstName))
             {
                 request.AddParameter("firstName", FirstName);
@@ -1047,6 +1110,22 @@ namespace MarvelAPI
             if (!String.IsNullOrWhiteSpace(Suffix))
             {
                 request.AddParameter("suffix", Suffix);
+            }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(FirstNameStartsWith))
+            {
+                request.AddParameter("firstNameStartsWith", FirstNameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(MiddleNameStartsWith))
+            {
+                request.AddParameter("middleNameStartsWith", MiddleNameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(LastNameStartsWith))
+            {
+                request.AddParameter("lastNameStartsWith", LastNameStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -1099,7 +1178,7 @@ namespace MarvelAPI
         public Creator GetCreator(int CreatorId)
         {
             var request = CreateRequest(String.Format("/creators/{0}", CreatorId));
-            
+
             IRestResponse<CreatorDataWrapper> response = _client.Execute<CreatorDataWrapper>(request);
 
             HandleResponseErrors(response);
@@ -1131,12 +1210,12 @@ namespace MarvelAPI
         /// <returns>
         /// Lists of comics in which the work of a specific creator appears.
         /// </returns>
-        public IEnumerable<Comic> GetComicsForCreator(int CreatorId, 
-                                                        ComicFormat? Format = null, 
-                                                        ComicFormatType? FormatType = null, 
+        public IEnumerable<Comic> GetComicsForCreator(int CreatorId,
+                                                        ComicFormat? Format = null,
+                                                        ComicFormatType? FormatType = null,
                                                         bool? NoVariants = null,
                                                         DateDescriptor? DateDescript = null,
-                                                        DateTime? DateRangeBegin = null, 
+                                                        DateTime? DateRangeBegin = null,
                                                         DateTime? DateRangeEnd = null,
                                                         bool? HasDigitalIssue = null,
                                                         DateTime? ModifiedSince = null,
@@ -1151,7 +1230,7 @@ namespace MarvelAPI
                                                         int? Offset = null)
         {
             var request = CreateRequest(String.Format("/creators/{0}/comics", CreatorId));
-            
+
             if (Format.HasValue)
             {
                 request.AddParameter("format", Format.Value.ToParameter());
@@ -1167,7 +1246,7 @@ namespace MarvelAPI
             if (DateDescript.HasValue)
             {
                 request.AddParameter("dateDescriptor", DateDescript.Value.ToParameter());
-            } 
+            }
             if (DateRangeBegin.HasValue && DateRangeEnd.HasValue)
             {
                 if (DateRangeBegin.Value <= DateRangeEnd.Value)
@@ -1235,6 +1314,7 @@ namespace MarvelAPI
         /// </summary>
         /// <param name="CreatorId">The creator ID.</param>
         /// <param name="Name">Filter the event list by name.</param>
+        /// <param name="NameStartsWith">Return characters with names that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only events which have been modified since the specified date.</param>
         /// <param name="Characters">Return only events which feature the specified characters.</param>
         /// <param name="Series">Return only events which are part of the specified series.</param>
@@ -1248,6 +1328,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Event> GetEventsForCreator(int CreatorId,
                                             string Name = null,
+                                            string NameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Characters = null,
                                             IEnumerable<int> Series = null,
@@ -1258,16 +1339,20 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/creators/{0}/events/", CreatorId));
-            
+
             if (!String.IsNullOrWhiteSpace(Name))
             {
                 request.AddParameter("name", Name);
+            }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
             }
-            
+
             if (Characters != null && Characters.Any())
             {
                 request.AddParameter("characters", string.Join<int>(",", Characters));
@@ -1285,8 +1370,8 @@ namespace MarvelAPI
                 request.AddParameter("stories", string.Join<int>(",", Stories));
             }
 
-            var availableOrderBy = new List<OrderBy> 
-            { 
+            var availableOrderBy = new List<OrderBy>
+            {
                 OrderBy.Name,
                 OrderBy.NameDesc,
                 OrderBy.StartDate,
@@ -1317,6 +1402,7 @@ namespace MarvelAPI
         /// </summary>
         /// <param name="CreatorId">The creator ID.</param>
         /// <param name="Title">Filter by series title.</param>
+        /// <param name="TitleStartsWith">Return titles that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only series which have been modified since the specified date.</param>
         /// <param name="Comics">Return only series which contain the specified comics.</param>
         /// <param name="Stories">Return only series which contain the specified stories.</param>
@@ -1332,6 +1418,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Series> GetSeriesForCreator(int CreatorId,
                                             string Title = null,
+                                            string TitleStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Stories = null,
@@ -1344,10 +1431,14 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/creators/{0}/series/", CreatorId));
-            
+
             if (!String.IsNullOrWhiteSpace(Title))
             {
                 request.AddParameter("title", Title);
+            }
+            if (!String.IsNullOrWhiteSpace(TitleStartsWith))
+            {
+                request.AddParameter("titleStartsWith", TitleStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -1358,7 +1449,7 @@ namespace MarvelAPI
             request.AddParameterList(Stories, "stories");
             request.AddParameterList(Events, "events");
             request.AddParameterList(Characters, "characters");
-            
+
             if (SeriesType.HasValue)
             {
                 request.AddParameter("seriesType", SeriesType.Value.ToParameter());
@@ -1379,7 +1470,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -1422,7 +1513,7 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/creators/{0}/events/", CreatorId));
-            
+
             if (ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
@@ -1441,7 +1532,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -1464,6 +1555,7 @@ namespace MarvelAPI
         /// Fetches lists of events with optional filters.
         /// </summary>
         /// <param name="Name">Return only events which match the specified name.</param>
+        /// <param name="NameStartsWith">Return characters with names that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only events which have been modified since the specified date.</param>
         /// <param name="Creators">Return only events which feature work by the specified creators.</param>
         /// <param name="Characters">Return only events which feature the specified characters.</param>
@@ -1477,6 +1569,7 @@ namespace MarvelAPI
         /// Lists of events
         /// </returns>
         public IEnumerable<Event> GetEvents(string Name = null,
+                                            string NameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Creators = null,
                                             IEnumerable<int> Characters = null,
@@ -1488,10 +1581,14 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest("/events/");
-            
+
             if (!String.IsNullOrWhiteSpace(Name))
             {
                 request.AddParameter("name", Name);
+            }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -1514,7 +1611,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -1542,7 +1639,7 @@ namespace MarvelAPI
         public Event GetEvent(int EventId)
         {
             var request = CreateRequest(String.Format("/events/{0}", EventId));
-            
+
             IRestResponse<EventDataWrapper> response = _client.Execute<EventDataWrapper>(request);
 
             HandleResponseErrors(response);
@@ -1555,6 +1652,7 @@ namespace MarvelAPI
         /// </summary>
         /// <param name="EventId">The event ID</param>
         /// <param name="Name">Return only characters matching the specified full character name (e.g. Spider-Man).</param>
+        /// <param name="NameStartsWith">Return characters with names that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only characters which have been modified since the specified date.</param>
         /// <param name="Comics">Return only characters which appear in the specified comics.</param>
         /// <param name="Series">Return only characters which appear the specified series.</param>
@@ -1567,6 +1665,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Character> GetCharactersForEvent(int EventId,
                                             string Name = null,
+                                            string NameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Series = null,
@@ -1576,10 +1675,14 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/events/{0}/characters", EventId));
-            
+
             if (!String.IsNullOrWhiteSpace(Name))
             {
                 request.AddParameter("name", Name);
+            }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -1661,7 +1764,7 @@ namespace MarvelAPI
                                                         int? Offset = null)
         {
             var request = CreateRequest(String.Format("/events/{0}/comics", EventId));
-            
+
             if (Format.HasValue)
             {
                 request.AddParameter("format", Format.Value.ToParameter());
@@ -1724,7 +1827,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -1749,6 +1852,10 @@ namespace MarvelAPI
         /// <param name="MiddleName">Filter by creator middle name (e.g. Michael).</param>
         /// <param name="LastName">Filter by creator last name (e.g. Bendis).</param>
         /// <param name="Suffix">Filter by suffix or honorific (e.g. Jr., Sr.).</param>
+        /// <param name="NameStartsWith">Filter by creator names that match critera (e.g. B, St L).</param>
+        /// <param name="FirstNameStartsWith">Filter by creator first names that match critera (e.g. B, St L).</param>
+        /// <param name="MiddleNameStartsWith">Filter by creator middle names that match critera (e.g. Mi).</param>
+        /// <param name="LastNameStartsWith">Filter by creator last names that match critera (e.g. Ben).</param>
         /// <param name="ModifiedSince">Return only creators which have been modified since the specified date.</param>
         /// <param name="Comics">Return only creators who worked on in the specified comics.</param>
         /// <param name="Series">Return only creators who worked on the specified series.</param>
@@ -1764,6 +1871,10 @@ namespace MarvelAPI
                                             string MiddleName = null,
                                             string LastName = null,
                                             string Suffix = null,
+                                            string NameStartsWith = null,
+                                            string FirstNameStartsWith = null,
+                                            string MiddleNameStartsWith = null,
+                                            string LastNameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Series = null,
@@ -1773,7 +1884,7 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/events/{0}/creators", EventId));
-            
+
             if (!String.IsNullOrWhiteSpace(FirstName))
             {
                 request.AddParameter("firstName", FirstName);
@@ -1789,6 +1900,22 @@ namespace MarvelAPI
             if (!String.IsNullOrWhiteSpace(Suffix))
             {
                 request.AddParameter("suffix", Suffix);
+            }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(FirstNameStartsWith))
+            {
+                request.AddParameter("firstNameStartsWith", FirstNameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(MiddleNameStartsWith))
+            {
+                request.AddParameter("middleNameStartsWith", MiddleNameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(LastNameStartsWith))
+            {
+                request.AddParameter("lastNameStartsWith", LastNameStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -1835,6 +1962,7 @@ namespace MarvelAPI
         /// </summary>
         /// <param name="EventId">The event ID.</param>
         /// <param name="Title">Filter by series title.</param>
+        /// <param name="TitleStartsWith">Return titles that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only series which have been modified since the specified date.</param>
         /// <param name="Comics">Return only series which contain the specified comics.</param>
         /// <param name="Stories">Return only series which contain the specified stories.</param>
@@ -1850,6 +1978,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Series> GetSeriesForEvent(int EventId,
                                             string Title = null,
+                                            string TitleStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Stories = null,
@@ -1862,10 +1991,14 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/events/{0}/series/", EventId));
-            
+
             if (!String.IsNullOrWhiteSpace(Title))
             {
                 request.AddParameter("title", Title);
+            }
+            if (!String.IsNullOrWhiteSpace(TitleStartsWith))
+            {
+                request.AddParameter("titleStartsWith", TitleStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -1876,7 +2009,7 @@ namespace MarvelAPI
             request.AddParameterList(Stories, "stories");
             request.AddParameterList(Creators, "creators");
             request.AddParameterList(Characters, "characters");
-            
+
             if (SeriesType.HasValue)
             {
                 request.AddParameter("seriesType", SeriesType.Value.ToParameter());
@@ -1897,7 +2030,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -1940,7 +2073,7 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/events/{0}/stories", EventId));
-            
+
             if (ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
@@ -1959,7 +2092,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -1982,6 +2115,7 @@ namespace MarvelAPI
         /// Fetches lists of comic series with optional filters.
         /// </summary>
         /// <param name="Title">Return only series matching the specified title.</param>
+        /// <param name="TitleStartsWith">Return titles that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only series which have been modified since the specified date.</param>
         /// <param name="Comics">Return only series which contain the specified comics.</param>
         /// <param name="Stories">Return only series which contain the specified stories.</param>
@@ -1997,6 +2131,7 @@ namespace MarvelAPI
         /// Lists of comic series
         /// </returns>
         public IEnumerable<Series> GetSeries(string Title = null,
+                                            string TitleStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Stories = null,
@@ -2010,10 +2145,14 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest("/series");
-            
+
             if (!String.IsNullOrWhiteSpace(Title))
             {
                 request.AddParameter("title", Title);
+            }
+            if (!String.IsNullOrWhiteSpace(TitleStartsWith))
+            {
+                request.AddParameter("titleStartsWith", TitleStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -2072,19 +2211,20 @@ namespace MarvelAPI
         public Series GetSeries(int SeriesId)
         {
             var request = CreateRequest(String.Format("/series/{0}", SeriesId));
-            
+
             IRestResponse<SeriesDataWrapper> response = _client.Execute<SeriesDataWrapper>(request);
 
             HandleResponseErrors(response);
 
             return response.Data.Data.Results.FirstOrDefault(series => series.Id == SeriesId);
         }
-        
+
         /// <summary>
         /// Fetches lists of characters which appear in specific series, with optional filters.
         /// </summary>
         /// <param name="SeriesId">The series id.</param>
         /// <param name="Name">Return only characters matching the specified full character name (e.g. Spider-Man).</param>
+        /// <param name="NameStartsWith">Return characters with names that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only characters which have been modified since the specified date.</param>
         /// <param name="Comics">Return only characters which appear in the specified comics.</param>
         /// <param name="Events">Return only characters which appear comics that took place in the specified events.</param>
@@ -2097,6 +2237,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Character> GetCharactersForSeries(int SeriesId,
                                             string Name = null,
+                                            string NameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Events = null,
@@ -2106,10 +2247,14 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/series/{0}/characters", SeriesId));
-            
+
             if (!String.IsNullOrWhiteSpace(Name))
             {
                 request.AddParameter("name", Name);
+            }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -2128,7 +2273,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -2189,7 +2334,7 @@ namespace MarvelAPI
                                                         int? Offset = null)
         {
             var request = CreateRequest(String.Format("/series/{0}/comics", SeriesId));
-            
+
             if (Format.HasValue)
             {
                 request.AddParameter("format", Format.Value.ToParameter());
@@ -2276,6 +2421,10 @@ namespace MarvelAPI
         /// <param name="MiddleName">Filter by creator middle name (e.g. Michael).</param>
         /// <param name="LastName">Filter by creator last name (e.g. Bendis).</param>
         /// <param name="Suffix">Filter by suffix or honorific (e.g. Jr., Sr.).</param>
+        /// <param name="NameStartsWith">Filter by creator names that match critera (e.g. B, St L).</param>
+        /// <param name="FirstNameStartsWith">Filter by creator first names that match critera (e.g. B, St L).</param>
+        /// <param name="MiddleNameStartsWith">Filter by creator middle names that match critera (e.g. Mi).</param>
+        /// <param name="LastNameStartsWith">Filter by creator last names that match critera (e.g. Ben).</param>
         /// <param name="ModifiedSince">Return only creators which have been modified since the specified date.</param>
         /// <param name="Comics">Return only creators who worked on in the specified comics.</param>
         /// <param name="Events">Return only creators who worked on comics that took place in the specified events.</param>
@@ -2291,6 +2440,10 @@ namespace MarvelAPI
                                             string MiddleName = null,
                                             string LastName = null,
                                             string Suffix = null,
+                                            string NameStartsWith = null,
+                                            string FirstNameStartsWith = null,
+                                            string MiddleNameStartsWith = null,
+                                            string LastNameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Events = null,
@@ -2300,7 +2453,7 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/series/{0}/creators", SeriesId));
-            
+
             if (!String.IsNullOrWhiteSpace(FirstName))
             {
                 request.AddParameter("firstName", FirstName);
@@ -2316,6 +2469,22 @@ namespace MarvelAPI
             if (!String.IsNullOrWhiteSpace(Suffix))
             {
                 request.AddParameter("suffix", Suffix);
+            }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(FirstNameStartsWith))
+            {
+                request.AddParameter("firstNameStartsWith", FirstNameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(MiddleNameStartsWith))
+            {
+                request.AddParameter("middleNameStartsWith", MiddleNameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(LastNameStartsWith))
+            {
+                request.AddParameter("lastNameStartsWith", LastNameStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -2362,6 +2531,7 @@ namespace MarvelAPI
         /// </summary>
         /// <param name="SeriesId">The series ID.</param>
         /// <param name="Name">Filter the event list by name.</param>
+        /// <param name="NameStartsWith">Return characters with names that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only events which have been modified since the specified date.</param>
         /// <param name="Creators">Return only events which feature work by the specified creators.</param>
         /// <param name="Characters">Return only events which feature the specified characters.</param>
@@ -2375,6 +2545,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Event> GetEventsForSeries(int SeriesId,
                                             string Name = null,
+                                            string NameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Creators = null,
                                             IEnumerable<int> Characters = null,
@@ -2385,10 +2556,14 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/series/{0}/events", SeriesId));
-            
+
             if (!String.IsNullOrWhiteSpace(Name))
             {
                 request.AddParameter("name", Name);
+            }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -2410,7 +2585,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -2453,7 +2628,7 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/series/{0}/stories", SeriesId));
-            
+
             if (ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
@@ -2472,7 +2647,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -2517,7 +2692,7 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest("/stories");
-            
+
             if (ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
@@ -2537,7 +2712,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -2564,7 +2739,7 @@ namespace MarvelAPI
         public Story GetStory(int StoryId)
         {
             var request = CreateRequest(String.Format("/stories/{0}", StoryId));
-            
+
             IRestResponse<StoryDataWrapper> response = _client.Execute<StoryDataWrapper>(request);
 
             HandleResponseErrors(response);
@@ -2577,6 +2752,7 @@ namespace MarvelAPI
         /// </summary>
         /// <param name="StoryId">The story ID.</param>
         /// <param name="Name">Return only characters matching the specified full character name (e.g. Spider-Man).</param>
+        /// <param name="NameStartsWith">Return characters with names that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only characters which have been modified since the specified date.</param>
         /// <param name="Comics">Return only characters which appear in the specified comics.</param>
         /// <param name="Series">Return only characters which appear the specified series.</param>
@@ -2589,6 +2765,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Character> GetCharactersForStory(int StoryId,
                                             string Name = null,
+                                            string NameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Comics = null,
                                             IEnumerable<int> Series = null,
@@ -2598,10 +2775,14 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/stories/{0}/characters", StoryId));
-            
+
             if (!String.IsNullOrWhiteSpace(Name))
             {
                 request.AddParameter("name", Name);
+            }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -2620,7 +2801,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -2681,7 +2862,7 @@ namespace MarvelAPI
                                                         int? Offset = null)
         {
             var request = CreateRequest(String.Format("/stories/{0}/comics", StoryId));
-            
+
             if (Format.HasValue)
             {
                 request.AddParameter("format", Format.Value.ToParameter());
@@ -2743,7 +2924,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -2768,6 +2949,10 @@ namespace MarvelAPI
         /// <param name="MiddleName">Filter by creator middle name (e.g. Michael).</param>
         /// <param name="LastName">Filter by creator last name (e.g. Bendis).</param>
         /// <param name="Suffix">Filter by suffix or honorific (e.g. Jr., Sr.).</param>
+        /// <param name="NameStartsWith">Filter by creator names that match critera (e.g. B, St L).</param>
+        /// <param name="FirstNameStartsWith">Filter by creator first names that match critera (e.g. B, St L).</param>
+        /// <param name="MiddleNameStartsWith">Filter by creator middle names that match critera (e.g. Mi).</param>
+        /// <param name="LastNameStartsWith">Filter by creator last names that match critera (e.g. Ben).</param>
         /// <param name="ModifiedSince">Return only creators which have been modified since the specified date.</param>
         /// <param name="Comics">Return only creators who worked on in the specified comics.</param>
         /// <param name="Series">Return only creators who worked on the specified series.</param>
@@ -2783,6 +2968,10 @@ namespace MarvelAPI
                                                         string MiddleName = null,
                                                         string LastName = null,
                                                         string Suffix = null,
+                                                        string NameStartsWith = null,
+                                                        string FirstNameStartsWith = null,
+                                                        string MiddleNameStartsWith = null,
+                                                        string LastNameStartsWith = null,
                                                         DateTime? ModifiedSince = null,
                                                         IEnumerable<int> Comics = null,
                                                         IEnumerable<int> Series = null,
@@ -2792,7 +2981,7 @@ namespace MarvelAPI
                                                         int? Offset = null)
         {
             var request = CreateRequest(String.Format("/stories/{0}/creators", StoryId));
-            
+
             if (!String.IsNullOrWhiteSpace(FirstName))
             {
                 request.AddParameter("firstName", FirstName);
@@ -2808,6 +2997,22 @@ namespace MarvelAPI
             if (!String.IsNullOrWhiteSpace(Suffix))
             {
                 request.AddParameter("suffix", Suffix);
+            }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(FirstNameStartsWith))
+            {
+                request.AddParameter("firstNameStartsWith", FirstNameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(MiddleNameStartsWith))
+            {
+                request.AddParameter("middleNameStartsWith", MiddleNameStartsWith);
+            }
+            if (!String.IsNullOrWhiteSpace(LastNameStartsWith))
+            {
+                request.AddParameter("lastNameStartsWith", LastNameStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -2832,7 +3037,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -2854,6 +3059,7 @@ namespace MarvelAPI
         /// </summary>
         /// <param name="StoryId">The story ID.</param>
         /// <param name="Name">Filter the event list by name.</param>
+        /// <param name="NameStartsWith">Return characters with names that begin with the specified string (e.g. Sp).</param>
         /// <param name="ModifiedSince">Return only events which have been modified since the specified date.</param>
         /// <param name="Creators">Return only events which feature work by the specified creators.</param>
         /// <param name="Characters">Return only events which feature the specified characters.</param>
@@ -2867,6 +3073,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Event> GetEventsForStories(int StoryId,
                                             string Name = null,
+                                            string NameStartsWith = null,
                                             DateTime? ModifiedSince = null,
                                             IEnumerable<int> Creators = null,
                                             IEnumerable<int> Characters = null,
@@ -2877,10 +3084,14 @@ namespace MarvelAPI
                                             int? Offset = null)
         {
             var request = CreateRequest(String.Format("/stories/{0}/events/", StoryId));
-            
+
             if (!String.IsNullOrWhiteSpace(Name))
             {
                 request.AddParameter("name", Name);
+            }
+            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            {
+                request.AddParameter("nameStartsWith", NameStartsWith);
             }
             if (ModifiedSince.HasValue)
             {
@@ -2902,7 +3113,7 @@ namespace MarvelAPI
                 OrderBy.ModifiedDesc
             };
             request.AddOrderByParameterList(Order, availableOrderBy);
-            
+
             if (Limit.HasValue && Limit.Value > 0)
             {
                 request.AddParameter("limit", Limit.Value.ToString());
@@ -2938,6 +3149,14 @@ namespace MarvelAPI
     {
         public string Path { get; set; }
         public string Extension { get; set; }
+        public override string ToString()
+        {
+            return string.Format("{0}.{1}", Path, Extension);
+        }
+        public string ToString(Image size)
+        {
+            return string.Format("{0}{1}.{2}", Path, size.ToParameter(), Extension);
+        }
     }
 
     public class TextObject
