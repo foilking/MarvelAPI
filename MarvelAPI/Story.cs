@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarvelAPI
 {
@@ -47,7 +44,7 @@ namespace MarvelAPI
         public string CollectionURI { get; set; }
         public List<StorySummary> Items { get; set; }
     }
-    
+
     public class StorySummary
     {
         public string ResourceURI { get; set; }

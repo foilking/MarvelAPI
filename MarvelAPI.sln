@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Web
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarvelAPI", "MarvelAPI\MarvelAPI.csproj", "{C1E16DBB-372A-4B2C-9C35-0D9C5AEDC5A7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarvelAPI.Sample", "MarvelAPI.Sample\MarvelAPI.Sample.csproj", "{6D802E3F-91F5-4978-9B1D-A6F67FF69102}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarvelAPI.Test", "MarvelAPI.Test\MarvelAPI.Test.csproj", "{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}"
@@ -21,16 +19,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		WebEssentials-Settings.json = WebEssentials-Settings.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarvelAPI", "MarvelAPI\MarvelAPI.csproj", "{33881CEB-2FF5-4571-A169-E08EB9662205}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C1E16DBB-372A-4B2C-9C35-0D9C5AEDC5A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1E16DBB-372A-4B2C-9C35-0D9C5AEDC5A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1E16DBB-372A-4B2C-9C35-0D9C5AEDC5A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1E16DBB-372A-4B2C-9C35-0D9C5AEDC5A7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6D802E3F-91F5-4978-9B1D-A6F67FF69102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6D802E3F-91F5-4978-9B1D-A6F67FF69102}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D802E3F-91F5-4978-9B1D-A6F67FF69102}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,8 +35,15 @@ Global
 		{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33881CEB-2FF5-4571-A169-E08EB9662205}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33881CEB-2FF5-4571-A169-E08EB9662205}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33881CEB-2FF5-4571-A169-E08EB9662205}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33881CEB-2FF5-4571-A169-E08EB9662205}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {21ACF387-50C4-47D4-B3C7-504216FB0B8B}
 	EndGlobalSection
 EndGlobal

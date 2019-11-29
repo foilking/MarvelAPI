@@ -1,30 +1,33 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using ApprovalTests;
+﻿using ApprovalTests;
 using ApprovalTests.Reporters;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace MarvelAPI.Test
 {
+    using ApprovalTests.Reporters.Windows;
+
     [UseReporter(typeof(WinMergeReporter))]
     [TestClass]
     public class CharacterTest
     {
-        private Marvel _Marvel { get; set; }
-        private string _MarvelPublicKey { get; set; }
-        private string _MarvelPrivateKey { get; set; }
+        private Marvel _marvel { get; set; }
+        private string _marvelPublicKey { get; set; }
+        private string _marvelPrivateKey { get; set; }
         private const int TOTAL_CHARACTERS = 1402;
-        private CompareInfo _Comparer;
+        private readonly CompareInfo _comparer;
 
         public CharacterTest()
         {
-            _MarvelPublicKey = "67d146c4c462f0b55bf12bb7d60948af";
-            _MarvelPrivateKey = "54fd1a8ac788767cc91938bcb96755186074970b";
-            _Marvel = new Marvel(_MarvelPublicKey, _MarvelPrivateKey);
-            _Comparer = CompareInfo.GetCompareInfo("en-US");
+            _marvelPublicKey = "67d146c4c462f0b55bf12bb7d60948af";
+            _marvelPrivateKey = "54fd1a8ac788767cc91938bcb96755186074970b";
+
+            _marvel = new Marvel(_marvelPublicKey, _marvelPrivateKey);
+            _comparer = CompareInfo.GetCompareInfo("en-US");
         }
 
         #region GetCharacters
@@ -34,8 +37,10 @@ namespace MarvelAPI.Test
             // Arrange
 
             // Act
-            var characters = _Marvel.GetCharacters();
+            var characters = _marvel.GetCharacters();
 
+
+            string characterText = JsonConvert.SerializeObject(characters);
             // Assert
             Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
             Assert.AreEqual(characters.Count(), 20);
@@ -48,7 +53,7 @@ namespace MarvelAPI.Test
             var name = "Deadpool";
 
             // Act
-            var characters = _Marvel.GetCharacters(Name: name);
+            var characters = _marvel.GetCharacters(name: name);
 
             // Assert
             Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
@@ -133,7 +138,7 @@ namespace MarvelAPI.Test
             var dateModified = new DateTime(2000, 1, 1);
 
             // Act
-            var characters = _Marvel.GetCharacters(ModifiedSince: dateModified);
+            var characters = _marvel.GetCharacters(modifiedSince: dateModified);
 
             // Assert
             Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
@@ -144,9 +149,9 @@ namespace MarvelAPI.Test
         public void GetCharactersOrderByName()
         {
             // Arrange
-            
+
             // Act
-            var characters = _Marvel.GetCharacters(Order: new List<OrderBy> { OrderBy.Name });
+            var characters = _marvel.GetCharacters(order: new List<OrderBy> { OrderBy.Name });
 
             // Assert
             Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
@@ -154,7 +159,7 @@ namespace MarvelAPI.Test
             var character = characters.FirstOrDefault();
             foreach (var nextCharacter in characters.Skip(1))
             {
-                if (_Comparer.Compare(character.Name, nextCharacter.Name, CompareOptions.StringSort) < 0)
+                if (_comparer.Compare(character.Name, nextCharacter.Name, CompareOptions.StringSort) < 0)
                 {
                     character = nextCharacter;
                 }
@@ -171,9 +176,9 @@ namespace MarvelAPI.Test
         public void GetCharactersOrderByNameDescending()
         {
             // Arrange
-            
+
             // Act
-            var characters = _Marvel.GetCharacters(Order: new List<OrderBy> { OrderBy.NameDesc });
+            var characters = _marvel.GetCharacters(order: new List<OrderBy> { OrderBy.NameDesc });
 
             // Assert
             Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
@@ -181,7 +186,7 @@ namespace MarvelAPI.Test
             var character = characters.FirstOrDefault();
             foreach (var nextCharacter in characters.Skip(1))
             {
-                if (_Comparer.Compare(character.Name, nextCharacter.Name, CompareOptions.StringSort) > 0)
+                if (_comparer.Compare(character.Name, nextCharacter.Name, CompareOptions.StringSort) > 0)
                 {
                     character = nextCharacter;
                 }
@@ -200,7 +205,7 @@ namespace MarvelAPI.Test
             // Arrange
 
             // Act
-            var characters = _Marvel.GetCharacters(Order: new List<OrderBy> { OrderBy.Modified });
+            var characters = _marvel.GetCharacters(order: new List<OrderBy> { OrderBy.Modified });
 
             // Assert
             Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
@@ -227,7 +232,7 @@ namespace MarvelAPI.Test
             // Arrange
 
             // Act
-            var characters = _Marvel.GetCharacters(Order: new List<OrderBy> { OrderBy.ModifiedDesc });
+            var characters = _marvel.GetCharacters(order: new List<OrderBy> { OrderBy.ModifiedDesc });
 
             // Assert
             Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
@@ -255,7 +260,7 @@ namespace MarvelAPI.Test
             var limit = 50;
 
             // Act
-            var characters = _Marvel.GetCharacters(Limit: limit);
+            var characters = _marvel.GetCharacters(limit: limit);
 
             // Assert
             Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
@@ -269,7 +274,7 @@ namespace MarvelAPI.Test
             // Arrange
 
             // Act
-            var characters = _Marvel.GetCharacters(Limit: 101);
+            var characters = _marvel.GetCharacters(limit: 101);
 
             // Assert
             Assert.Fail("Exception Should Be Caught.");
@@ -281,7 +286,7 @@ namespace MarvelAPI.Test
             // Arrange
 
             // Act
-            var characters = _Marvel.GetCharacters(Limit: 0);
+            var characters = _marvel.GetCharacters(limit: 0);
 
             // Assert
             Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
@@ -295,17 +300,17 @@ namespace MarvelAPI.Test
             var offset = 20;
 
             // Act
-            var firstCharacters = _Marvel.GetCharacters(Limit: 20);
+            var firstCharacters = _marvel.GetCharacters(limit: 20);
             var firstListLastCharacterName = firstCharacters.Last().Name;
-            var secondCharacters = _Marvel.GetCharacters(Offset: offset);
+            var secondCharacters = _marvel.GetCharacters(offset: offset);
             var secondListFirstCharacterName = secondCharacters.FirstOrDefault().Name;
             var exempt = secondCharacters.Except(firstCharacters);
-            
+
             // Assert
             Assert.IsInstanceOfType(firstCharacters, typeof(IEnumerable<Character>));
             Assert.IsInstanceOfType(secondCharacters, typeof(IEnumerable<Character>));
             Assert.IsTrue(exempt.Count() == 20);
-            Assert.IsTrue(String.CompareOrdinal(firstListLastCharacterName, secondListFirstCharacterName) < 0);
+            Assert.IsTrue(string.CompareOrdinal(firstListLastCharacterName, secondListFirstCharacterName) < 0);
         }
 
         [TestMethod]
@@ -314,7 +319,7 @@ namespace MarvelAPI.Test
             // Arrange
 
             // Act
-            var characters = _Marvel.GetCharacters(Offset: TOTAL_CHARACTERS + 1);
+            var characters = _marvel.GetCharacters(offset: TOTAL_CHARACTERS + 1);
 
             // Assert
             Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
@@ -327,7 +332,7 @@ namespace MarvelAPI.Test
             // Arrange
 
             // Act
-            var characters = _Marvel.GetCharacters(Offset: 0);
+            var characters = _marvel.GetCharacters(offset: 0);
 
             // Assert
             Assert.IsInstanceOfType(characters, typeof(IEnumerable<Character>));
@@ -344,7 +349,7 @@ namespace MarvelAPI.Test
             var characterId = 1009268;
 
             // Act
-            var character = _Marvel.GetCharacter(characterId);
+            var character = _marvel.GetCharacter(characterId);
 
             // Assert
             Approvals.Verify(JsonConvert.SerializeObject(character));
@@ -358,7 +363,7 @@ namespace MarvelAPI.Test
             var invalidCharacterId = 0;
 
             // Act
-            var character = _Marvel.GetCharacter(invalidCharacterId);
+            var character = _marvel.GetCharacter(invalidCharacterId);
 
             // Assert
             Assert.Fail("Exception Should Be Caught.");
@@ -374,7 +379,7 @@ namespace MarvelAPI.Test
             var characterId = 1009268;
 
             // Act
-            var comics = _Marvel.GetComicsForCharacter(characterId);
+            var comics = _marvel.GetComicsForCharacter(characterId);
 
             // Assert
             Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
@@ -389,7 +394,7 @@ namespace MarvelAPI.Test
             var comicFormat = ComicFormat.GraphicNovel;
 
             // Act
-            var comics = _Marvel.GetComicsForCharacter(characterId, Format: comicFormat);
+            var comics = _marvel.GetComicsForCharacter(characterId, format: comicFormat);
 
             // Assert
             Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
@@ -404,7 +409,7 @@ namespace MarvelAPI.Test
             var comicFormatType = ComicFormatType.Comic;
 
             // Act
-            var comics = _Marvel.GetComicsForCharacter(characterId, FormatType: comicFormatType);
+            var comics = _marvel.GetComicsForCharacter(characterId, formatType: comicFormatType);
 
             // Assert
             Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
@@ -426,7 +431,7 @@ namespace MarvelAPI.Test
             var comicFormatType = ComicFormatType.Collection;
 
             // Act
-            var comics = _Marvel.GetComicsForCharacter(characterId, FormatType: comicFormatType);
+            var comics = _marvel.GetComicsForCharacter(characterId, formatType: comicFormatType);
 
             // Assert
             Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
@@ -444,11 +449,11 @@ namespace MarvelAPI.Test
             var characterId = 1009268;
 
             // Act
-            var comics = _Marvel.GetComicsForCharacter(characterId, NoVariants: true);
+            var comics = _marvel.GetComicsForCharacter(characterId, noVariants: true);
 
             // Assert
             Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
-            Assert.IsTrue(comics.All(comic => String.IsNullOrWhiteSpace(comic.VariantDescription)));
+            Assert.IsTrue(comics.All(comic => string.IsNullOrWhiteSpace(comic.VariantDescription)));
         }
 
         /*  GetComicsForCharacterByDateDescriptor 
@@ -464,12 +469,12 @@ namespace MarvelAPI.Test
             var dateEnding = new DateTime(2001, 1, 1);
 
             // Act
-            var comics = _Marvel.GetComicsForCharacter(characterId, DateRangeBegin: dateBeginning, DateRangeEnd: dateEnding);
+            var comics = _marvel.GetComicsForCharacter(characterId, dateRangeBegin: dateBeginning, dateRangeEnd: dateEnding);
 
             // Assert
             Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
-            Assert.IsTrue(comics.All(comic => 
-                comic.Dates.All(date => 
+            Assert.IsTrue(comics.All(comic =>
+                comic.Dates.All(date =>
                     date.Type == "onsaleDate" && date.Date >= dateBeginning && date.Date <= dateEnding)));
         }
 
@@ -483,7 +488,7 @@ namespace MarvelAPI.Test
             var dateEnding = new DateTime(2000, 1, 1);
 
             // Act
-            var comics = _Marvel.GetComicsForCharacter(characterId, DateRangeBegin: dateBeginning, DateRangeEnd: dateEnding);
+            var comics = _marvel.GetComicsForCharacter(characterId, dateRangeBegin: dateBeginning, dateRangeEnd: dateEnding);
 
             // Assert
             Assert.Fail("Exception Should Be Caught.");
@@ -498,7 +503,7 @@ namespace MarvelAPI.Test
             var dateBeginning = new DateTime(2001, 1, 1);
 
             // Act
-            var comics = _Marvel.GetComicsForCharacter(characterId, DateRangeBegin: dateBeginning);
+            var comics = _marvel.GetComicsForCharacter(characterId, dateRangeBegin: dateBeginning);
 
             // Assert
             Assert.Fail("Exception Should Be Caught.");
@@ -513,7 +518,7 @@ namespace MarvelAPI.Test
             var dateEnding = new DateTime(2000, 1, 1);
 
             // Act
-            var comics = _Marvel.GetComicsForCharacter(characterId, DateRangeEnd: dateEnding);
+            var comics = _marvel.GetComicsForCharacter(characterId, dateRangeEnd: dateEnding);
 
             // Assert
             Assert.Fail("Exception Should Be Caught.");
@@ -527,7 +532,7 @@ namespace MarvelAPI.Test
             var hasDigitalIssue = true;
 
             // Act
-            var comics = _Marvel.GetComicsForCharacter(characterId, HasDigitalIssue: hasDigitalIssue);
+            var comics = _marvel.GetComicsForCharacter(characterId, hasDigitalIssue: hasDigitalIssue);
 
             // Assert
             Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
@@ -542,7 +547,7 @@ namespace MarvelAPI.Test
             var modifiedDate = new DateTime(2000, 1, 1);
 
             // Act
-            var comics = _Marvel.GetComicsForCharacter(characterId, ModifiedSince: modifiedDate);
+            var comics = _marvel.GetComicsForCharacter(characterId, modifiedSince: modifiedDate);
 
             // Assert
             Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
@@ -600,7 +605,7 @@ namespace MarvelAPI.Test
             var limit = 50;
 
             // Act
-            var comics = _Marvel.GetComicsForCharacter(characterId, Limit: limit);
+            var comics = _marvel.GetComicsForCharacter(characterId, limit: limit);
 
             // Assert
             Assert.IsInstanceOfType(comics, typeof(IEnumerable<Comic>));
@@ -615,9 +620,9 @@ namespace MarvelAPI.Test
             var offset = 20;
 
             // Act
-            var firstComics = _Marvel.GetComicsForCharacter(characterId, Limit: offset);
+            var firstComics = _marvel.GetComicsForCharacter(characterId, limit: offset);
             var firstListLastComicTitle = firstComics.Last().Title;
-            var secondComics = _Marvel.GetComicsForCharacter(characterId, Offset: offset);
+            var secondComics = _marvel.GetComicsForCharacter(characterId, offset: offset);
             var secondListFirstComicTitle = secondComics.FirstOrDefault().Title;
             var exempt = secondComics.Except(firstComics);
 
@@ -625,7 +630,7 @@ namespace MarvelAPI.Test
             Assert.IsInstanceOfType(firstComics, typeof(IEnumerable<Comic>));
             Assert.IsInstanceOfType(secondComics, typeof(IEnumerable<Comic>));
             Assert.IsTrue(exempt.Count() == 20);
-            Assert.IsTrue(String.CompareOrdinal(firstListLastComicTitle, secondListFirstComicTitle) < 0);
+            Assert.IsTrue(string.CompareOrdinal(firstListLastComicTitle, secondListFirstComicTitle) < 0);
         }
         #endregion
     }

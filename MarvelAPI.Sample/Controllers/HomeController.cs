@@ -1,11 +1,9 @@
-﻿using System;
+﻿using MarvelAPI.Sample.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using MarvelAPI;
 using System.Configuration;
-using MarvelAPI.Sample.Models;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace MarvelAPI.Sample.Controllers
 {
@@ -66,7 +64,7 @@ namespace MarvelAPI.Sample.Controllers
             characters.Add(1011334);
             characters.Add(1017100);
 
-            var comics = _Marvel.GetComics(SharedAppearances: characters);
+            var comics = _Marvel.GetComics(sharedAppearances: characters);
 
             return View();
         }

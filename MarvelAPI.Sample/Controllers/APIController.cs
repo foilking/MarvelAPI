@@ -1,11 +1,7 @@
 ﻿using MarvelAPI.Sample.Models;
-using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Newtonsoft.Json;
 
 namespace MarvelAPI.Sample.Controllers
 {
@@ -34,7 +30,7 @@ namespace MarvelAPI.Sample.Controllers
         [HttpPost]
         public JsonResult Comics(GetComicsViewModel model)
         {
-            IEnumerable<Comic> comics = _Marvel.GetComics(Format: model.Format, FormatType: model.FormatType, NoVariants: model.NoVariants, DateDescript: model.Descriptor, HasDigitalIssue: model.HasDigitalIssue, Order: model.Order, Limit: model.Limit, Offset: model.Offset);
+            IEnumerable<Comic> comics = _Marvel.GetComics(format: model.Format, formatType: model.FormatType, noVariants: model.NoVariants, dateDescript: model.Descriptor, hasDigitalIssue: model.HasDigitalIssue, order: model.Order, limit: model.Limit, offset: model.Offset);
             return Json(comics);
         }
 
@@ -50,7 +46,7 @@ namespace MarvelAPI.Sample.Controllers
         [HttpPost]
         public JsonResult GetComics(GetComicsViewModel model)
         {
-            IEnumerable<Comic> comics = _Marvel.GetComics(Format: model.Format, FormatType: model.FormatType, NoVariants: model.NoVariants, DateDescript: model.Descriptor, HasDigitalIssue: model.HasDigitalIssue, Order: model.Order, Limit: model.Limit, Offset: model.Offset);
+            IEnumerable<Comic> comics = _Marvel.GetComics(format: model.Format, formatType: model.FormatType, noVariants: model.NoVariants, dateDescript: model.Descriptor, hasDigitalIssue: model.HasDigitalIssue, order: model.Order, limit: model.Limit, offset: model.Offset);
             return Json(comics);
         }
 
@@ -68,7 +64,7 @@ namespace MarvelAPI.Sample.Controllers
         [HttpPost]
         public ActionResult GetComicsForCharacter(GetComicsForCharacterViewModel model)
         {
-            IEnumerable<Comic> comics = _Marvel.GetComicsForCharacter(CharacterId: model.CharacterId, Format: model.Format, FormatType: model.FormatType, NoVariants: model.NoVariants, DateDescript: model.Descriptor, HasDigitalIssue: model.HasDigitalIssue, Order: model.Order, Limit: model.Limit, Offset: model.Offset);
+            IEnumerable<Comic> comics = _Marvel.GetComicsForCharacter(characterId: model.CharacterId, format: model.Format, formatType: model.FormatType, noVariants: model.NoVariants, dateDescript: model.Descriptor, hasDigitalIssue: model.HasDigitalIssue, order: model.Order, limit: model.Limit, offset: model.Offset);
             model.ResultComics = comics;
             return View(model);
         }
@@ -78,9 +74,9 @@ namespace MarvelAPI.Sample.Controllers
         [HttpPost]
         public ActionResult GetComicsForCreator(GetComicsForCreatorViewModel model)
         {
-            IEnumerable<Comic> comics = _Marvel.GetComicsForCreator(CreatorId: model.CreatorId, Format: model.Format, FormatType: model.FormatType, NoVariants: model.NoVariants, DateDescript: model.Descriptor, HasDigitalIssue: model.HasDigitalIssue, Order: model.Order, Limit: model.Limit, Offset: model.Offset);
+            IEnumerable<Comic> comics = _Marvel.GetComicsForCreator(creatorId: model.CreatorId, format: model.Format, formatType: model.FormatType, noVariants: model.NoVariants, dateDescript: model.Descriptor, hasDigitalIssue: model.HasDigitalIssue, order: model.Order, limit: model.Limit, offset: model.Offset);
             model.ResultComics = comics;
             return View(model);
         }
-	}
+    }
 }

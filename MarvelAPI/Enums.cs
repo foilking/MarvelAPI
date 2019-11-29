@@ -1,11 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using System.Reflection;
+﻿using System.ComponentModel;
 
 namespace MarvelAPI
 {
     public enum ComicFormat
-    {
+    { 
         Comic,
         Magazine,
         TradePaperback,
@@ -22,7 +20,7 @@ namespace MarvelAPI
         Collection
     }
 
-    public enum SeriesType 
+    public enum SeriesType
     {
         Collection,
         OneShot,
@@ -139,7 +137,7 @@ namespace MarvelAPI
                 case ComicFormat.TradePaperback:
                     return "trade paperback";
                 default:
-                    return String.Empty;
+                    return string.Empty;
             }
         }
 
@@ -152,7 +150,7 @@ namespace MarvelAPI
                 case ComicFormatType.Comic:
                     return "comic";
                 default:
-                    return String.Empty;
+                    return string.Empty;
             }
         }
 
@@ -169,7 +167,7 @@ namespace MarvelAPI
                 case SeriesType.Ongoing:
                     return "ongoing";
                 default:
-                    return String.Empty;
+                    return string.Empty;
             }
         }
 
@@ -186,13 +184,13 @@ namespace MarvelAPI
                 case DateDescriptor.ThisWeek:
                     return "thisWeek";
                 default:
-                    return String.Empty;
+                    return string.Empty;
             }
         }
 
         public static string ToParameter(this OrderBy Order)
         {
-            switch(Order)
+            switch (Order)
             {
                 case OrderBy.FocDate:
                     return "focDate";
@@ -247,7 +245,7 @@ namespace MarvelAPI
                 case OrderBy.StartYearDesc:
                     return "-startYear";
                 default:
-                    return String.Empty;
+                    return string.Empty;
             }
         }
 
@@ -295,7 +293,7 @@ namespace MarvelAPI
 
                 case Image.Detail:
                     return "/detail";
-                default :
+                default:
                     return "";
             }
         }
@@ -305,7 +303,7 @@ namespace MarvelAPI
         {
             var fi = source.GetType().GetField(source.ToString());
 
-            var attributes = (DescriptionAttribute[]) fi.GetCustomAttributes(typeof (DescriptionAttribute), false);
+            var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
             return attributes.Length > 0 ? attributes[0].Description : source.ToString();
         }

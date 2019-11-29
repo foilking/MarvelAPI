@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MarvelAPI</id>
+    <version>0.1.2.2</version>
+    <title>MarvelAPI</title>
+    <authors>Foilking</authors>
+    <owners>Foilking</owners>
+    <licenseUrl>https://github.com/foilking/MarvelAPI/blob/master/license.txt</licenseUrl>
+    <projectUrl>https://foilking.github.io/MarvelAPI/</projectUrl>
+    <iconUrl>https://foilking.github.io/assets/img/marvel-icon.gif</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>RestSharp wrapper for Marvel's API.</description>
+    <releaseNotes>Fixed issues with resource URL naming conventions.</releaseNotes>
+    <copyright>Copyright © 2014</copyright>
+  </metadata>
+</package>
