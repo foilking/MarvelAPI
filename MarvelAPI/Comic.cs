@@ -7,23 +7,6 @@ using System.Threading.Tasks;
 
 namespace MarvelAPI
 {
-    public class ComicDataWrapper
-    {
-        public int Code { get; set; }
-        public string Status { get; set; }
-        public ComicDataContainer Data { get; set; }
-        public string Etag { get; set; }
-    }
-
-    public class ComicDataContainer
-    {
-        public int Offset { get; set; }
-        public int Limit { get; set; }
-        public int Total { get; set; }
-        public int Count { get; set; }
-        public List<Comic> Results { get; set; }
-    }
-
     public class Comic
     {
         public int Id { get; set; }
@@ -51,16 +34,14 @@ namespace MarvelAPI
         public List<ComicPrice> Prices { get; set; }
         public MarvelImage Thumbnail { get; set; }
         public List<MarvelImage> Images { get; set; }
-        public CreatorList Creators { get; set; }
-        public CharacterList Characters { get; set; }
-        public StoryList Stories { get; set; }
-        public EventList Events { get; set; }
+        public ResourceList<CreatorSummary> Creators { get; set; }
+        public ResourceList<CharacterSummary> Characters { get; set; }
+        public ResourceList<StorySummary> Stories { get; set; }
+        public ResourceList<EventSummary> Events { get; set; }
     }
 
-    public class ComicSummary
+    public class ComicSummary : Summary
     {
-        public string ResourceURI { get; set; }
-        public string Name { get; set; }
     }
 
     public class ComicDate
@@ -73,13 +54,5 @@ namespace MarvelAPI
     {
         public string Type { get; set; }
         public float Price { get; set; }
-    }
-
-    public class ComicList
-    {
-        public int Available { get; set; }
-        public int Returned { get; set; }
-        public string CollectionURI { get; set; }
-        public List<ComicSummary> Items { get; set; }
     }
 }

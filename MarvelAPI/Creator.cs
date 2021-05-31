@@ -1,28 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarvelAPI
 {
-    public class CreatorDataWrapper
-    {
-        public int Code { get; set; }
-        public string Status { get; set; }
-        public CreatorDataContainer Data { get; set; }
-        public string Etag { get; set; }
-    }
-
-    public class CreatorDataContainer
-    {
-        public int Offset { get; set; }
-        public int Limit { get; set; }
-        public int Total { get; set; }
-        public int Count { get; set; }
-        public List<Creator> Results { get; set; }
-    }
-
     public class Creator
     {
         public int Id { get; set; }
@@ -35,24 +15,14 @@ namespace MarvelAPI
         public string ResourceURI { get; set; }
         public List<MarvelUrl> Urls { get; set; }
         public MarvelImage Thumbnail { get; set; }
-        public SeriesList Series { get; set; }
-        public StoryList Stories { get; set; }
-        public ComicList Comics { get; set; }
-        public EventList Events { get; set; }
+        public ResourceList<SeriesSummary> Series { get; set; }
+        public ResourceList<StorySummary> Stories { get; set; }
+        public ResourceList<CharacterSummary> Comics { get; set; }
+        public ResourceList<EventSummary> Events { get; set; }
     }
 
-    public class CreatorList
+    public class CreatorSummary : Summary
     {
-        public int Available { get; set; }
-        public int Returned { get; set; }
-        public string CollectionURI { get; set; }
-        public List<CreatorSummary> Items { get; set; }
-    }
-
-    public class CreatorSummary
-    {
-        public string ResourceURI { get; set; }
-        public string Name { get; set; }
         public string Role { get; set; }
     }
 }

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IdentityModel;
 
@@ -103,35 +102,35 @@ namespace MarvelAPI
             {
                 var data = response.Data;
 
-                if (data is CharacterDataWrapper)
+                if (data is Wrapper<Container<Character>>)
                 {
-                    code = (data as CharacterDataWrapper).Code;
-                    status = (data as CharacterDataWrapper).Status;
+                    code = (data as Wrapper<Container<Character>>).Code;
+                    status = (data as Wrapper<Container<Character>>).Status;
                 }
-                else if (data is ComicDataWrapper)
+                else if (data is Wrapper<Container<Comic>>)
                 {
-                    code = (data as ComicDataWrapper).Code;
-                    status = (data as ComicDataWrapper).Status;
+                    code = (data as Wrapper<Container<Comic>>).Code;
+                    status = (data as Wrapper<Container<Comic>>).Status;
                 }
-                else if (data is CreatorDataWrapper)
+                else if (data is Wrapper<Container<Creator>>)
                 {
-                    code = (data as CreatorDataWrapper).Code;
-                    status = (data as CreatorDataWrapper).Status;
+                    code = (data as Wrapper<Container<Creator>>).Code;
+                    status = (data as Wrapper<Container<Creator>>).Status;
                 }
-                else if (data is EventDataWrapper)
+                else if (data is Wrapper<Container<Event>>)
                 {
-                    code = (data as EventDataWrapper).Code;
-                    status = (data as EventDataWrapper).Status;
+                    code = (data as Wrapper<Container<Event>>).Code;
+                    status = (data as Wrapper<Container<Event>>).Status;
                 }
-                else if (data is SeriesDataWrapper)
+                else if (data is Wrapper<Container<Series>>)
                 {
-                    code = (data as SeriesDataWrapper).Code;
-                    status = (data as SeriesDataWrapper).Status;
+                    code = (data as Wrapper<Container<Series>>).Code;
+                    status = (data as Wrapper<Container<Series>>).Status;
                 }
-                else if (data is StoryDataWrapper)
+                else if (data is Wrapper<Container<Story>>)
                 {
-                    code = (data as StoryDataWrapper).Code;
-                    status = (data as StoryDataWrapper).Status;
+                    code = (data as Wrapper<Container<Story>>).Code;
+                    status = (data as Wrapper<Container<Story>>).Status;
                 }
             }
 
@@ -214,7 +213,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<CharacterDataWrapper> response = _client.Execute<CharacterDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Character>>> response = _client.Execute<Wrapper<Container<Character>>>(request);
 
             HandleResponseErrors(response);
 
@@ -230,7 +229,7 @@ namespace MarvelAPI
         {
             var request = CreateRequest(String.Format("/characters/{0}", CharacterId));
 
-            IRestResponse<CharacterDataWrapper> response = _client.Execute<CharacterDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Character>>> response = _client.Execute<Wrapper<Container<Character>>>(request);
 
             HandleResponseErrors(response);
 
@@ -351,7 +350,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<ComicDataWrapper> response = _client.Execute<ComicDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Comic>>> response = _client.Execute<Wrapper<Container<Comic>>>(request);
 
             HandleResponseErrors(response);
 
@@ -430,7 +429,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<EventDataWrapper> response = _client.Execute<EventDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Event>>> response = _client.Execute<Wrapper<Container<Event>>>(request);
 
             HandleResponseErrors(response);
 
@@ -519,7 +518,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<SeriesDataWrapper> response = _client.Execute<SeriesDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Series>>> response = _client.Execute<Wrapper<Container<Series>>>(request);
 
             HandleResponseErrors(response);
 
@@ -578,7 +577,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<StoryDataWrapper> response = _client.Execute<StoryDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Story>>> response = _client.Execute<Wrapper<Container<Story>>>(request);
 
             HandleResponseErrors(response);
 
@@ -704,7 +703,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<ComicDataWrapper> response = _client.Execute<ComicDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Comic>>> response = _client.Execute<Wrapper<Container<Comic>>>(request);
 
             HandleResponseErrors(response);
 
@@ -722,7 +721,7 @@ namespace MarvelAPI
         {
             var request = CreateRequest(String.Format("/comics/{0}", ComicId));
 
-            IRestResponse<ComicDataWrapper> response = _client.Execute<ComicDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Comic>>> response = _client.Execute<Wrapper<Container<Comic>>>(request);
 
             HandleResponseErrors(response);
 
@@ -793,7 +792,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<CharacterDataWrapper> response = _client.Execute<CharacterDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Character>>> response = _client.Execute<Wrapper<Container<Character>>>(request);
 
             HandleResponseErrors(response);
 
@@ -906,7 +905,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<CreatorDataWrapper> response = _client.Execute<CreatorDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Creator>>> response = _client.Execute<Wrapper<Container<Creator>>>(request);
 
             HandleResponseErrors(response);
 
@@ -982,7 +981,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<EventDataWrapper> response = _client.Execute<EventDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Event>>> response = _client.Execute<Wrapper<Container<Event>>>(request);
 
             HandleResponseErrors(response);
 
@@ -1044,7 +1043,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<StoryDataWrapper> response = _client.Execute<StoryDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Story>>> response = _client.Execute<Wrapper<Container<Story>>>(request);
 
             HandleResponseErrors(response);
 
@@ -1161,7 +1160,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<CreatorDataWrapper> response = _client.Execute<CreatorDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Creator>>> response = _client.Execute<Wrapper<Container<Creator>>>(request);
 
             HandleResponseErrors(response);
 
@@ -1179,7 +1178,7 @@ namespace MarvelAPI
         {
             var request = CreateRequest(String.Format("/creators/{0}", CreatorId));
 
-            IRestResponse<CreatorDataWrapper> response = _client.Execute<CreatorDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Creator>>> response = _client.Execute<Wrapper<Container<Creator>>>(request);
 
             HandleResponseErrors(response);
 
@@ -1302,7 +1301,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<ComicDataWrapper> response = _client.Execute<ComicDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Comic>>> response = _client.Execute<Wrapper<Container<Comic>>>(request);
 
             HandleResponseErrors(response);
 
@@ -1390,7 +1389,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<EventDataWrapper> response = _client.Execute<EventDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Event>>> response = _client.Execute<Wrapper<Container<Event>>>(request);
 
             HandleResponseErrors(response);
 
@@ -1480,7 +1479,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<SeriesDataWrapper> response = _client.Execute<SeriesDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Series>>> response = _client.Execute<Wrapper<Container<Series>>>(request);
 
             HandleResponseErrors(response);
 
@@ -1542,7 +1541,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<StoryDataWrapper> response = _client.Execute<StoryDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Story>>> response = _client.Execute<Wrapper<Container<Story>>>(request);
 
             HandleResponseErrors(response);
 
@@ -1621,7 +1620,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<EventDataWrapper> response = _client.Execute<EventDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Event>>> response = _client.Execute<Wrapper<Container<Event>>>(request);
 
             HandleResponseErrors(response);
 
@@ -1640,7 +1639,7 @@ namespace MarvelAPI
         {
             var request = CreateRequest(String.Format("/events/{0}", EventId));
 
-            IRestResponse<EventDataWrapper> response = _client.Execute<EventDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Event>>> response = _client.Execute<Wrapper<Container<Event>>>(request);
 
             HandleResponseErrors(response);
 
@@ -1711,7 +1710,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<CharacterDataWrapper> response = _client.Execute<CharacterDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Character>>> response = _client.Execute<Wrapper<Container<Character>>>(request);
 
             HandleResponseErrors(response);
 
@@ -1837,7 +1836,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<ComicDataWrapper> response = _client.Execute<ComicDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Comic>>> response = _client.Execute<Wrapper<Container<Comic>>>(request);
 
             HandleResponseErrors(response);
 
@@ -1950,7 +1949,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<CreatorDataWrapper> response = _client.Execute<CreatorDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Creator>>> response = _client.Execute<Wrapper<Container<Creator>>>(request);
 
             HandleResponseErrors(response);
 
@@ -2040,7 +2039,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<SeriesDataWrapper> response = _client.Execute<SeriesDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Series>>> response = _client.Execute<Wrapper<Container<Series>>>(request);
 
             HandleResponseErrors(response);
 
@@ -2102,7 +2101,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<StoryDataWrapper> response = _client.Execute<StoryDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Story>>> response = _client.Execute<Wrapper<Container<Story>>>(request);
 
             HandleResponseErrors(response);
 
@@ -2194,7 +2193,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<SeriesDataWrapper> response = _client.Execute<SeriesDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Series>>> response = _client.Execute<Wrapper<Container<Series>>>(request);
 
             HandleResponseErrors(response);
 
@@ -2212,7 +2211,7 @@ namespace MarvelAPI
         {
             var request = CreateRequest(String.Format("/series/{0}", SeriesId));
 
-            IRestResponse<SeriesDataWrapper> response = _client.Execute<SeriesDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Series>>> response = _client.Execute<Wrapper<Container<Series>>>(request);
 
             HandleResponseErrors(response);
 
@@ -2283,7 +2282,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<CharacterDataWrapper> response = _client.Execute<CharacterDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Character>>> response = _client.Execute<Wrapper<Container<Character>>>(request);
 
             HandleResponseErrors(response);
 
@@ -2406,7 +2405,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<ComicDataWrapper> response = _client.Execute<ComicDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Comic>>> response = _client.Execute<Wrapper<Container<Comic>>>(request);
 
             HandleResponseErrors(response);
 
@@ -2519,7 +2518,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<CreatorDataWrapper> response = _client.Execute<CreatorDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Creator>>> response = _client.Execute<Wrapper<Container<Creator>>>(request);
 
             HandleResponseErrors(response);
 
@@ -2595,7 +2594,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<EventDataWrapper> response = _client.Execute<EventDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Event>>> response = _client.Execute<Wrapper<Container<Event>>>(request);
 
             HandleResponseErrors(response);
 
@@ -2657,7 +2656,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<StoryDataWrapper> response = _client.Execute<StoryDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Story>>> response = _client.Execute<Wrapper<Container<Story>>>(request);
 
             HandleResponseErrors(response);
 
@@ -2722,7 +2721,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<StoryDataWrapper> response = _client.Execute<StoryDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Story>>> response = _client.Execute<Wrapper<Container<Story>>>(request);
 
             HandleResponseErrors(response);
 
@@ -2740,7 +2739,7 @@ namespace MarvelAPI
         {
             var request = CreateRequest(String.Format("/stories/{0}", StoryId));
 
-            IRestResponse<StoryDataWrapper> response = _client.Execute<StoryDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Story>>> response = _client.Execute<Wrapper<Container<Story>>>(request);
 
             HandleResponseErrors(response);
 
@@ -2811,7 +2810,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<CharacterDataWrapper> response = _client.Execute<CharacterDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Character>>> response = _client.Execute<Wrapper<Container<Character>>>(request);
 
             HandleResponseErrors(response);
 
@@ -2934,7 +2933,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<ComicDataWrapper> response = _client.Execute<ComicDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Comic>>> response = _client.Execute<Wrapper<Container<Comic>>>(request);
 
             HandleResponseErrors(response);
 
@@ -3047,7 +3046,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<CreatorDataWrapper> response = _client.Execute<CreatorDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Creator>>> response = _client.Execute<Wrapper<Container<Creator>>>(request);
 
             HandleResponseErrors(response);
 
@@ -3123,7 +3122,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<EventDataWrapper> response = _client.Execute<EventDataWrapper>(request);
+            IRestResponse<Wrapper<Container<Event>>> response = _client.Execute<Wrapper<Container<Event>>>(request);
 
             HandleResponseErrors(response);
 

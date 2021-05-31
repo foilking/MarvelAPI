@@ -6,23 +6,6 @@ using System.Threading.Tasks;
 
 namespace MarvelAPI
 {
-    public class CharacterDataWrapper
-    {
-        public int Code { get; set; }
-        public string Status { get; set; }
-        public CharacterDataContainer Data { get; set; }
-        public string Etag { get; set; }
-    }
-
-    public class CharacterDataContainer
-    {
-        public int Offset { get; set; }
-        public int Limit { get; set; }
-        public int Total { get; set; }
-        public int Count { get; set; }
-        public List<Character> Results { get; set; }
-    }
-
     public class Character
     {
         public int Id { get; set; }
@@ -32,24 +15,14 @@ namespace MarvelAPI
         public string ResourceURI { get; set; }
         public List<MarvelUrl> Urls { get; set; }
         public MarvelImage Thumbnail { get; set; }
-        public ComicList Comics { get; set; }
-        public StoryList Stories { get; set; }
-        public EventList Events { get; set; }
-        public SeriesList Series { get; set; }
+        public ResourceList<ComicSummary> Comics { get; set; }
+        public ResourceList<StorySummary> Stories { get; set; }
+        public ResourceList<EventSummary> Events { get; set; }
+        public ResourceList<SeriesSummary> Series { get; set; }
     }
 
-    public class CharacterList
+    public class CharacterSummary : Summary
     {
-        public int Available { get; set; }
-        public int Returned { get; set; }
-        public string CollectionURI { get; set; }
-        public List<CharacterSummary> Items { get; set; }
-    }
-
-    public class CharacterSummary
-    {
-        public string ResourceURI { get; set; }
-        public string Name { get; set; }
         public string Role { get; set; }
     }
 }
