@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Web
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarvelAPI", "MarvelAPI\MarvelAPI.csproj", "{C1E16DBB-372A-4B2C-9C35-0D9C5AEDC5A7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarvelAPI.Sample", "MarvelAPI.Sample\MarvelAPI.Sample.csproj", "{6D802E3F-91F5-4978-9B1D-A6F67FF69102}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarvelAPI.Test", "MarvelAPI.Test\MarvelAPI.Test.csproj", "{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}"
 EndProject
@@ -21,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		WebEssentials-Settings.json = WebEssentials-Settings.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarvelAPI.ConsoleTester", "MarvelAPI.ConsoleTester\MarvelAPI.ConsoleTester.csproj", "{E7D00A9A-4223-4FC6-A8FB-FD3DDCBE07A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,16 +31,19 @@ Global
 		{C1E16DBB-372A-4B2C-9C35-0D9C5AEDC5A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1E16DBB-372A-4B2C-9C35-0D9C5AEDC5A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1E16DBB-372A-4B2C-9C35-0D9C5AEDC5A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D802E3F-91F5-4978-9B1D-A6F67FF69102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D802E3F-91F5-4978-9B1D-A6F67FF69102}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D802E3F-91F5-4978-9B1D-A6F67FF69102}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D802E3F-91F5-4978-9B1D-A6F67FF69102}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7D00A9A-4223-4FC6-A8FB-FD3DDCBE07A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7D00A9A-4223-4FC6-A8FB-FD3DDCBE07A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7D00A9A-4223-4FC6-A8FB-FD3DDCBE07A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7D00A9A-4223-4FC6-A8FB-FD3DDCBE07A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B2A5FE8E-E14D-4FE6-BF56-CCF609C662D3}
 	EndGlobalSection
 EndGlobal
