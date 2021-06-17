@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 namespace MarvelAPI
 {
-    public class Wrapper<T>
+    public interface IWrapper
+    {
+        int Code { get; set; }
+        string Status { get; set; }
+    }
+    public class Wrapper<T> : IWrapper where T : IMarvelItem
     {
         public int Code { get; set; }
         public string Status { get; set; }
-        public T Data { get; set; }
+        public Container<T> Data { get; set; }
         public string Etag { get; set; }
         public string Copyright { get; set; }
         public string AttributionText { get; set; }

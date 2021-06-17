@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MarvelAPI.ConsoleTester
 {
+    [ExcludeFromCodeCoverage]
     class Program
     {
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+            var marvel = new Marvel("67d146c4c462f0b55bf12bb7d60948af", "54fd1a8ac788767cc91938bcb96755186074970b");
+            var deadpool = marvel.GetCharacter(1009268);
+            Console.WriteLine(deadpool.Name);
         }
     }
 }

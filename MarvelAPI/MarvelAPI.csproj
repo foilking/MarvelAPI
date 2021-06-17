@@ -72,6 +72,7 @@
     <Compile Include="Responses\Event.cs" />
     <Compile Include="Responses\MarvelError.cs" />
     <Compile Include="Responses\MarvelImage.cs" />
+    <Compile Include="Responses\IMarvelItem.cs" />
     <Compile Include="Responses\MarvelUrl.cs" />
     <Compile Include="Responses\ResourceList.cs" />
     <Compile Include="Responses\Series.cs" />

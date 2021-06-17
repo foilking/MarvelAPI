@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MarvelAPI
 {
-    public class Creator
+    public class Creator : IMarvelItem
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

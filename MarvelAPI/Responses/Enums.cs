@@ -118,9 +118,9 @@ namespace MarvelAPI
 
     public static class EnumExtensions
     {
-        public static string ToParameter(this ComicFormat Format)
+        public static string ToParameter(this ComicFormat format)
         {
-            switch (Format)
+            switch (format)
             {
                 case ComicFormat.Comic:
                     return "comic";
@@ -139,7 +139,7 @@ namespace MarvelAPI
                 case ComicFormat.TradePaperback:
                     return "trade paperback";
                 default:
-                    return String.Empty;
+                    return string.Empty;
             }
         }
 
@@ -300,8 +300,7 @@ namespace MarvelAPI
             }
         }
 
-        public static
-            string Description<T>(this T source)
+        public static string Description<T>(this T source)
         {
             var fi = source.GetType().GetField(source.ToString());
 

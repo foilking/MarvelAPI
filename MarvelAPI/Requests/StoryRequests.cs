@@ -70,7 +70,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<Wrapper<Container<Story>>> response = Client.Execute<Wrapper<Container<Story>>>(request);
+            IRestResponse<Wrapper<Story>> response = Client.Execute<Wrapper<Story>>(request);
 
             HandleResponseErrors(response);
 
@@ -88,7 +88,7 @@ namespace MarvelAPI
         {
             var request = CreateRequest(String.Format("/stories/{0}", StoryId));
 
-            IRestResponse<Wrapper<Container<Story>>> response = Client.Execute<Wrapper<Container<Story>>>(request);
+            IRestResponse<Wrapper<Story>> response = Client.Execute<Wrapper<Story>>(request);
 
             HandleResponseErrors(response);
 
@@ -159,7 +159,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<Wrapper<Container<Character>>> response = Client.Execute<Wrapper<Container<Character>>>(request);
+            IRestResponse<Wrapper<Character>> response = Client.Execute<Wrapper<Character>>(request);
 
             HandleResponseErrors(response);
 
@@ -282,7 +282,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<Wrapper<Container<Comic>>> response = Client.Execute<Wrapper<Container<Comic>>>(request);
+            IRestResponse<Wrapper<Comic>> response = Client.Execute<Wrapper<Comic>>(request);
 
             HandleResponseErrors(response);
 
@@ -395,7 +395,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<Wrapper<Container<Creator>>> response = Client.Execute<Wrapper<Container<Creator>>>(request);
+            IRestResponse<Wrapper<Creator>> response = Client.Execute<Wrapper<Creator>>(request);
 
             HandleResponseErrors(response);
 
@@ -471,7 +471,7 @@ namespace MarvelAPI
                 request.AddParameter("offset", Offset.Value.ToString());
             }
 
-            IRestResponse<Wrapper<Container<Event>>> response = Client.Execute<Wrapper<Container<Event>>>(request);
+            IRestResponse<Wrapper<Event>> response = Client.Execute<Wrapper<Event>>(request);
 
             HandleResponseErrors(response);
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MarvelAPI
 {
-    public class Story
+    public class Story : IMarvelItem
     {
         public int Id { get; set; }
         public string Title { get; set; }

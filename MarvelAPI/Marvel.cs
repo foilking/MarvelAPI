@@ -7,7 +7,7 @@ namespace MarvelAPI
 {
     public class Marvel : IMarvel
     {
-        internal CharacterRequests Charcaters { get; }
+        internal CharacterRequests Characters { get; }
         internal ComicRequests Comics { get; }
 
         private const string BASE_URL = "http://gateway.marvel.com/v1/public";
@@ -16,7 +16,7 @@ namespace MarvelAPI
         {
             var client = new RestClient(BASE_URL);
 
-            Charcaters =  new CharacterRequests(publicApiKey, privateApiKey, client, useGZip);
+            Characters =  new CharacterRequests(publicApiKey, privateApiKey, client, useGZip);
             Comics = new ComicRequests(publicApiKey, privateApiKey, client, useGZip);
         }
 
@@ -34,7 +34,7 @@ namespace MarvelAPI
             int? Limit = null,
             int? Offset = null)
         {
-            return Charcaters.GetCharacters(new GetCharacters
+            return Characters.GetCharacters(new GetCharacters
             {
                 Name = Name,
                 NameStartsWith = NameStartsWith,
@@ -51,7 +51,7 @@ namespace MarvelAPI
 
         public IEnumerable<Character> GetCharacters(GetCharacters model)
         {
-            return Charcaters.GetCharacters(model);
+            return Characters.GetCharacters(model);
         }
 
         [Obsolete("Use method with GetComicsForCharacter object")]
@@ -76,7 +76,7 @@ namespace MarvelAPI
             int? Limit = null,
             int? Offset = null)
         {
-            return Charcaters.GetComicsForCharacter(new GetComicsForCharacter
+            return Characters.GetComicsForCharacter(new GetComicsForCharacter
             {
                 CharacterId = CharacterId,
                 Format = Format,
@@ -101,7 +101,7 @@ namespace MarvelAPI
 
         public IEnumerable<Comic> GetComicsForCharacter(GetComicsForCharacter model)
         {
-            return Charcaters.GetComicsForCharacter(model);
+            return Characters.GetComicsForCharacter(model);
         }
 
         [Obsolete("Use method with GetEventsForCharacter object")]
@@ -122,7 +122,7 @@ namespace MarvelAPI
 
         public Character GetCharacter(int CharacterId)
         {
-            throw new NotImplementedException();
+            return Characters.GetCharacter(CharacterId);
         }
 
         public IEnumerable<Series> GetSeriesForCharacter(int CharacterId, string Title, string TitleStartsWith, DateTime? ModifiedSince, IEnumerable<int> Comics, IEnumerable<int> Stories, IEnumerable<int> Events, IEnumerable<int> Creators, SeriesType? SeriesType, IEnumerable<ComicFormat> Contains, IEnumerable<OrderBy> Order, int? Limit, int? Offset)

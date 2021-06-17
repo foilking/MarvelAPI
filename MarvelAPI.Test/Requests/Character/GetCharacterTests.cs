@@ -7,25 +7,20 @@ using System.Globalization;
 using Moq;
 using RestSharp;
 
-namespace MarvelAPI.Test
+namespace MarvelAPI.Test.Requests
 {
     [TestClass]
-    public class CharacterRequestsTests
+    public class GetCharacterTests : CharacterRequestTestBase
     {
-        public CharacterRequestsTests()
-        {
-        }
-
         [TestMethod]
-        public void GetCharactersTest()
+        public void Success()
         {
             // Arrange
             var characterId = 1;
-            var clientMock = new Mock<IRestClient>();
-            clientMock.Setup(c => c.Execute<Wrapper<Container<Character>>>(It.IsAny<IRestRequest>()))
-                .Returns(new RestResponse<Wrapper<Container<Character>>>
+            RestClientMock.Setup(c => c.Execute<Wrapper<Character>>(It.IsAny<IRestRequest>()))
+                .Returns(new RestResponse<Wrapper<Character>>
                 {
-                    Data = new Wrapper<Container<Character>>
+                    Data = new Wrapper<Character>
                     {
                         Data = new Container<Character>
                         {
@@ -39,14 +34,13 @@ namespace MarvelAPI.Test
                         }
                     }
                 });
-            var requests = new CharacterRequests(It.IsAny<string>(), It.IsAny<string>(), clientMock.Object);
-
+            
             // Act
-            var result = requests.GetCharacter(characterId);
+            var result = Requests.GetCharacter(characterId);
 
             // Assert
 
-            clientMock.Verify(c => c.Execute<Wrapper<Container<Character>>>(It.IsAny<IRestRequest>()), Times.Once);
+            RestClientMock.Verify(c => c.Execute<Wrapper<Character>>(It.IsAny<IRestRequest>()), Times.Once);
             
         }
     }

@@ -2,9 +2,13 @@
 using Newtonsoft.Json;
 using RestSharp;
 using System;
+using System.Runtime.CompilerServices;
 using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Text;
+
+
+[assembly: InternalsVisibleTo("MarvelAPI.Test")]
 
 namespace MarvelAPI
 {
@@ -14,6 +18,7 @@ namespace MarvelAPI
         private string _privateApiKey { get; set; }
         private bool _useGZip { get; set; }
         protected IRestClient Client;
+        
         public BaseRequest(string publicApiKey, string privateApiKey, IRestClient client, bool? useGZip = null)
         {
             _publicApiKey = publicApiKey;
@@ -42,7 +47,7 @@ namespace MarvelAPI
             return hash;
         }
 
-        protected RestRequest CreateRequest(string requestUrl)
+        internal RestRequest CreateRequest(string requestUrl)
         {
             var request = new RestRequest(requestUrl);
             var timestamp = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds.ToString();
@@ -63,7 +68,7 @@ namespace MarvelAPI
             return request;
         }
 
-        protected void HandleResponseErrors<T>(IRestResponse<T> response)
+        internal void HandleResponseErrors<T>(IRestResponse<T> response)
         {
             var code = 0;
             var status = string.Empty;
@@ -89,12 +94,11 @@ namespace MarvelAPI
             }
             else
             {
-                var data = response.Data;
-
-                if (data is Wrapper<T> wrapped)
+                var data = response.Data as IWrapper;
+                if (data != null)
                 {
-                    code = wrapped.Code;
-                    status = wrapped.Status;
+                    code = data.Code;
+                    status = data.Status;
                 }
             }
 
