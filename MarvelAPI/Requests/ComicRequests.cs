@@ -79,7 +79,7 @@ namespace MarvelAPI
             {
                 if (DateRangeBegin.Value <= DateRangeEnd.Value)
                 {
-                    request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("YYYY-MM-DD"), DateRangeEnd.Value.ToString("YYYY-MM-DD")));
+                    request.AddParameter("dateRange", String.Format("{0},{1}", DateRangeBegin.Value.ToString("yyyy-MM-dd"), DateRangeEnd.Value.ToString("yyyy-MM-dd")));
                 }
                 else
                 {
@@ -96,7 +96,7 @@ namespace MarvelAPI
             }
             if (ModifiedSince.HasValue)
             {
-                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("yyyy-MM-dd"));
             }
 
             request.AddParameterList(Creators, "creators");
@@ -195,7 +195,7 @@ namespace MarvelAPI
             }
             if (ModifiedSince.HasValue)
             {
-                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("yyyy-MM-dd"));
             }
 
             request.AddParameterList(Series, "series");
@@ -302,7 +302,7 @@ namespace MarvelAPI
             }
             if (ModifiedSince.HasValue)
             {
-                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("yyyy-MM-dd"));
             }
 
             request.AddParameterList(Series, "series");
@@ -381,7 +381,7 @@ namespace MarvelAPI
             }
             if (ModifiedSince.HasValue)
             {
-                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("yyyy-MM-dd"));
             }
 
             request.AddParameterList(Creators, "creators");
@@ -445,7 +445,7 @@ namespace MarvelAPI
 
             if (ModifiedSince.HasValue)
             {
-                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("YYYY-MM-DD"));
+                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("yyyy-MM-dd"));
             }
 
             request.AddParameterList(Series, "series");

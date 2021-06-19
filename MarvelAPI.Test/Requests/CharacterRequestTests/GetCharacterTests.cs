@@ -7,7 +7,7 @@ using System.Globalization;
 using Moq;
 using RestSharp;
 
-namespace MarvelAPI.Test.Requests
+namespace MarvelAPI.Test.Requests.CharacterRequestTests
 {
     [TestClass]
     public class GetCharacterTests : CharacterRequestTestBase

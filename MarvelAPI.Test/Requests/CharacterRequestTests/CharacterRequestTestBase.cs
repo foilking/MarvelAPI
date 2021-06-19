@@ -1,4 +1,5 @@
 ﻿using Moq;
+using MSTestExtensions;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -6,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarvelAPI.Test.Requests
+namespace MarvelAPI.Test.Requests.CharacterRequestTests
 {
-    public class CharacterRequestTestBase
+    public class CharacterRequestTestBase : BaseTest
     {
         public string PublicApiKey { get; set; }
         public string PrivateApiKey { get; set; }

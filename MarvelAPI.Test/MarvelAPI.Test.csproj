@@ -83,12 +83,15 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Requests\Base\CreateRequestTests.cs" />
-    <Compile Include="Requests\Character\CharacterRequestTestBase.cs" />
-    <Compile Include="Requests\Character\GetCharactersTests.cs" />
-    <Compile Include="Requests\Character\GetCharacterTests.cs" />
+    <Compile Include="Requests\CharacterRequestTests\CharacterRequestTestBase.cs" />
+    <Compile Include="Requests\CharacterRequestTests\GetCharactersTests.cs" />
+    <Compile Include="Requests\CharacterRequestTests\GetCharacterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\Base\HandleResponseErrorsTests.cs" />
-    <Compile Include="Requests\Character\GetComicsForCharacterTests.cs" />
+    <Compile Include="Requests\CharacterRequestTests\GetComicsForCharacterTests.cs" />
+    <Compile Include="Requests\CharacterRequestTests\GetEventsForCharacterTests.cs" />
+    <Compile Include="Requests\CharacterRequestTests\GetSeriesForCharacterTests.cs" />
+    <Compile Include="Requests\CharacterRequestTests\GetStoriesForCharacterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MarvelAPI\MarvelAPI.csproj">

@@ -1,6 +1,7 @@
 ﻿using MarvelAPI.Parameters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using MSTestExtensions;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarvelAPI.Test.Requests
+namespace MarvelAPI.Test.Requests.CharacterRequestTests
 {
     [TestClass]
     public class GetCharactersTests : CharacterRequestTestBase
@@ -143,7 +144,7 @@ namespace MarvelAPI.Test.Requests
             RestClientMock.Setup(c =>
                 c.Execute<Wrapper<Character>>(It.Is<IRestRequest>(r =>
                     r.Parameters.Any(p =>
-                        p.Name == "modifiedSince" && dateSearch.ToString("YYYY-MM-DD") == p.Value.ToString()
+                        p.Name == "modifiedSince" && dateSearch.ToString("yyyy-MM-dd") == p.Value.ToString()
             ))))
             .Returns(new RestResponse<Wrapper<Character>>
             {
