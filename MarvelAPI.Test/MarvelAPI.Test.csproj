@@ -99,6 +99,13 @@
     <Compile Include="Requests\ComicsRequestTests\GetCreatorsForComicTests.cs" />
     <Compile Include="Requests\ComicsRequestTests\GetEventsForComicTests.cs" />
     <Compile Include="Requests\ComicsRequestTests\GetStoriesForComicTests.cs" />
+    <Compile Include="Requests\CreatorRequestTests\CreatorRequestTestBase.cs" />
+    <Compile Include="Requests\CreatorRequestTests\GetComicsForCreatorTests.cs" />
+    <Compile Include="Requests\CreatorRequestTests\GetCreatorsTests.cs" />
+    <Compile Include="Requests\CreatorRequestTests\GetCreatorTests.cs" />
+    <Compile Include="Requests\CreatorRequestTests\GetEventsForCreatorTests.cs" />
+    <Compile Include="Requests\CreatorRequestTests\GetSeriesForCreatorTests.cs" />
+    <Compile Include="Requests\CreatorRequestTests\GetStoriesForCreatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MarvelAPI\MarvelAPI.csproj">

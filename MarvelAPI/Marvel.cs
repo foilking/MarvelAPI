@@ -9,6 +9,7 @@ namespace MarvelAPI
     {
         internal CharacterRequests Characters { get; }
         internal ComicRequests Comics { get; }
+        internal CreatorRequests Creators { get; }
 
         private const string BASE_URL = "http://gateway.marvel.com/v1/public";
 
@@ -18,6 +19,7 @@ namespace MarvelAPI
 
             Characters =  new CharacterRequests(publicApiKey, privateApiKey, client, useGZip);
             Comics = new ComicRequests(publicApiKey, privateApiKey, client, useGZip);
+            Creators = new CreatorRequests(publicApiKey, privateApiKey, client, useGZip);
         }
 
         #region Characters
@@ -174,7 +176,7 @@ namespace MarvelAPI
 
         public Creator GetCreator(int CreatorId)
         {
-            throw new NotImplementedException();
+            return Creators.GetCreator(CreatorId);
         }
 
         public IEnumerable<Comic> GetComicsForCreator(int CreatorId, ComicFormat? Format, ComicFormatType? FormatType, bool? NoVariants, DateDescriptor? DateDescript, DateTime? DateRangeBegin, DateTime? DateRangeEnd, bool? HasDigitalIssue, DateTime? ModifiedSince, IEnumerable<int> Characters, IEnumerable<int> Series, IEnumerable<int> Events, IEnumerable<int> Stories, IEnumerable<int> SharedAppearances, IEnumerable<int> Collaborators, IEnumerable<OrderBy> Order, int? Limit, int? Offset)

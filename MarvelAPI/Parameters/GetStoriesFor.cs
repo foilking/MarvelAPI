@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarvelAPI.Parameters
 {
@@ -36,5 +33,10 @@ namespace MarvelAPI.Parameters
     public class GetStoriesForComic : GetStoriesFor
     {
         public int ComicId { get; set; }
+    }
+
+    public class GetStoriesForCreator : GetStoriesFor
+    {
+        public int CreatorId { get; set; }
     }
 }

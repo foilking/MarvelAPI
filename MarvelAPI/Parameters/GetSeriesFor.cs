@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarvelAPI.Parameters
 {
@@ -24,6 +21,7 @@ namespace MarvelAPI.Parameters
         public IEnumerable<int> Stories { get; set; }
         public IEnumerable<int> Events { get; set; }
         public IEnumerable<int> Creators { get; set; }
+        public IEnumerable<int> Characters { get; set; }
         public SeriesType? SeriesType { get; set; }
         public IEnumerable<ComicFormat> Contains { get; set; }
         public IEnumerable<OrderBy> Order { get; set; }
@@ -34,5 +32,10 @@ namespace MarvelAPI.Parameters
     public class GetSeriesForCharacter : GetSeriesFor
     {
         public int CharacterId { get; set; }
+    }
+
+    public class GetSeriesForCreator : GetSeriesFor
+    {
+        public int CreatorId { get; set; }
     }
 }

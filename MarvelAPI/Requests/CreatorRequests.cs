@@ -3,14 +3,12 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarvelAPI
 {
     public class CreatorRequests : BaseRequest
     {
-        public CreatorRequests(string publicApiKey, string privateApiKey, RestClient client, bool? useGZip = null) 
+        public CreatorRequests(string publicApiKey, string privateApiKey, IRestClient client, bool? useGZip = null) 
             : base(publicApiKey, privateApiKey, client, useGZip)
         {
         }
@@ -18,85 +16,54 @@ namespace MarvelAPI
         /// <summary>
         /// Fetches lists of comic creators with optional filters.
         /// </summary>
-        /// <param name="FirstName">Filter by creator first name (e.g. Brian).</param>
-        /// <param name="MiddleName">Filter by creator middle name (e.g. Michael).</param>
-        /// <param name="LastName">Filter by creator last name (e.g. Bendis).</param>
-        /// <param name="Suffix">Filter by suffix or honorific (e.g. Jr., Sr.).</param>
-        /// <param name="NameStartsWith">Filter by creator names that match critera (e.g. B, St L).</param>
-        /// <param name="FirstNameStartsWith">Filter by creator first names that match critera (e.g. B, St L).</param>
-        /// <param name="MiddleNameStartsWith">Filter by creator middle names that match critera (e.g. Mi).</param>
-        /// <param name="LastNameStartsWith">Filter by creator last names that match critera (e.g. Ben).</param>
-        /// <param name="ModifiedSince">Return only creators which have been modified since the specified date.</param>
-        /// <param name="Comics">Return only creators who worked on in the specified comics.</param>
-        /// <param name="Series">Return only creators who worked on the specified series.</param>
-        /// <param name="Events">Return only creators who worked on comics that took place in the specified events.</param>
-        /// <param name="Stories">Return only creators who worked on the specified stories.</param>
-        /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
-        /// <param name="Limit">Limit the result set to the specified number of resources.</param>
-        /// <param name="Offset">Skip the specified number of resources in the result set.</param>
         /// <returns>
         /// Lists of comic creators
         /// </returns>
-        public IEnumerable<Creator> GetCreators(string FirstName = null,
-                                                string MiddleName = null,
-                                                string LastName = null,
-                                                string Suffix = null,
-                                                string NameStartsWith = null,
-                                                string FirstNameStartsWith = null,
-                                                string MiddleNameStartsWith = null,
-                                                string LastNameStartsWith = null,
-                                                DateTime? ModifiedSince = null,
-                                                IEnumerable<int> Comics = null,
-                                                IEnumerable<int> Series = null,
-                                                IEnumerable<int> Events = null,
-                                                IEnumerable<int> Stories = null,
-                                                IEnumerable<OrderBy> Order = null,
-                                                int? Limit = null,
-                                                int? Offset = null)
+        public IEnumerable<Creator> GetCreators(GetCreators model)
         {
             var request = CreateRequest("/creators");
 
-            if (!String.IsNullOrWhiteSpace(FirstName))
+            if (!string.IsNullOrWhiteSpace(model.FirstName))
             {
-                request.AddParameter("firstName", FirstName);
+                request.AddParameter("firstName", model.FirstName);
             }
-            if (!String.IsNullOrWhiteSpace(MiddleName))
+            if (!string.IsNullOrWhiteSpace(model.MiddleName))
             {
-                request.AddParameter("middleName", MiddleName);
+                request.AddParameter("middleName", model.MiddleName);
             }
-            if (!String.IsNullOrWhiteSpace(LastName))
+            if (!string.IsNullOrWhiteSpace(model.LastName))
             {
-                request.AddParameter("lastName", LastName);
+                request.AddParameter("lastName", model.LastName);
             }
-            if (!String.IsNullOrWhiteSpace(Suffix))
+            if (!string.IsNullOrWhiteSpace(model.Suffix))
             {
-                request.AddParameter("suffix", Suffix);
+                request.AddParameter("suffix", model.Suffix);
             }
-            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            if (!string.IsNullOrWhiteSpace(model.NameStartsWith))
             {
-                request.AddParameter("nameStartsWith", NameStartsWith);
+                request.AddParameter("nameStartsWith", model.NameStartsWith);
             }
-            if (!String.IsNullOrWhiteSpace(FirstNameStartsWith))
+            if (!string.IsNullOrWhiteSpace(model.FirstNameStartsWith))
             {
-                request.AddParameter("firstNameStartsWith", FirstNameStartsWith);
+                request.AddParameter("firstNameStartsWith", model.FirstNameStartsWith);
             }
-            if (!String.IsNullOrWhiteSpace(MiddleNameStartsWith))
+            if (!string.IsNullOrWhiteSpace(model.MiddleNameStartsWith))
             {
-                request.AddParameter("middleNameStartsWith", MiddleNameStartsWith);
+                request.AddParameter("middleNameStartsWith", model.MiddleNameStartsWith);
             }
-            if (!String.IsNullOrWhiteSpace(LastNameStartsWith))
+            if (!string.IsNullOrWhiteSpace(model.LastNameStartsWith))
             {
-                request.AddParameter("lastNameStartsWith", LastNameStartsWith);
+                request.AddParameter("lastNameStartsWith", model.LastNameStartsWith);
             }
-            if (ModifiedSince.HasValue)
+            if (model.ModifiedSince.HasValue)
             {
-                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("yyyy-MM-dd"));
+                request.AddParameter("modifiedSince", model.ModifiedSince.Value.ToString("yyyy-MM-dd"));
             }
 
-            request.AddParameterList(Comics, "comics");
-            request.AddParameterList(Series, "series");
-            request.AddParameterList(Events, "events");
-            request.AddParameterList(Stories, "stories");
+            request.AddParameterList(model.Comics, "comics");
+            request.AddParameterList(model.Series, "series");
+            request.AddParameterList(model.Events, "events");
+            request.AddParameterList(model.Stories, "stories");
 
             var availableOrderBy = new List<OrderBy>
             {
@@ -111,15 +78,15 @@ namespace MarvelAPI
                 OrderBy.Modified,
                 OrderBy.ModifiedDesc
             };
-            request.AddOrderByParameterList(Order, availableOrderBy);
+            request.AddOrderByParameterList(model.Order, availableOrderBy);
 
-            if (Limit.HasValue && Limit.Value > 0)
+            if (model.Limit.HasValue && model.Limit.Value > 0)
             {
-                request.AddParameter("limit", Limit.Value.ToString());
+                request.AddParameter("limit", model.Limit.Value.ToString());
             }
-            if (Offset.HasValue && Offset.Value > 0)
+            if (model.Offset.HasValue && model.Offset.Value > 0)
             {
-                request.AddParameter("offset", Offset.Value.ToString());
+                request.AddParameter("offset", model.Offset.Value.ToString());
             }
 
             IRestResponse<Wrapper<Creator>> response = Client.Execute<Wrapper<Creator>>(request);
@@ -138,7 +105,7 @@ namespace MarvelAPI
         /// </returns>
         public Creator GetCreator(int CreatorId)
         {
-            var request = CreateRequest(String.Format("/creators/{0}", CreatorId));
+            var request = CreateRequest($"/creators/{CreatorId}");
 
             IRestResponse<Wrapper<Creator>> response = Client.Execute<Wrapper<Creator>>(request);
 
@@ -155,7 +122,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Comic> GetComicsForCreator(GetComicsForCreator model)
         {
-            var request = CreateRequest(string.Format("/creators/{0}/comics", model.CreatorId));
+            var request = CreateRequest($"/creators/{model.CreatorId}/comics");
 
             if (model.Format.HasValue)
             {
@@ -238,63 +205,30 @@ namespace MarvelAPI
         /// <summary>
         /// Fetches lists of events featuring the work of a specific creator with optional filters.
         /// </summary>
-        /// <param name="CreatorId">The creator ID.</param>
-        /// <param name="Name">Filter the event list by name.</param>
-        /// <param name="NameStartsWith">Return characters with names that begin with the specified string (e.g. Sp).</param>
-        /// <param name="ModifiedSince">Return only events which have been modified since the specified date.</param>
-        /// <param name="Characters">Return only events which feature the specified characters.</param>
-        /// <param name="Series">Return only events which are part of the specified series.</param>
-        /// <param name="Comics">Return only events which take place in the specified comics.</param>
-        /// <param name="Stories">Return only events which contain the specified stories.</param>
-        /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
-        /// <param name="Limit">Limit the result set to the specified number of resources.</param>
-        /// <param name="Offset">Skip the specified number of resources in the result set.</param>
         /// <returns>
         /// Lists of events featuring the work of a specific creator
         /// </returns>
-        public IEnumerable<Event> GetEventsForCreator(int CreatorId,
-                                            string Name = null,
-                                            string NameStartsWith = null,
-                                            DateTime? ModifiedSince = null,
-                                            IEnumerable<int> Characters = null,
-                                            IEnumerable<int> Series = null,
-                                            IEnumerable<int> Comics = null,
-                                            IEnumerable<int> Stories = null,
-                                            IEnumerable<OrderBy> Order = null,
-                                            int? Limit = null,
-                                            int? Offset = null)
+        public IEnumerable<Event> GetEventsForCreator(GetEventsForCreator model)
         {
-            var request = CreateRequest(String.Format("/creators/{0}/events/", CreatorId));
+            var request = CreateRequest($"/creators/{model.CreatorId}/events");
 
-            if (!String.IsNullOrWhiteSpace(Name))
+            if (!string.IsNullOrWhiteSpace(model.Name))
             {
-                request.AddParameter("name", Name);
+                request.AddParameter("name", model.Name);
             }
-            if (!String.IsNullOrWhiteSpace(NameStartsWith))
+            if (!string.IsNullOrWhiteSpace(model.NameStartsWith))
             {
-                request.AddParameter("nameStartsWith", NameStartsWith);
+                request.AddParameter("nameStartsWith", model.NameStartsWith);
             }
-            if (ModifiedSince.HasValue)
+            if (model.ModifiedSince.HasValue)
             {
-                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("yyyy-MM-dd"));
+                request.AddParameter("modifiedSince", model.ModifiedSince.Value.ToString("yyyy-MM-dd"));
             }
 
-            if (Characters != null && Characters.Any())
-            {
-                request.AddParameter("characters", string.Join<int>(",", Characters));
-            }
-            if (Series != null && Series.Any())
-            {
-                request.AddParameter("series", string.Join<int>(",", Series));
-            }
-            if (Comics != null && Comics.Any())
-            {
-                request.AddParameter("comics", string.Join<int>(",", Comics));
-            }
-            if (Stories != null && Stories.Any())
-            {
-                request.AddParameter("stories", string.Join<int>(",", Stories));
-            }
+            request.AddParameterList(model.Characters, "characters");
+            request.AddParameterList(model.Comics, "comics");
+            request.AddParameterList(model.Series, "series");
+            request.AddParameterList(model.Stories, "stories");
 
             var availableOrderBy = new List<OrderBy>
             {
@@ -305,15 +239,15 @@ namespace MarvelAPI
                 OrderBy.Modified,
                 OrderBy.ModifiedDesc
             };
-            request.AddOrderByParameterList(Order, availableOrderBy);
+            request.AddOrderByParameterList(model.Order, availableOrderBy);
 
-            if (Limit.HasValue && Limit.Value > 0)
+            if (model.Limit.HasValue && model.Limit.Value > 0)
             {
-                request.AddParameter("limit", Limit.Value.ToString());
+                request.AddParameter("limit", model.Limit.Value.ToString());
             }
-            if (Offset.HasValue && Offset.Value > 0)
+            if (model.Offset.HasValue && model.Offset.Value > 0)
             {
-                request.AddParameter("offset", Offset.Value.ToString());
+                request.AddParameter("offset", model.Offset.Value.ToString());
             }
 
             IRestResponse<Wrapper<Event>> response = Client.Execute<Wrapper<Event>>(request);
@@ -326,63 +260,38 @@ namespace MarvelAPI
         /// <summary>
         /// Fetches lists of comic series in which a specific creator's work appears, with optional filters.
         /// </summary>
-        /// <param name="CreatorId">The creator ID.</param>
-        /// <param name="Title">Filter by series title.</param>
-        /// <param name="TitleStartsWith">Return titles that begin with the specified string (e.g. Sp).</param>
-        /// <param name="ModifiedSince">Return only series which have been modified since the specified date.</param>
-        /// <param name="Comics">Return only series which contain the specified comics.</param>
-        /// <param name="Stories">Return only series which contain the specified stories.</param>
-        /// <param name="Events">Return only series which have comics that take place during the specified events.</param>
-        /// <param name="Characters">Return only series which feature the specified characters.</param>
-        /// <param name="SeriesType">Filter the series by publication frequency type.</param>
-        /// <param name="Contains">Return only series containing one or more comics with the specified format.</param>
-        /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
-        /// <param name="Limit">Limit the result set to the specified number of resources.</param>
-        /// <param name="Offset">Skip the specified number of resources in the result set.</param>
         /// <returns>
         /// Lists of comic series in which a specific creator's work appears
         /// </returns>
-        public IEnumerable<Series> GetSeriesForCreator(int CreatorId,
-                                            string Title = null,
-                                            string TitleStartsWith = null,
-                                            DateTime? ModifiedSince = null,
-                                            IEnumerable<int> Comics = null,
-                                            IEnumerable<int> Stories = null,
-                                            IEnumerable<int> Events = null,
-                                            IEnumerable<int> Characters = null,
-                                            SeriesType? SeriesType = null,
-                                            IEnumerable<ComicFormat> Contains = null,
-                                            IEnumerable<OrderBy> Order = null,
-                                            int? Limit = null,
-                                            int? Offset = null)
+        public IEnumerable<Series> GetSeriesForCreator(GetSeriesForCreator model)
         {
-            var request = CreateRequest(String.Format("/creators/{0}/series/", CreatorId));
+            var request = CreateRequest($"/creators/{model.CreatorId}/series");
 
-            if (!String.IsNullOrWhiteSpace(Title))
+            if (!string.IsNullOrWhiteSpace(model.Title))
             {
-                request.AddParameter("title", Title);
+                request.AddParameter("title", model.Title);
             }
-            if (!String.IsNullOrWhiteSpace(TitleStartsWith))
+            if (!string.IsNullOrWhiteSpace(model.TitleStartsWith))
             {
-                request.AddParameter("titleStartsWith", TitleStartsWith);
+                request.AddParameter("titleStartsWith", model.TitleStartsWith);
             }
-            if (ModifiedSince.HasValue)
+            if (model.ModifiedSince.HasValue)
             {
-                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("yyyy-MM-dd"));
+                request.AddParameter("modifiedSince", model.ModifiedSince.Value.ToString("yyyy-MM-dd"));
             }
 
-            request.AddParameterList(Comics, "comics");
-            request.AddParameterList(Stories, "stories");
-            request.AddParameterList(Events, "events");
-            request.AddParameterList(Characters, "characters");
+            request.AddParameterList(model.Comics, "comics");
+            request.AddParameterList(model.Stories, "stories");
+            request.AddParameterList(model.Events, "events");
+            request.AddParameterList(model.Characters, "characters");
 
-            if (SeriesType.HasValue)
+            if (model.SeriesType.HasValue)
             {
-                request.AddParameter("seriesType", SeriesType.Value.ToParameter());
+                request.AddParameter("seriesType", model.SeriesType.Value.ToParameter());
             }
-            if (Contains != null && Contains.Any())
+            if (model.Contains != null && model.Contains.Any())
             {
-                var containsParameters = Contains.Select(contain => contain.ToParameter());
+                var containsParameters = model.Contains.Select(contain => contain.ToParameter());
                 request.AddParameter("contains", string.Join(",", containsParameters));
             }
 
@@ -395,15 +304,15 @@ namespace MarvelAPI
                 OrderBy.Modified,
                 OrderBy.ModifiedDesc
             };
-            request.AddOrderByParameterList(Order, availableOrderBy);
+            request.AddOrderByParameterList(model.Order, availableOrderBy);
 
-            if (Limit.HasValue && Limit.Value > 0)
+            if (model.Limit.HasValue && model.Limit.Value > 0)
             {
-                request.AddParameter("limit", Limit.Value.ToString());
+                request.AddParameter("limit", model.Limit.Value.ToString());
             }
-            if (Offset.HasValue && Offset.Value > 0)
+            if (model.Offset.HasValue && model.Offset.Value > 0)
             {
-                request.AddParameter("offset", Offset.Value.ToString());
+                request.AddParameter("offset", model.Offset.Value.ToString());
             }
 
             IRestResponse<Wrapper<Series>> response = Client.Execute<Wrapper<Series>>(request);
@@ -416,39 +325,22 @@ namespace MarvelAPI
         /// <summary>
         /// Fetches lists of comic stories by a specific creator with optional filters.
         /// </summary>
-        /// <param name="CreatorId">The ID of the creator.</param>
-        /// <param name="ModifiedSince">Return only stories which have been modified since the specified date.</param>
-        /// <param name="Comics">Return only stories contained in the specified comics.</param>
-        /// <param name="Series">Return only stories contained the specified series.</param>
-        /// <param name="Events">Return only stories which take place during the specified events.</param>
-        /// <param name="Characters">Return only stories which feature the specified characters.</param>
-        /// <param name="Order">Order the result set by a field or fields. Multiple values are given priority in the order in which they are passed.</param>
-        /// <param name="Limit">Limit the result set to the specified number of resources.</param>
-        /// <param name="Offset">Skip the specified number of resources in the result set.</param>
         /// <returns>
         /// Lists of comic stories by a specific creator
         /// </returns>
-        public IEnumerable<Story> GetStoriesForCreator(int CreatorId,
-                                            DateTime? ModifiedSince = null,
-                                            IEnumerable<int> Comics = null,
-                                            IEnumerable<int> Series = null,
-                                            IEnumerable<int> Events = null,
-                                            IEnumerable<int> Characters = null,
-                                            IEnumerable<OrderBy> Order = null,
-                                            int? Limit = null,
-                                            int? Offset = null)
+        public IEnumerable<Story> GetStoriesForCreator(GetStoriesForCreator model)
         {
-            var request = CreateRequest(String.Format("/creators/{0}/events/", CreatorId));
+            var request = CreateRequest($"/creators/{model.CreatorId}/stories");
 
-            if (ModifiedSince.HasValue)
+            if (model.ModifiedSince.HasValue)
             {
-                request.AddParameter("modifiedSince", ModifiedSince.Value.ToString("yyyy-MM-dd"));
+                request.AddParameter("modifiedSince", model.ModifiedSince.Value.ToString("yyyy-MM-dd"));
             }
 
-            request.AddParameterList(Comics, "comics");
-            request.AddParameterList(Series, "series");
-            request.AddParameterList(Events, "events");
-            request.AddParameterList(Characters, "characters");
+            request.AddParameterList(model.Comics, "comics");
+            request.AddParameterList(model.Series, "series");
+            request.AddParameterList(model.Events, "events");
+            request.AddParameterList(model.Characters, "characters");
 
             var availableOrderBy = new List<OrderBy>
             {
@@ -457,15 +349,15 @@ namespace MarvelAPI
                 OrderBy.Modified,
                 OrderBy.ModifiedDesc
             };
-            request.AddOrderByParameterList(Order, availableOrderBy);
+            request.AddOrderByParameterList(model.Order, availableOrderBy);
 
-            if (Limit.HasValue && Limit.Value > 0)
+            if (model.Limit.HasValue && model.Limit.Value > 0)
             {
-                request.AddParameter("limit", Limit.Value.ToString());
+                request.AddParameter("limit", model.Limit.Value.ToString());
             }
-            if (Offset.HasValue && Offset.Value > 0)
+            if (model.Offset.HasValue && model.Offset.Value > 0)
             {
-                request.AddParameter("offset", Offset.Value.ToString());
+                request.AddParameter("offset", model.Offset.Value.ToString());
             }
 
             IRestResponse<Wrapper<Story>> response = Client.Execute<Wrapper<Story>>(request);
