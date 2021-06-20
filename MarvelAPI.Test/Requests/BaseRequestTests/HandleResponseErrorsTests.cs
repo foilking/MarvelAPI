@@ -5,13 +5,9 @@ using MSTestExtensions;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Authentication;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MarvelAPI.Test.Requests
+namespace MarvelAPI.Test.Requests.BaseRequestTests
 {
     [TestClass]
     public class HandleResponseErrorsTests : BaseTest

@@ -8,9 +8,6 @@ using System.Threading.Tasks;
 
 namespace MarvelAPI
 {
-    public interface ICharacterRequests
-    { }
-
     public class CharacterRequests : BaseRequest
     {
         public CharacterRequests(string publicApiKey, string privateApiKey, IRestClient client, bool? useGZip = null) 

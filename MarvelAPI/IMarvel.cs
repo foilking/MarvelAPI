@@ -34,130 +34,78 @@ namespace MarvelAPI
         #region Comic methods
         [Obsolete("Use method with GetComics object")]
         IEnumerable<Comic> GetComics(
-            ComicFormat? Format,
-            ComicFormatType? FormatType,
-            bool? NoVariants,
-            DateDescriptor? DateDescript,
-            DateTime? DateRangeBegin,
-            DateTime? DateRangeEnd,
-            bool? HasDigitalIssue,
-            DateTime? ModifiedSince,
-            IEnumerable<int> Creators,
-            IEnumerable<int> Characters,
-            IEnumerable<int> Series,
-            IEnumerable<int> Events,
-            IEnumerable<int> Stories,
-            IEnumerable<int> SharedAppearances,
-            IEnumerable<int> Collaborators,
-            IEnumerable<OrderBy> Order,
-            int? Limit,
-            int? Offset);
+            ComicFormat? Format, ComicFormatType? FormatType,
+            bool? NoVariants, DateDescriptor? DateDescript,
+            DateTime? DateRangeBegin, DateTime? DateRangeEnd,
+            bool? HasDigitalIssue, DateTime? ModifiedSince,
+            IEnumerable<int> Creators, IEnumerable<int> Characters,
+            IEnumerable<int> Series, IEnumerable<int> Events,
+            IEnumerable<int> Stories, IEnumerable<int> SharedAppearances,
+            IEnumerable<int> Collaborators, IEnumerable<OrderBy> Order,
+            int? Limit, int? Offset);
         IEnumerable<Comic> GetComics(GetComics model);
 
         Comic GetComic(int ComicId);
 
         [Obsolete("Use method with GetCharactersForComic object")]
         IEnumerable<Character> GetCharactersForComic(
-            int ComicId,
-            string Name,
-            string NameStartsWith,
-            DateTime? ModifiedSince,
-            IEnumerable<int> Series,
-            IEnumerable<int> Events,
-            IEnumerable<int> Stories,
-            IEnumerable<OrderBy> Order,
-            int? Limit,
-            int? Offset);
+            int ComicId, string Name, string NameStartsWith, 
+            DateTime? ModifiedSince, IEnumerable<int> Series, 
+            IEnumerable<int> Events, IEnumerable<int> Stories, 
+            IEnumerable<OrderBy> Order, int? Limit, int? Offset);
         IEnumerable<Character> GetCharactersForComic(GetCharactersForComic model);
 
         [Obsolete("Use method with GetCreatorsForComic object")]
         IEnumerable<Creator> GetCreatorsForComic(
-            int ComicId,
-            string FirstName,
-            string MiddleName,
-            string LastName,
-            string Suffix,
-            string NameStartsWith,
-            string FirstNameStartsWith,
-            string MiddleNameStartsWith,
-            string LastNameStartsWith,
-            DateTime? ModifiedSince,
-            IEnumerable<int> Comics,
-            IEnumerable<int> Series,
-            IEnumerable<int> Stories,
-            IEnumerable<OrderBy> Order,
-            int? Limit,
-            int? Offset);
+            int ComicId, string FirstName, string MiddleName,
+            string LastName, string Suffix, string NameStartsWith,
+            string FirstNameStartsWith, string MiddleNameStartsWith,
+            string LastNameStartsWith, DateTime? ModifiedSince,
+            IEnumerable<int> Comics, IEnumerable<int> Series,
+            IEnumerable<int> Stories, IEnumerable<OrderBy> Order,
+            int? Limit, int? Offset);
         IEnumerable<Creator> GetCreatorsForComic(GetCreatorsForComic model);
 
         [Obsolete("Use method with GetEventsForComic object")]
         IEnumerable<Event> GetEventsForComic(
-            int ComicId,
-            string Name,
-            string NameStartsWith,
-            DateTime? ModifiedSince,
-            IEnumerable<int> Creators,
-            IEnumerable<int> Characters,
-            IEnumerable<int> Series,
-            IEnumerable<int> Stories,
-            IEnumerable<OrderBy> Order,
-            int? Limit,
-            int? Offset);
+            int ComicId, string Name, string NameStartsWith,
+            DateTime? ModifiedSince, IEnumerable<int> Creators,
+            IEnumerable<int> Characters, IEnumerable<int> Series,
+            IEnumerable<int> Stories, IEnumerable<OrderBy> Order,
+            int? Limit, int? Offset);
         IEnumerable<Event> GetEventsForComic(GetEventsForComic model);
 
         [Obsolete("Use method with GetStoriesForComic object")]
         IEnumerable<Story> GetStoriesForComic(
-            int ComicId,
-            DateTime? ModifiedSince,
-            IEnumerable<int> Series,
-            IEnumerable<int> Events,
-            IEnumerable<int> Creators,
-            IEnumerable<int> Characters,
-            IEnumerable<OrderBy> Order,
-            int? Limit,
-            int? Offset);
+            int ComicId, DateTime? ModifiedSince, IEnumerable<int> Series,
+            IEnumerable<int> Events, IEnumerable<int> Creators,
+            IEnumerable<int> Characters, IEnumerable<OrderBy> Order,
+            int? Limit, int? Offset);
         IEnumerable<Story> GetStoriesForComic(GetStoriesForComic model);
         #endregion
         #region Creator methods
         [Obsolete("Use method with GetCreators object")]
         IEnumerable<Creator> GetCreators(
-            string FirstName,
-            string MiddleName,
-            string LastName,
-            string Suffix,
-            string NameStartsWith,
-            string FirstNameStartsWith,
-            string MiddleNameStartsWith,
-            string LastNameStartsWith,
-            DateTime? ModifiedSince,
-            IEnumerable<int> Comics,
-            IEnumerable<int> Series,
-            IEnumerable<int> Events,
-            IEnumerable<int> Stories,
-            IEnumerable<OrderBy> Order,
-            int? Limit,
-            int? Offset);
+            string FirstName, string MiddleName, string LastName,
+            string Suffix, string NameStartsWith, string FirstNameStartsWith,
+            string MiddleNameStartsWith, string LastNameStartsWith,
+            DateTime? ModifiedSince, IEnumerable<int> Comics,
+            IEnumerable<int> Series, IEnumerable<int> Events,
+            IEnumerable<int> Stories, IEnumerable<OrderBy> Order,
+            int? Limit, int? Offset);
         IEnumerable<Creator> GetCreators(GetCreators model);
         Creator GetCreator(int CreatorId);
+        [Obsolete("Use method with GetComicsForCreator object")]
         IEnumerable<Comic> GetComicsForCreator(
-            int CreatorId,
-            ComicFormat? Format,
-            ComicFormatType? FormatType,
-            bool? NoVariants,
-            DateDescriptor? DateDescript,
-            DateTime? DateRangeBegin,
-            DateTime? DateRangeEnd,
-            bool? HasDigitalIssue,
-            DateTime? ModifiedSince,
-            IEnumerable<int> Characters,
-            IEnumerable<int> Series,
-            IEnumerable<int> Events,
-            IEnumerable<int> Stories,
-            IEnumerable<int> SharedAppearances,
-            IEnumerable<int> Collaborators,
-            IEnumerable<OrderBy> Order,
-            int? Limit,
-            int? Offset);
+            int CreatorId, ComicFormat? Format, ComicFormatType? FormatType,
+            bool? NoVariants, DateDescriptor? DateDescript,
+            DateTime? DateRangeBegin, DateTime? DateRangeEnd,
+            bool? HasDigitalIssue, DateTime? ModifiedSince,
+            IEnumerable<int> Characters, IEnumerable<int> Series,
+            IEnumerable<int> Events, IEnumerable<int> Stories,
+            IEnumerable<int> SharedAppearances, IEnumerable<int> Collaborators,
+            IEnumerable<OrderBy> Order, int? Limit, int? Offset);
+        IEnumerable<Comic> GetComicsForCreator(GetComicsForCreator model);
         IEnumerable<Event> GetEventsForCreator(
             int CreatorId,
             string Name,

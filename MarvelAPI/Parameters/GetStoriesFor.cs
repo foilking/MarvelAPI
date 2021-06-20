@@ -22,6 +22,7 @@ namespace MarvelAPI.Parameters
         public IEnumerable<int> Series { get; set; }
         public IEnumerable<int> Events { get; set; }
         public IEnumerable<int> Creators { get; set; }
+        public IEnumerable<int> Characters { get; set; }
         public IEnumerable<OrderBy> Order { get; set; }
         public int? Limit { get; set; }
         public int? Offset { get; set; }
@@ -34,6 +35,6 @@ namespace MarvelAPI.Parameters
 
     public class GetStoriesForComic : GetStoriesFor
     {
-        public int ComicsId { get; set; }
+        public int ComicId { get; set; }
     }
 }

@@ -8,10 +8,12 @@ namespace MarvelAPI.ConsoleTester
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Console Tester");
             var marvel = new Marvel("67d146c4c462f0b55bf12bb7d60948af", "54fd1a8ac788767cc91938bcb96755186074970b");
             var deadpool = marvel.GetCharacter(1009268);
             Console.WriteLine(deadpool.Name);
+            var comic = marvel.GetComic(82325);
+            Console.WriteLine(comic.Title);
         }
     }
 }

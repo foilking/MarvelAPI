@@ -82,16 +82,23 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Requests\Base\CreateRequestTests.cs" />
+    <Compile Include="Requests\BaseRequestTests\CreateRequestTests.cs" />
     <Compile Include="Requests\CharacterRequestTests\CharacterRequestTestBase.cs" />
     <Compile Include="Requests\CharacterRequestTests\GetCharactersTests.cs" />
     <Compile Include="Requests\CharacterRequestTests\GetCharacterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Requests\Base\HandleResponseErrorsTests.cs" />
+    <Compile Include="Requests\BaseRequestTests\HandleResponseErrorsTests.cs" />
     <Compile Include="Requests\CharacterRequestTests\GetComicsForCharacterTests.cs" />
     <Compile Include="Requests\CharacterRequestTests\GetEventsForCharacterTests.cs" />
     <Compile Include="Requests\CharacterRequestTests\GetSeriesForCharacterTests.cs" />
     <Compile Include="Requests\CharacterRequestTests\GetStoriesForCharacterTests.cs" />
+    <Compile Include="Requests\ComicsRequestTests\ComicRequestTestBase.cs" />
+    <Compile Include="Requests\ComicsRequestTests\GetCharactersForComicTests.cs" />
+    <Compile Include="Requests\ComicsRequestTests\GetComicsTests.cs" />
+    <Compile Include="Requests\ComicsRequestTests\GetComicTests.cs" />
+    <Compile Include="Requests\ComicsRequestTests\GetCreatorsForComicTests.cs" />
+    <Compile Include="Requests\ComicsRequestTests\GetEventsForComicTests.cs" />
+    <Compile Include="Requests\ComicsRequestTests\GetStoriesForComicTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MarvelAPI\MarvelAPI.csproj">

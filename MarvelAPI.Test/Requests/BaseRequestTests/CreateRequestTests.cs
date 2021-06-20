@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarvelAPI.Test.Requests.Request
+namespace MarvelAPI.Test.Requests.BaseRequestTests
 {
     [TestClass]
     public class CreateRequestTests

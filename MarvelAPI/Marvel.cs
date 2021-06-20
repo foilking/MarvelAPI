@@ -55,7 +55,6 @@ namespace MarvelAPI
         }
 
         [Obsolete("Use method with GetComicsForCharacter object")]
-
         public IEnumerable<Comic> GetComicsForCharacter(
             int CharacterId,
             ComicFormat? Format = null,
@@ -144,7 +143,7 @@ namespace MarvelAPI
 
         public Comic GetComic(int ComicId)
         {
-            throw new NotImplementedException();
+            return Comics.GetComic(ComicId);
         }
 
         public IEnumerable<Character> GetCharactersForComic(int ComicId, string Name, string NameStartsWith, DateTime? ModifiedSince, IEnumerable<int> Series, IEnumerable<int> Events, IEnumerable<int> Stories, IEnumerable<OrderBy> Order, int? Limit, int? Offset)
@@ -179,6 +178,10 @@ namespace MarvelAPI
         }
 
         public IEnumerable<Comic> GetComicsForCreator(int CreatorId, ComicFormat? Format, ComicFormatType? FormatType, bool? NoVariants, DateDescriptor? DateDescript, DateTime? DateRangeBegin, DateTime? DateRangeEnd, bool? HasDigitalIssue, DateTime? ModifiedSince, IEnumerable<int> Characters, IEnumerable<int> Series, IEnumerable<int> Events, IEnumerable<int> Stories, IEnumerable<int> SharedAppearances, IEnumerable<int> Collaborators, IEnumerable<OrderBy> Order, int? Limit, int? Offset)
+        {
+            throw new NotImplementedException();
+        }
+        public IEnumerable<Comic> GetComicsForCreator(GetComicsForCreator model)
         {
             throw new NotImplementedException();
         }

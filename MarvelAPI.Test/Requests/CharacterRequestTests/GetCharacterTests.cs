@@ -33,7 +33,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
                             }
                         }
                     }
-                });
+                }).Verifiable();
             
             // Act
             var result = Requests.GetCharacter(characterId);
