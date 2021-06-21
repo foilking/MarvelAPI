@@ -49,7 +49,7 @@ namespace MarvelAPI.Test.Requests.BaseRequestTests
             {
                 Message = message
             });
-            var response = new RestResponse<IWrapper>
+            var response = new RestResponse<BaseWrapper>
             {
                 ResponseStatus = ResponseStatus.Error,
                 Content = errorString
@@ -74,7 +74,7 @@ namespace MarvelAPI.Test.Requests.BaseRequestTests
                 Message = message,
                 Code = "InvalidCredentials"
             });
-            var response = new RestResponse<IWrapper>
+            var response = new RestResponse<BaseWrapper>
             {
                 ResponseStatus = ResponseStatus.Error,
                 Content = errorString
@@ -99,7 +99,7 @@ namespace MarvelAPI.Test.Requests.BaseRequestTests
                 Message = message,
                 Code = "RequestThrottled"
             });
-            var response = new RestResponse<IWrapper>
+            var response = new RestResponse<BaseWrapper>
             {
                 ResponseStatus = ResponseStatus.Error,
                 Content = errorString

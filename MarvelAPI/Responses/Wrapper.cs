@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MarvelAPI
+﻿namespace MarvelAPI
 {
-    public interface IWrapper
-    {
-        int Code { get; set; }
-        string Status { get; set; }
-    }
-    public class Wrapper<T> : IWrapper where T : IMarvelItem
+    public class BaseWrapper
     {
         public int Code { get; set; }
         public string Status { get; set; }
+    }
+    public class Wrapper<T> : BaseWrapper where T : IMarvelItem
+    {
         public Container<T> Data { get; set; }
         public string Etag { get; set; }
         public string Copyright { get; set; }

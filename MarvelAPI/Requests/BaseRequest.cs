@@ -94,7 +94,7 @@ namespace MarvelAPI
             }
             else
             {
-                var data = response.Data as IWrapper;
+                var data = response.Data as BaseWrapper;
                 if (data != null)
                 {
                     code = data.Code;

@@ -36,4 +36,9 @@ namespace MarvelAPI.Parameters
     {
         public int ComicId { get; set; }
     }
+
+    public class GetCreatorsForEvent : GetCreatorsFor
+    {
+        public int EventId { get; set; }
+    }
 }
