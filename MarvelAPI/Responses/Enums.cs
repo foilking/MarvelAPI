@@ -152,7 +152,7 @@ namespace MarvelAPI
                 case ComicFormatType.Comic:
                     return "comic";
                 default:
-                    return String.Empty;
+                    return string.Empty;
             }
         }
 

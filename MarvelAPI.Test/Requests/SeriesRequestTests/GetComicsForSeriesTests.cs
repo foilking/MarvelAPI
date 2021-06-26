@@ -9,21 +9,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarvelAPI.Test.Requests.EventRequestTests
+namespace MarvelAPI.Test.Requests.SeriesRequestTests
 {
     [TestClass]
-    public class GetComicsForEventTests : EventRequestTestBase
+    public class GetComicsForSeriesTests : SeriesRequestTestBase
     {
         [TestMethod]
         public void Success()
         {
             // arrange
-            var eventId = 1;
+            var seriesId = 1;
             var comicList = new List<Comic>
             {
                 new Comic { }
             };
-            RestClientMock.Setup(c => c.Execute<Wrapper<Comic>>(It.Is<IRestRequest>(r => r.Resource == $"/events/{eventId}/comics")))
+            RestClientMock.Setup(c => c.Execute<Wrapper<Comic>>(It.Is<IRestRequest>(r => r.Resource == $"/series/{seriesId}/comics")))
                 .Returns(new RestResponse<Wrapper<Comic>>
                 {
                     Data = new Wrapper<Comic>
@@ -37,10 +37,11 @@ namespace MarvelAPI.Test.Requests.EventRequestTests
                 .Verifiable();
 
             // act
-            var results = Request.GetComicsForEvent(new GetComicsForEvent
+            var results = Request.GetComicsForSeries(new GetComicsForSeries
             {
-                EventId = eventId
+                SeriesId = seriesId
             });
+
             // assert
             Assert.AreEqual(comicList.Count, results.Count());
             RestClientMock.VerifyAll();

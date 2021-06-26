@@ -3,55 +3,62 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarvelAPI.Requests
 {
-    public class EventRequest : BaseRequest
+    public class SeriesRequest : BaseRequest
     {
-        public EventRequest(string publicApiKey, string privateApiKey, IRestClient client, bool? useGZip = null)
+        public SeriesRequest(string publicApiKey, string privateApiKey, IRestClient client, bool? useGZip = null) 
             : base(publicApiKey, privateApiKey, client, useGZip)
         {
         }
 
         /// <summary>
-        /// Fetches lists of events with optional filters.
+        /// Fetches lists of comic series with optional filters.
         /// </summary>
         /// <returns>
-        /// Lists of events
+        /// Lists of comic series
         /// </returns>
-        public IEnumerable<Event> GetEvents(GetEvents model)
+        public IEnumerable<Series> GetSeries(GetSeries model)
         {
-            var request = CreateRequest("/events");
+            var request = CreateRequest("/series");
 
-            if (!string.IsNullOrWhiteSpace(model.Name))
+            if (!string.IsNullOrWhiteSpace(model.Title))
             {
-                request.AddParameter("name", model.Name);
+                request.AddParameter("title", model.Title);
             }
-            if (!string.IsNullOrWhiteSpace(model.NameStartsWith))
+            if (!string.IsNullOrWhiteSpace(model.TitleStartsWith))
             {
-                request.AddParameter("nameStartsWith", model.NameStartsWith);
+                request.AddParameter("titleStartsWith", model.TitleStartsWith);
             }
             if (model.ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", model.ModifiedSince.Value.ToString("yyyy-MM-dd"));
             }
 
-            request.AddParameterList(model.Creators, "creators");
-            request.AddParameterList(model.Characters, "characters");
-            request.AddParameterList(model.Series, "series");
             request.AddParameterList(model.Comics, "comics");
             request.AddParameterList(model.Stories, "stories");
+            request.AddParameterList(model.Events, "events");
+            request.AddParameterList(model.Creators, "creators");
+            request.AddParameterList(model.Characters, "characters");
+
+            if (model.Type.HasValue)
+            {
+                request.AddParameter("seriesType", model.Type.Value.ToParameter());
+            }
+            if (model.Contains.HasValue)
+            {
+                request.AddParameter("contains", model.Contains.Value.ToParameter());
+            }
 
             var availableOrderBy = new List<OrderBy>
             {
-                OrderBy.Name,
-                OrderBy.NameDesc,
-                OrderBy.StartDate,
-                OrderBy.StartDateDesc,
+                OrderBy.Title,
+                OrderBy.TitleDesc,
                 OrderBy.Modified,
-                OrderBy.ModifiedDesc
+                OrderBy.ModifiedDesc,
+                OrderBy.StartYear,
+                OrderBy.StartYearDesc
             };
             request.AddOrderByParameterList(model.Order, availableOrderBy);
 
@@ -64,40 +71,40 @@ namespace MarvelAPI.Requests
                 request.AddParameter("offset", model.Offset.Value.ToString());
             }
 
-            IRestResponse<Wrapper<Event>> response = Client.Execute<Wrapper<Event>>(request);
+            IRestResponse<Wrapper<Series>> response = Client.Execute<Wrapper<Series>>(request);
 
             HandleResponseErrors(response);
 
             return response.Data.Data.Results;
         }
 
-
         /// <summary>
-        /// This method fetches a single event resource. It is the canonical URI for any event resource provided by the API.
+        /// This method fetches a single comic series resource. It is the canonical URI for any comic series resource provided by the API.
         /// </summary>
+        /// <param name="SeriesId">The series id.</param>
         /// <returns>
-        /// A single event resource
+        /// A single comic series resource
         /// </returns>
-        public Event GetEvent(int eventId)
+        public Series GetSeries(int SeriesId)
         {
-            var request = CreateRequest($"/events/{eventId}");
+            var request = CreateRequest($"/series/{SeriesId}");
 
-            IRestResponse<Wrapper<Event>> response = Client.Execute<Wrapper<Event>>(request);
+            IRestResponse<Wrapper<Series>> response = Client.Execute<Wrapper<Series>>(request);
 
             HandleResponseErrors(response);
 
-            return response.Data.Data.Results.FirstOrDefault(ev => ev.Id == eventId);
+            return response.Data.Data.Results.FirstOrDefault(series => series.Id == SeriesId);
         }
 
         /// <summary>
-        /// Fetches lists of characters which appear in a specific event, with optional filters.
+        /// Fetches lists of characters which appear in specific series, with optional filters.
         /// </summary>
         /// <returns>
-        /// Lists of characters which appear in a specific event
+        /// Lists of characters which appear in specific series
         /// </returns>
-        public IEnumerable<Character> GetCharactersForEvent(GetCharactersForEvent model)
+        public IEnumerable<Character> GetCharactersForSeries(GetCharactersForSeries model)
         {
-            var request = CreateRequest($"/events/{model.EventId}/characters");
+            var request = CreateRequest($"/series/{model.SeriesId}/characters");
 
             if (!string.IsNullOrWhiteSpace(model.Name))
             {
@@ -113,7 +120,7 @@ namespace MarvelAPI.Requests
             }
 
             request.AddParameterList(model.Comics, "comics");
-            request.AddParameterList(model.Series, "series");
+            request.AddParameterList(model.Events, "events");
             request.AddParameterList(model.Stories, "stories");
 
             var availableOrderBy = new List<OrderBy>
@@ -142,14 +149,14 @@ namespace MarvelAPI.Requests
         }
 
         /// <summary>
-        /// Fetches lists of comics which take place during a specific event, with optional filters.
+        /// Fetches lists of comics which are published as part of a specific series, with optional filters.
         /// </summary>
         /// <returns>
-        /// Lists of comics which take place during a specific event
+        /// Lists of comics which are published as part of a specific series
         /// </returns>
-        public IEnumerable<Comic> GetComicsForEvent(GetComicsForEvent model)
+        public IEnumerable<Comic> GetComicsForSeries(GetComicsForSeries model)
         {
-            var request = CreateRequest($"/events/{model.EventId}/comics");
+            var request = CreateRequest($"/series/{model.SeriesId}/comics");
 
             if (model.Format.HasValue)
             {
@@ -171,7 +178,7 @@ namespace MarvelAPI.Requests
             {
                 if (model.DateRangeBegin.Value <= model.DateRangeEnd.Value)
                 {
-                    request.AddParameter("dateRange", $"{model.DateRangeBegin.Value.ToString("yyyy -MM-dd")},{model.DateRangeEnd.Value.ToString("yyyy-MM-dd")}");
+                    request.AddParameter("dateRange", $"{model.DateRangeBegin.Value.ToString("yyyy-MM-dd")},{model.DateRangeEnd.Value.ToString("yyyy-MM-dd")}");
                 }
                 else
                 {
@@ -193,7 +200,6 @@ namespace MarvelAPI.Requests
 
             request.AddParameterList(model.Creators, "creators");
             request.AddParameterList(model.Characters, "characters");
-            request.AddParameterList(model.Series, "series");
             request.AddParameterList(model.Events, "events");
             request.AddParameterList(model.Stories, "stories");
             request.AddParameterList(model.SharedAppearances, "sharedAppearances");
@@ -231,14 +237,14 @@ namespace MarvelAPI.Requests
         }
 
         /// <summary>
-        /// Fetches lists of comic creators whose work appears in a specific event, with optional filters.
+        /// Fetches lists of comic creators whose work appears in a specific series, with optional filters.
         /// </summary>
         /// <returns>
-        /// Lists of comic creators whose work appears in a specific event
+        /// Lists of comic creators whose work appears in a specific series
         /// </returns>
-        public IEnumerable<Creator> GetCreatorsForEvent(GetCreatorsForEvent model)
+        public IEnumerable<Creator> GetCreatorsForSeries(GetCreatorsForSeries model)
         {
-            var request = CreateRequest($"/events/{model.EventId}/creators");
+            var request = CreateRequest($"/series/{model.SeriesId}/creators");
 
             if (!string.IsNullOrWhiteSpace(model.FirstName))
             {
@@ -278,7 +284,7 @@ namespace MarvelAPI.Requests
             }
 
             request.AddParameterList(model.Comics, "comics");
-            request.AddParameterList(model.Series, "series");
+            request.AddParameterList(model.Events, "events");
             request.AddParameterList(model.Stories, "stories");
 
             var availableOrderBy = new List<OrderBy>
@@ -313,49 +319,39 @@ namespace MarvelAPI.Requests
         }
 
         /// <summary>
-        /// Fetches lists of comic series in which a specific event takes place, with optional filters.
+        /// Fetches lists of events which occur in a specific series, with optional filters.
         /// </summary>
         /// <returns>
-        /// Lists of comic series in which a specific event takes place
+        /// Lists of events which occur in a specific series
         /// </returns>
-        public IEnumerable<Series> GetSeriesForEvent(GetSeriesForEvent model)
+        public IEnumerable<Event> GetEventsForSeries(GetEventsForSeries model)
         {
-            var request = CreateRequest($"/events/{model.EventId}/series");
+            var request = CreateRequest($"/series/{model.SeriesId}/events");
 
-            if (!string.IsNullOrWhiteSpace(model.Title))
+            if (!string.IsNullOrWhiteSpace(model.Name))
             {
-                request.AddParameter("title", model.Title);
+                request.AddParameter("name", model.Name);
             }
-            if (!string.IsNullOrWhiteSpace(model.TitleStartsWith))
+            if (!string.IsNullOrWhiteSpace(model.NameStartsWith))
             {
-                request.AddParameter("titleStartsWith", model.TitleStartsWith);
+                request.AddParameter("nameStartsWith", model.NameStartsWith);
             }
             if (model.ModifiedSince.HasValue)
             {
                 request.AddParameter("modifiedSince", model.ModifiedSince.Value.ToString("yyyy-MM-dd"));
             }
 
-            request.AddParameterList(model.Comics, "comics");
-            request.AddParameterList(model.Stories, "stories");
             request.AddParameterList(model.Creators, "creators");
             request.AddParameterList(model.Characters, "characters");
-
-            if (model.SeriesType.HasValue)
-            {
-                request.AddParameter("seriesType", model.SeriesType.Value.ToParameter());
-            }
-            if (model.Contains != null && model.Contains.Any())
-            {
-                var containsParameters = model.Contains.Select(contain => contain.ToParameter());
-                request.AddParameter("contains", string.Join(",", containsParameters));
-            }
+            request.AddParameterList(model.Comics, "comics");
+            request.AddParameterList(model.Stories, "stories");
 
             var availableOrderBy = new List<OrderBy>
             {
-                OrderBy.Title,
-                OrderBy.TitleDesc,
-                OrderBy.StartYear,
-                OrderBy.StartYearDesc,
+                OrderBy.Name,
+                OrderBy.NameDesc,
+                OrderBy.StartDate,
+                OrderBy.StartDateDesc,
                 OrderBy.Modified,
                 OrderBy.ModifiedDesc
             };
@@ -370,7 +366,7 @@ namespace MarvelAPI.Requests
                 request.AddParameter("offset", model.Offset.Value.ToString());
             }
 
-            IRestResponse<Wrapper<Series>> response = Client.Execute<Wrapper<Series>>(request);
+            IRestResponse<Wrapper<Event>> response = Client.Execute<Wrapper<Event>>(request);
 
             HandleResponseErrors(response);
 
@@ -378,14 +374,14 @@ namespace MarvelAPI.Requests
         }
 
         /// <summary>
-        /// Fetches lists of comic stories from a specific event, with optional filters.
+        /// Fetches lists of comic stories from a specific series with optional filters.
         /// </summary>
         /// <returns>
-        /// Lists of comic stories from a specific event
+        /// Lists of comic stories from a specific series
         /// </returns>
-        public IEnumerable<Story> GetStoriesForEvent(GetStoriesForEvent model)
+        public IEnumerable<Story> GetStoriesForSeries(GetStoriesForSeries model)
         {
-            var request = CreateRequest($"/events/{model.EventId}/stories");
+            var request = CreateRequest($"/series/{model.SeriesId}/stories");
 
             if (model.ModifiedSince.HasValue)
             {
@@ -393,7 +389,7 @@ namespace MarvelAPI.Requests
             }
 
             request.AddParameterList(model.Comics, "comics");
-            request.AddParameterList(model.Series, "series");
+            request.AddParameterList(model.Events, "events");
             request.AddParameterList(model.Creators, "creators");
             request.AddParameterList(model.Characters, "characters");
 

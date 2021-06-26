@@ -25,6 +25,7 @@ namespace MarvelAPI.Parameters
         public string LastNameStartsWith { get; set; }
         public DateTime? ModifiedSince { get; set; }
         public IEnumerable<int> Comics { get; set; }
+        public IEnumerable<int> Events { get; set; }
         public IEnumerable<int> Series { get; set; }
         public IEnumerable<int> Stories { get; set; }
         public IEnumerable<OrderBy> Order { get; set; }
@@ -40,5 +41,10 @@ namespace MarvelAPI.Parameters
     public class GetCreatorsForEvent : GetCreatorsFor
     {
         public int EventId { get; set; }
+    }
+
+    public class GetCreatorsForSeries : GetCreatorsFor
+    {
+        public int SeriesId { get; set; }
     }
 }
