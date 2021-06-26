@@ -44,4 +44,9 @@ namespace MarvelAPI.Parameters
     {
         public int SeriesId { get; set; }
     }
+
+    public class GetEventsForStory : GetEventsFor
+    {
+        public int StoryId { get; set; }
+    }
 }

@@ -122,6 +122,13 @@
     <Compile Include="Requests\SeriesRequestTests\GetSingleSeriesTest.cs" />
     <Compile Include="Requests\SeriesRequestTests\GetStoriesForSeriesTests.cs" />
     <Compile Include="Requests\SeriesRequestTests\SeriesRequestTestBase.cs" />
+    <Compile Include="Requests\StoryRequestTests\GetCharactersForStoryTests.cs" />
+    <Compile Include="Requests\StoryRequestTests\GetComicsForStoryTests.cs" />
+    <Compile Include="Requests\StoryRequestTests\GetCreatorsForStoryTests.cs" />
+    <Compile Include="Requests\StoryRequestTests\GetEventsForStoriesTests.cs" />
+    <Compile Include="Requests\StoryRequestTests\GetStoriesTests.cs" />
+    <Compile Include="Requests\StoryRequestTests\GetStoryTests.cs" />
+    <Compile Include="Requests\StoryRequestTests\StoryRequestTestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MarvelAPI\MarvelAPI.csproj">

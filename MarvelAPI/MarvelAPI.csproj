@@ -65,6 +65,7 @@
     <Compile Include="Parameters\GetEventsFor.cs" />
     <Compile Include="Parameters\GetSeries.cs" />
     <Compile Include="Parameters\GetSeriesFor.cs" />
+    <Compile Include="Parameters\GetStories.cs" />
     <Compile Include="Parameters\GetStoriesFor.cs" />
     <Compile Include="Responses\Character.cs" />
     <Compile Include="Responses\Comic.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="Requests\CreatorRequests.cs" />
     <Compile Include="Requests\EventRequest.cs" />
     <Compile Include="Requests\SeriesRequest.cs" />
-    <Compile Include="Requests\StoryRequests.cs" />
+    <Compile Include="Requests\StoryRequest.cs" />
     <Compile Include="Responses\Wrapper.cs" />
     <Compile Include="RestExtensions.cs" />
   </ItemGroup>
