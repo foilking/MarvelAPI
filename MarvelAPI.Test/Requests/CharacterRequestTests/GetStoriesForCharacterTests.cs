@@ -23,7 +23,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             {
                 new Story { }
             };
-            RestClientMock.Setup(c => c.Execute<Wrapper<Story>>(It.Is<IRestRequest>(r => r.Resource == string.Format($"/characters/{characterId}/stories"))))
+            RestClientMock.Setup(c => c.Execute<Wrapper<Story>>(It.Is<IRestRequest>(r => r.Resource == $"/characters/{characterId}/stories")))
                 .Returns(new RestResponse<Wrapper<Story>>
                 {
                     Data = new Wrapper<Story>

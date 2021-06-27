@@ -54,7 +54,7 @@ namespace MarvelAPI
 
             request.AddParameter("apikey", _publicApiKey);
             request.AddParameter("ts", timestamp);
-            request.AddParameter("hash", CreateHash(string.Format("{0}{1}{2}", timestamp, _privateApiKey, _publicApiKey)));
+            request.AddParameter("hash", CreateHash($"{timestamp}{_privateApiKey}{_publicApiKey}"));
 
             if (_useGZip)
             {

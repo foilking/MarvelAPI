@@ -144,7 +144,7 @@ namespace MarvelAPI
             {
                 if (model.DateRangeBegin.Value <= model.DateRangeEnd.Value)
                 {
-                    request.AddParameter("dateRange", string.Format("{0},{1}", model.DateRangeBegin.Value.ToString("yyyy-MM-dd"), model.DateRangeEnd.Value.ToString("yyyy-MM-dd")));
+                    request.AddParameter("dateRange", $"{model.DateRangeBegin.Value.ToString("yyyy-MM-dd")},{model.DateRangeEnd.Value.ToString("yyyy-MM-dd")}");
                 }
                 else
                 {

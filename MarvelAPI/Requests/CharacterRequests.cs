@@ -73,7 +73,7 @@ namespace MarvelAPI
         /// <returns>Character details</returns>
         public Character GetCharacter(int CharacterId)
         {
-            var request = CreateRequest(String.Format("/characters/{0}", CharacterId));
+            var request = CreateRequest($"/characters/{CharacterId}");
 
             IRestResponse<Wrapper<Character>> response = Client.Execute<Wrapper<Character>>(request);
 
@@ -90,7 +90,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Comic> GetComicsForCharacter(GetComicsForCharacter model)
         {
-            var request = CreateRequest(string.Format("/characters/{0}/comics", model.CharacterId));
+            var request = CreateRequest($"/characters/{model.CharacterId}/comics");
             if (model.Format.HasValue)
             {
                 request.AddParameter("format", model.Format.Value.ToParameter());
@@ -111,7 +111,7 @@ namespace MarvelAPI
             {
                 if (model.DateRangeBegin.Value <= model.DateRangeEnd.Value)
                 {
-                    request.AddParameter("dateRange", string.Format("{0},{1}", model.DateRangeBegin.Value.ToString("yyyy-MM-dd"), model.DateRangeEnd.Value.ToString("yyyy-MM-dd")));
+                    request.AddParameter("dateRange", $"{model.DateRangeBegin.Value.ToString("yyyy-MM-dd")},{model.DateRangeEnd.Value.ToString("yyyy-MM-dd")}");
                 }
                 else
                 {
@@ -176,7 +176,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Event> GetEventsForCharacter(GetEventsForCharacter model)
         {
-            var request = CreateRequest(string.Format("/characters/{0}/events", model.CharacterId));
+            var request = CreateRequest($"/characters/{model.CharacterId}/events");
 
             if (!string.IsNullOrWhiteSpace(model.Name))
             {
@@ -234,7 +234,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Series> GetSeriesForCharacter(GetSeriesForCharacter model)
         {
-            var request = CreateRequest(string.Format("/characters/{0}/series", model.CharacterId));
+            var request = CreateRequest($"/characters/{model.CharacterId}/series");
 
             if (!string.IsNullOrWhiteSpace(model.Title))
             {
@@ -298,7 +298,7 @@ namespace MarvelAPI
         /// </returns>
         public IEnumerable<Story> GetStoriesForCharacter(GetStoriesForCharacter model)
         {
-            var request = CreateRequest(string.Format("/characters/{0}/stories", model.CharacterId));
+            var request = CreateRequest($"/characters/{model.CharacterId}/stories");
 
             if (model.ModifiedSince.HasValue)
             {

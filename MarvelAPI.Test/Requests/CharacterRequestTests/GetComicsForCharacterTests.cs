@@ -59,7 +59,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             };
             RestClientMock.Setup(c => c.Execute<Wrapper<Comic>>(
                 It.Is<IRestRequest>(r => 
-                r.Resource == string.Format($"/characters/{characterId}/comics")
+                r.Resource == $"/characters/{characterId}/comics"
                 && r.Parameters.Any(p => p.Name == "format" && p.Value.ToString() == format.ToParameter()))))
                 .Returns(new RestResponse<Wrapper<Comic>>
                 {
@@ -97,7 +97,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             };
             RestClientMock.Setup(c => c.Execute<Wrapper<Comic>>(
                 It.Is<IRestRequest>(r =>
-                r.Resource == string.Format($"/characters/{characterId}/comics")
+                r.Resource == $"/characters/{characterId}/comics"
                 && r.Parameters.Any(p => p.Name == "formatType" && p.Value.ToString() == formatType.ToParameter()))))
                 .Returns(new RestResponse<Wrapper<Comic>>
                 {
@@ -135,7 +135,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             };
             RestClientMock.Setup(c => c.Execute<Wrapper<Comic>>(
                 It.Is<IRestRequest>(r =>
-                r.Resource == string.Format($"/characters/{characterId}/comics")
+                r.Resource == $"/characters/{characterId}/comics"
                 && r.Parameters.Any(p => p.Name == "noVariants" && p.Value.ToString() == noVariant.ToString().ToLower()))))
                 .Returns(new RestResponse<Wrapper<Comic>>
                 {
@@ -173,7 +173,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             };
             RestClientMock.Setup(c => c.Execute<Wrapper<Comic>>(
                 It.Is<IRestRequest>(r =>
-                r.Resource == string.Format($"/characters/{characterId}/comics")
+                r.Resource == $"/characters/{characterId}/comics"
                 && r.Parameters.Any(p => p.Name == "dateDescriptor" && p.Value.ToString() == dateDescriptor.ToParameter()))))
                 .Returns(new RestResponse<Wrapper<Comic>>
                 {
@@ -206,14 +206,14 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             var characterId = 1;
             var startDate = DateTime.Now.AddMonths(-1);
             var endDate = startDate.AddDays(7);
-            var rangeString = string.Format("{0},{1}", startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));
+            var rangeString = $"{startDate.ToString("yyyy-MM-dd")},{endDate.ToString("yyyy-MM-dd")}";
             var comicList = new List<Comic>
             {
                 new Comic { }
             };
             RestClientMock.Setup(c => c.Execute<Wrapper<Comic>>(
                 It.Is<IRestRequest>(r =>
-                r.Resource == string.Format($"/characters/{characterId}/comics")
+                r.Resource == $"/characters/{characterId}/comics"
                 && r.Parameters.Any(p => p.Name == "dateRange" && p.Value.ToString() == rangeString))))
                 .Returns(new RestResponse<Wrapper<Comic>>
                 {
@@ -247,14 +247,14 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             var characterId = 1;
             var startDate = DateTime.Now.AddMonths(-1);
             var endDate = startDate.AddDays(-1);
-            var rangeString = string.Format("{0},{1}", startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));
+            var rangeString = $"{startDate.ToString("yyyy-MM-dd")},{endDate.ToString("yyyy-MM-dd")}";
             var comicList = new List<Comic>
             {
                 new Comic { }
             };
             RestClientMock.Setup(c => c.Execute<Wrapper<Comic>>(
                 It.Is<IRestRequest>(r =>
-                r.Resource == string.Format($"/characters/{characterId}/comics")
+                r.Resource == $"/characters/{characterId}/comics"
                 && r.Parameters.Any(p => p.Name == "dateRange" && p.Value.ToString() == rangeString))))
                 .Returns(new RestResponse<Wrapper<Comic>>
                 {
@@ -284,14 +284,14 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             var characterId = 1;
             var startDate = DateTime.Now.AddMonths(-1);
             var endDate = startDate.AddDays(1);
-            var rangeString = string.Format("{0},{1}", startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));
+            var rangeString = $"{startDate.ToString("yyyy-MM-dd")},{endDate.ToString("yyyy-MM-dd")}";
             var comicList = new List<Comic>
             {
                 new Comic { }
             };
             RestClientMock.Setup(c => c.Execute<Wrapper<Comic>>(
                 It.Is<IRestRequest>(r =>
-                r.Resource == string.Format($"/characters/{characterId}/comics")
+                r.Resource == $"/characters/{characterId}/comics"
                 && r.Parameters.Any(p => p.Name == "dateRange" && p.Value.ToString() == rangeString))))
                 .Returns(new RestResponse<Wrapper<Comic>>
                 {
@@ -325,7 +325,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             };
             RestClientMock.Setup(c => c.Execute<Wrapper<Comic>>(
                 It.Is<IRestRequest>(r =>
-                r.Resource == string.Format($"/characters/{characterId}/comics")
+                r.Resource == $"/characters/{characterId}/comics"
                 && r.Parameters.Any(p => p.Name == "hasDigitalIssue" && p.Value.ToString() == hasDigitalIssue.ToString().ToLower()))))
                 .Returns(new RestResponse<Wrapper<Comic>>
                 {
@@ -364,7 +364,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             };
             RestClientMock.Setup(c => c.Execute<Wrapper<Comic>>(
                 It.Is<IRestRequest>(r =>
-                r.Resource == string.Format($"/characters/{characterId}/comics")
+                r.Resource == $"/characters/{characterId}/comics"
                 && r.Parameters.Any(p => p.Name == "modifiedSince" && p.Value.ToString() == modifiedSinceString))))
                 .Returns(new RestResponse<Wrapper<Comic>>
                 {
@@ -403,7 +403,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
 
             RestClientMock.Setup(c =>
                 c.Execute<Wrapper<Comic>>(It.Is<IRestRequest>(r =>
-                    r.Resource == string.Format($"/characters/{characterId}/comics")
+                    r.Resource == $"/characters/{characterId}/comics"
                     && r.Parameters.Any(p =>
                         p.Name == "series" && p.Value.ToString() == string.Join(",", searchList)
             ))))
@@ -443,7 +443,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             };
             RestClientMock.Setup(c => c.Execute<Wrapper<Comic>>(
                 It.Is<IRestRequest>(r =>
-                r.Resource == string.Format($"/characters/{characterId}/comics")
+                r.Resource == $"/characters/{characterId}/comics"
                 && r.Parameters.Any(p => p.Name == "limit" && p.Value.ToString() == limit.ToString()))))
                 .Returns(new RestResponse<Wrapper<Comic>>
                 {
@@ -481,7 +481,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             };
             RestClientMock.Setup(c => c.Execute<Wrapper<Comic>>(
                 It.Is<IRestRequest>(r =>
-                r.Resource == string.Format($"/characters/{characterId}/comics")
+                r.Resource == $"/characters/{characterId}/comics"
                 && r.Parameters.Any(p => p.Name == "offset" && p.Value.ToString() == offset.ToString()))))
                 .Returns(new RestResponse<Wrapper<Comic>>
                 {

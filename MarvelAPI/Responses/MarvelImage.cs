@@ -6,11 +6,11 @@
         public string Extension { get; set; }
         public override string ToString()
         {
-            return string.Format("{0}.{1}", Path, Extension);
+            return $"{Path}.{Extension}";
         }
         public string ToString(Image size)
         {
-            return string.Format("{0}{1}.{2}", Path, size.ToParameter(), Extension);
+            return $"{Path}{size.ToParameter()}.{Extension}";
         }
     }
 }
