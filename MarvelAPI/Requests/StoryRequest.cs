@@ -354,5 +354,70 @@ namespace MarvelAPI
 
             return response.Data.Data.Results;
         }
+
+        /// <summary>
+        /// Fetches lists of comic series in which a specific event takes place, with optional filters.
+        /// </summary>
+        /// <returns>
+        /// Lists of comic series in which a specific event takes place
+        /// </returns>
+        internal IEnumerable<Series> GetSeriesForStory(GetSeriesForStory model)
+        {
+            var request = CreateRequest($"/stories/{model.StoryId}/series");
+
+            if (!string.IsNullOrWhiteSpace(model.Title))
+            {
+                request.AddParameter("title", model.Title);
+            }
+            if (!string.IsNullOrWhiteSpace(model.TitleStartsWith))
+            {
+                request.AddParameter("titleStartsWith", model.TitleStartsWith);
+            }
+            if (model.ModifiedSince.HasValue)
+            {
+                request.AddParameter("modifiedSince", model.ModifiedSince.Value.ToString("yyyy-MM-dd"));
+            }
+
+            request.AddParameterList(model.Comics, "comics");
+            request.AddParameterList(model.Events, "events");
+            request.AddParameterList(model.Creators, "creators");
+            request.AddParameterList(model.Characters, "characters");
+
+            if (model.SeriesType.HasValue)
+            {
+                request.AddParameter("seriesType", model.SeriesType.Value.ToParameter());
+            }
+            if (model.Contains != null && model.Contains.Any())
+            {
+                var containsParameters = model.Contains.Select(contain => contain.ToParameter());
+                request.AddParameter("contains", string.Join(",", containsParameters));
+            }
+
+            var availableOrderBy = new List<OrderBy>
+            {
+                OrderBy.Title,
+                OrderBy.TitleDesc,
+                OrderBy.StartYear,
+                OrderBy.StartYearDesc,
+                OrderBy.Modified,
+                OrderBy.ModifiedDesc
+            };
+            request.AddOrderByParameterList(model.Order, availableOrderBy);
+
+            if (model.Limit.HasValue && model.Limit.Value > 0)
+            {
+                request.AddParameter("limit", model.Limit.Value.ToString());
+            }
+            if (model.Offset.HasValue && model.Offset.Value > 0)
+            {
+                request.AddParameter("offset", model.Offset.Value.ToString());
+            }
+
+            IRestResponse<Wrapper<Series>> response = Client.Execute<Wrapper<Series>>(request);
+
+            HandleResponseErrors(response);
+
+            return response.Data.Data.Results;
+        }
     }
 }

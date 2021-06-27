@@ -82,6 +82,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="MarvelTests.cs" />
     <Compile Include="Requests\BaseRequestTests\CreateRequestTests.cs" />
     <Compile Include="Requests\CharacterRequestTests\CharacterRequestTestBase.cs" />
     <Compile Include="Requests\CharacterRequestTests\GetCharactersTests.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Requests\StoryRequestTests\GetComicsForStoryTests.cs" />
     <Compile Include="Requests\StoryRequestTests\GetCreatorsForStoryTests.cs" />
     <Compile Include="Requests\StoryRequestTests\GetEventsForStoriesTests.cs" />
+    <Compile Include="Requests\StoryRequestTests\GetSeriesForStoryTests.cs" />
     <Compile Include="Requests\StoryRequestTests\GetStoriesTests.cs" />
     <Compile Include="Requests\StoryRequestTests\GetStoryTests.cs" />
     <Compile Include="Requests\StoryRequestTests\StoryRequestTestBase.cs" />

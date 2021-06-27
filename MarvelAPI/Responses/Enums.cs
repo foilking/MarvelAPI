@@ -70,7 +70,6 @@ namespace MarvelAPI
 
     public enum Image
     {
-
         [Description("50x75px")]
         PortraitSmall,
         [Description("100x150px")]
@@ -83,7 +82,6 @@ namespace MarvelAPI
         PortraitUncanny,
         [Description("216x324px")]
         PortraitIncredible,
-
         [Description("65x45px")]
         StandardSmall,
         [Description("100x100px")]
@@ -96,7 +94,6 @@ namespace MarvelAPI
         StandardFantastic,
         [Description("180x180px")]
         StandardAmazing,
-
         [Description("120x90px")]
         LandscapeSmall,
         [Description("175x130px")]
@@ -109,7 +106,6 @@ namespace MarvelAPI
         LandscapeAmazing,
         [Description("464x261px")]
         LandscapeIncredible,
-
         [Description("full image, constrained to 500px wide")]
         Detail,
         [Description("no variant descriptor")]
@@ -169,7 +165,7 @@ namespace MarvelAPI
                 case SeriesType.Ongoing:
                     return "ongoing";
                 default:
-                    return String.Empty;
+                    return string.Empty;
             }
         }
 
@@ -186,7 +182,7 @@ namespace MarvelAPI
                 case DateDescriptor.ThisWeek:
                     return "thisWeek";
                 default:
-                    return String.Empty;
+                    return string.Empty;
             }
         }
 
@@ -247,7 +243,7 @@ namespace MarvelAPI
                 case OrderBy.StartYearDesc:
                     return "-startYear";
                 default:
-                    return String.Empty;
+                    return string.Empty;
             }
         }
 
@@ -267,7 +263,6 @@ namespace MarvelAPI
                     return "/portrait_uncanny";
                 case Image.PortraitIncredible:
                     return "/portrait_incredible";
-
                 case Image.StandardSmall:
                     return "/standard_small";
                 case Image.StandardMedium:
@@ -292,7 +287,6 @@ namespace MarvelAPI
                     return "/landscape_amazing";
                 case Image.LandscapeIncredible:
                     return "/landscape_incredible";
-
                 case Image.Detail:
                     return "/detail";
                 default :
