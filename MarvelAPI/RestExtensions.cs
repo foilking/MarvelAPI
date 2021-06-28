@@ -29,7 +29,6 @@ namespace MarvelAPI
                             orderString.Append(",");
                         }
                         orderString.Append(order.ToParameter());
-                        break;
                     }
                 }
                 if (orderString.Length > 0)
