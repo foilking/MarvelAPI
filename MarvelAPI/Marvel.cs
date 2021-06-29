@@ -21,7 +21,7 @@ namespace MarvelAPI
         {
             var client = new RestClient(BASE_URL);
 
-            Characters =  new CharacterRequests(publicApiKey, privateApiKey, client, useGZip);
+            Characters = new CharacterRequests(publicApiKey, privateApiKey, client, useGZip);
             Comics = new ComicRequests(publicApiKey, privateApiKey, client, useGZip);
             Creators = new CreatorRequests(publicApiKey, privateApiKey, client, useGZip);
             Events = new EventRequest(publicApiKey, privateApiKey, client, useGZip);
@@ -125,8 +125,8 @@ namespace MarvelAPI
             int? Limit = null,
             int? Offset = null)
         {
-            return GetEventsForCharacter(new GetEventsForCharacter 
-            { 
+            return GetEventsForCharacter(new GetEventsForCharacter
+            {
                 CharacterId = CharacterId,
                 Name = Name,
                 NameStartsWith = NameStartsWith,
@@ -135,7 +135,7 @@ namespace MarvelAPI
                 Series = Series,
                 Comics = Comics,
                 Stories = Stories,
-                Order = Order, 
+                Order = Order,
                 Limit = Limit,
                 Offset = Offset
             });
@@ -151,12 +151,12 @@ namespace MarvelAPI
         }
 
         [Obsolete("Use method with GetSeriesForCharacter object")]
-        public IEnumerable<Series> GetSeriesForCharacter(int CharacterId, 
-            string Title = null, string TitleStartsWith = null, 
-            DateTime? ModifiedSince = null, 
-            IEnumerable<int> Comics = null, IEnumerable<int> Stories = null, 
-            IEnumerable<int> Events = null, IEnumerable<int> Creators = null, 
-            SeriesType? SeriesType = null, IEnumerable<ComicFormat> Contains = null, 
+        public IEnumerable<Series> GetSeriesForCharacter(int CharacterId,
+            string Title = null, string TitleStartsWith = null,
+            DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Stories = null,
+            IEnumerable<int> Events = null, IEnumerable<int> Creators = null,
+            SeriesType? SeriesType = null, IEnumerable<ComicFormat> Contains = null,
             IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
             return GetSeriesForCharacter(new GetSeriesForCharacter
@@ -184,10 +184,10 @@ namespace MarvelAPI
 
         [Obsolete("Use method with GetStoriesForCharacter object")]
         public IEnumerable<Story> GetStoriessForCharacter(
-            int CharacterId, 
-            DateTime? ModifiedSince = null, 
-            IEnumerable<int> Comics = null, IEnumerable<int> Series = null, 
-            IEnumerable<int> Events = null, IEnumerable<int> Creators = null, 
+            int CharacterId,
+            DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Series = null,
+            IEnumerable<int> Events = null, IEnumerable<int> Creators = null,
             IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
             return GetStoriesForCharacter(new GetStoriesForCharacter
@@ -211,24 +211,75 @@ namespace MarvelAPI
 
         #region Comics
         [Obsolete("Use method with GetComics object")]
-        public IEnumerable<Comic> GetComics(ComicFormat? Format, ComicFormatType? FormatType, bool? NoVariants, DateDescriptor? DateDescript, DateTime? DateRangeBegin, DateTime? DateRangeEnd, bool? HasDigitalIssue, DateTime? ModifiedSince, IEnumerable<int> Creators, IEnumerable<int> Characters, IEnumerable<int> Series, IEnumerable<int> Events, IEnumerable<int> Stories, IEnumerable<int> SharedAppearances, IEnumerable<int> Collaborators, IEnumerable<OrderBy> Order, int? Limit, int? Offset)
+        public IEnumerable<Comic> GetComics(
+            ComicFormat? Format = null,
+            ComicFormatType? FormatType = null,
+            bool? NoVariants = null,
+            DateDescriptor? DateDescript = null,
+            DateTime? DateRangeBegin = null,
+            DateTime? DateRangeEnd = null,
+            bool? HasDigitalIssue = null,
+            DateTime? ModifiedSince = null,
+            IEnumerable<int> Creators = null,
+            IEnumerable<int> Characters = null,
+            IEnumerable<int> Series = null,
+            IEnumerable<int> Events = null,
+            IEnumerable<int> Stories = null,
+            IEnumerable<int> SharedAppearances = null,
+            IEnumerable<int> Collaborators = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetComics(new GetComics
+            {
+                Format = Format,
+                FormatType = FormatType,
+                NoVariants = NoVariants,
+                DateDescript = DateDescript,
+                DateRangeBegin = DateRangeBegin,
+                DateRangeEnd = DateRangeEnd,
+                HasDigitalIssue = HasDigitalIssue,
+                ModifiedSince = ModifiedSince,
+                Creators = Creators,
+                Characters = Characters,
+                Series = Series,
+                Events = Events,
+                Stories = Stories,
+                SharedAppearances = SharedAppearances,
+                Collaborators = Collaborators,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Comic> GetComics(GetComics model)
         {
             return Comics.GetComics(model);
         }
-        
+
         public Comic GetComic(int ComicId)
         {
             return Comics.GetComic(ComicId);
         }
 
         [Obsolete("Use method with GetComics object")]
-        public IEnumerable<Character> GetCharactersForComic(int ComicId, string Name, string NameStartsWith, DateTime? ModifiedSince, IEnumerable<int> Series, IEnumerable<int> Events, IEnumerable<int> Stories, IEnumerable<OrderBy> Order, int? Limit, int? Offset)
+        public IEnumerable<Character> GetCharactersForComic(int ComicId,
+            string Name = null, string NameStartsWith = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Series = null, IEnumerable<int> Events = null, IEnumerable<int> Stories = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetCharactersForComic(new GetCharactersForComic
+            {
+                ComicId = ComicId,
+                Name = Name,
+                NameStartsWith = NameStartsWith,
+                ModifiedSince = ModifiedSince,
+                Series = Series,
+                Events = Events,
+                Stories = Stories,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
 
         public IEnumerable<Character> GetCharactersForComic(GetCharactersForComic model)
@@ -237,15 +288,15 @@ namespace MarvelAPI
         }
 
         [Obsolete("Use method with GetCreatorsForComic object")]
-        public IEnumerable<Creator> GetCreatorsForComic(int ComicId, 
-            string FirstName = null, string MiddleName = null, string LastName = null, 
-            string Suffix = null, string NameStartsWith = null, 
-            string FirstNameStartsWith = null, string MiddleNameStartsWith = null, string LastNameStartsWith = null, 
-            DateTime? ModifiedSince = null, 
-            IEnumerable<int> Comics = null, 
-            IEnumerable<int> Series = null, 
-            IEnumerable<int> Stories = null, 
-            IEnumerable<OrderBy> Order = null, 
+        public IEnumerable<Creator> GetCreatorsForComic(int ComicId,
+            string FirstName = null, string MiddleName = null, string LastName = null,
+            string Suffix = null, string NameStartsWith = null,
+            string FirstNameStartsWith = null, string MiddleNameStartsWith = null, string LastNameStartsWith = null,
+            DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null,
+            IEnumerable<int> Series = null,
+            IEnumerable<int> Stories = null,
+            IEnumerable<OrderBy> Order = null,
             int? Limit = null, int? Offset = null)
         {
             return GetCreatorsForComic(new GetCreatorsForComic
@@ -273,9 +324,27 @@ namespace MarvelAPI
             return Comics.GetCreatorsForComic(model);
         }
 
-        public IEnumerable<Event> GetEventsForComic(int ComicId, string Name, string NameStartsWith, DateTime? ModifiedSince, IEnumerable<int> Creators, IEnumerable<int> Characters, IEnumerable<int> Series, IEnumerable<int> Stories, IEnumerable<OrderBy> Order, int? Limit, int? Offset)
+        [Obsolete("Use method with GetEventsForComic object")]
+        public IEnumerable<Event> GetEventsForComic(int ComicId,
+            string Name = null, string NameStartsWith = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Creators = null, IEnumerable<int> Characters = null,
+            IEnumerable<int> Series = null, IEnumerable<int> Stories = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetEventsForComic(new GetEventsForComic
+            {
+                ComicId = ComicId,
+                Name = Name,
+                NameStartsWith = NameStartsWith,
+                ModifiedSince = ModifiedSince,
+                Creators = Creators,
+                Characters = Characters,
+                Series = Series,
+                Stories = Stories,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
 
         public IEnumerable<Event> GetEventsForComic(GetEventsForComic model)
@@ -283,9 +352,24 @@ namespace MarvelAPI
             return Comics.GetEventsForComic(model);
         }
 
-        public IEnumerable<Story> GetStoriesForComic(int ComicId, DateTime? ModifiedSince, IEnumerable<int> Series, IEnumerable<int> Events, IEnumerable<int> Creators, IEnumerable<int> Characters, IEnumerable<OrderBy> Order, int? Limit, int? Offset)
+        [Obsolete("Use method with GetStoriesForComic object")]
+        public IEnumerable<Story> GetStoriesForComic(int ComicId,
+            DateTime? ModifiedSince = null, IEnumerable<int> Series = null, IEnumerable<int> Events = null,
+            IEnumerable<int> Creators = null, IEnumerable<int> Characters = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetStoriesForComic(new GetStoriesForComic
+            {
+                ComicId = ComicId,
+                ModifiedSince = ModifiedSince,
+                Series = Series,
+                Events = Events,
+                Creators = Creators,
+                Characters = Characters,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
 
         public IEnumerable<Story> GetStoriesForComic(GetStoriesForComic model)
@@ -295,9 +379,35 @@ namespace MarvelAPI
         #endregion
 
         #region Creators
-        public IEnumerable<Creator> GetCreators(string FirstName, string MiddleName, string LastName, string Suffix, string NameStartsWith, string FirstNameStartsWith, string MiddleNameStartsWith, string LastNameStartsWith, DateTime? ModifiedSince, IEnumerable<int> Comics, IEnumerable<int> Series, IEnumerable<int> Events, IEnumerable<int> Stories, IEnumerable<OrderBy> Order, int? Limit, int? Offset)
+
+        [Obsolete("Use method with GetCreators object")]
+        public IEnumerable<Creator> GetCreators(
+            string FirstName = null, string MiddleName = null, string LastName = null, string Suffix = null,
+            string NameStartsWith = null, string FirstNameStartsWith = null, string MiddleNameStartsWith = null, string LastNameStartsWith = null,
+            DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Series = null,
+            IEnumerable<int> Events = null, IEnumerable<int> Stories = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetCreators(new GetCreators
+            {
+                FirstName = FirstName,
+                MiddleName = MiddleName,
+                LastName = LastName,
+                Suffix = Suffix,
+                NameStartsWith = NameStartsWith,
+                FirstNameStartsWith = FirstNameStartsWith,
+                MiddleNameStartsWith = MiddleNameStartsWith,
+                LastNameStartsWith = LastNameStartsWith,
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Series = Series,
+                Events = Events,
+                Stories = Stories,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
 
         public IEnumerable<Creator> GetCreators(GetCreators model)
@@ -309,40 +419,119 @@ namespace MarvelAPI
             return Creators.GetCreator(CreatorId);
         }
 
-        public IEnumerable<Comic> GetComicsForCreator(int CreatorId, ComicFormat? Format, ComicFormatType? FormatType, bool? NoVariants, DateDescriptor? DateDescript, DateTime? DateRangeBegin, DateTime? DateRangeEnd, bool? HasDigitalIssue, DateTime? ModifiedSince, IEnumerable<int> Characters, IEnumerable<int> Series, IEnumerable<int> Events, IEnumerable<int> Stories, IEnumerable<int> SharedAppearances, IEnumerable<int> Collaborators, IEnumerable<OrderBy> Order, int? Limit, int? Offset)
+        [Obsolete("Use method with GetComicsForCreator object")]
+        public IEnumerable<Comic> GetComicsForCreator(int CreatorId,
+            ComicFormat? Format = null, ComicFormatType? FormatType = null, bool? NoVariants = null,
+            DateDescriptor? DateDescript = null, DateTime? DateRangeBegin = null, DateTime? DateRangeEnd = null,
+            bool? HasDigitalIssue = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Characters = null, IEnumerable<int> Series = null,
+            IEnumerable<int> Events = null, IEnumerable<int> Stories = null,
+            IEnumerable<int> SharedAppearances = null, IEnumerable<int> Collaborators = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetComicsForCreator(new GetComicsForCreator
+            {
+                CreatorId = CreatorId,
+                Format = Format,
+                FormatType = FormatType,
+                NoVariants = NoVariants,
+                DateDescript = DateDescript,
+                DateRangeBegin = DateRangeBegin,
+                DateRangeEnd = DateRangeEnd,
+                HasDigitalIssue = HasDigitalIssue,
+                ModifiedSince = ModifiedSince,
+                Characters = Characters,
+                Series = Series,
+                Events = Events,
+                Stories = Stories,
+                SharedAppearances = SharedAppearances,
+                Collaborators = Collaborators,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Comic> GetComicsForCreator(GetComicsForCreator model)
         {
             return Creators.GetComicsForCreator(model);
         }
 
-        public IEnumerable<Event> GetEventsForCreator(int CreatorId, string Name, string NameStartsWith, DateTime? ModifiedSince, IEnumerable<int> Characters, IEnumerable<int> Series, IEnumerable<int> Comics, IEnumerable<int> Stories, IEnumerable<OrderBy> Order, int? Limit, int? Offset)
+        [Obsolete("Use method with GetEventsForCreator object")]
+        public IEnumerable<Event> GetEventsForCreator(int CreatorId,
+            string Name = null, string NameStartsWith = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Characters = null, IEnumerable<int> Series = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Stories = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetEventsForCreator(new GetEventsForCreator
+            {
+                CreatorId = CreatorId,
+                Name = Name,
+                NameStartsWith = NameStartsWith,
+                ModifiedSince = ModifiedSince,
+                Characters = Characters,
+                Series = Series,
+                Comics = Comics,
+                Stories = Stories,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Event> GetEventsForCreator(GetEventsForCreator model)
         {
             return Creators.GetEventsForCreator(model);
         }
 
-        public IEnumerable<Series> GetSeriesForCreator(int CreatorId, string Title = null, string TitleStartsWith = null, DateTime? ModifiedSince = null, IEnumerable<int> Comics = null, IEnumerable<int> Stories = null, IEnumerable<int> Events = null, IEnumerable<int> Characters = null, SeriesType? SeriesType = null, IEnumerable<ComicFormat> Contains = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetSeriesForCreator object")]
+        public IEnumerable<Series> GetSeriesForCreator(int CreatorId,
+            string Title = null, string TitleStartsWith = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Stories = null,
+            IEnumerable<int> Events = null, IEnumerable<int> Characters = null,
+            SeriesType? SeriesType = null, IEnumerable<ComicFormat> Contains = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetSeriesForCreator(new GetSeriesForCreator
+            {
+                CreatorId = CreatorId,
+                Title = Title,
+                TitleStartsWith = TitleStartsWith,
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Stories = Stories,
+                Events = Events,
+                Characters = Characters,
+                SeriesType = SeriesType,
+                Contains = Contains,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Series> GetSeriesForCreator(GetSeriesForCreator model)
         {
             return Creators.GetSeriesForCreator(model);
         }
 
-        public IEnumerable<Story> GetStoriesForCreator(int CreatorId, 
-            DateTime? ModifiedSince = null, 
+        [Obsolete("Use method with GetStoriesForCreator object")]
+        public IEnumerable<Story> GetStoriesForCreator(int CreatorId,
+            DateTime? ModifiedSince = null,
             IEnumerable<int> Comics = null, IEnumerable<int> Series = null,
-            IEnumerable<int> Events = null, IEnumerable<int> Characters = null, 
+            IEnumerable<int> Events = null, IEnumerable<int> Characters = null,
             IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetStoriesForCreator(new GetStoriesForCreator
+            {
+                CreatorId = CreatorId,
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Series = Series,
+                Events = Events,
+                Characters = Characters,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Story> GetStoriesForCreator(GetStoriesForCreator model)
         {
@@ -352,9 +541,27 @@ namespace MarvelAPI
 
         #region Events
 
-        public IEnumerable<Event> GetEvents(string Name = null, string NameStartsWith = null, DateTime? ModifiedSince = null, IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, IEnumerable<int> Series = null, IEnumerable<int> Comics = null, IEnumerable<int> Stories = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetEvents object")]
+        public IEnumerable<Event> GetEvents(
+            string Name = null, string NameStartsWith = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Creators = null, IEnumerable<int> Characters = null,
+            IEnumerable<int> Series = null, IEnumerable<int> Comics = null, IEnumerable<int> Stories = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetEvents(new GetEvents
+            {
+                Name = Name,
+                NameStartsWith = NameStartsWith,
+                ModifiedSince = ModifiedSince,
+                Creators = Creators,
+                Characters = Characters,
+                Series = Series,
+                Comics = Comics,
+                Stories = Stories,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Event> GetEvents(GetEvents model)
         {
@@ -366,45 +573,152 @@ namespace MarvelAPI
             return Events.GetEvent(EventId);
         }
 
-        public IEnumerable<Character> GetCharactersForEvent(int EventId, string Name = null, string NameStartsWith = null, DateTime? ModifiedSince = null, IEnumerable<int> Comics = null, IEnumerable<int> Series = null, IEnumerable<int> Stories = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetCharactersForEvent object")]
+        public IEnumerable<Character> GetCharactersForEvent(int EventId,
+            string Name = null, string NameStartsWith = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Series = null, IEnumerable<int> Stories = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetCharactersForEvent(new GetCharactersForEvent
+            {
+                EventId = EventId,
+                Name = Name,
+                NameStartsWith = NameStartsWith,
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Series = Series,
+                Stories = Stories,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Character> GetCharactersForEvent(GetCharactersForEvent model)
         {
             return Events.GetCharactersForEvent(model);
         }
 
-        public IEnumerable<Comic> GetComicsForEvent(int EventId, ComicFormat? Format = null, ComicFormatType? FormatType = null, bool? NoVariants = null, DateDescriptor? DateDescript = null, DateTime? DateRangeBegin = null, DateTime? DateRangeEnd = null, bool? HasDigitalIssue = null, DateTime? ModifiedSince = null, IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, IEnumerable<int> Series = null, IEnumerable<int> Events = null, IEnumerable<int> Stories = null, IEnumerable<int> SharedAppearances = null, IEnumerable<int> Collaborators = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetComicsForEvent object")]
+        public IEnumerable<Comic> GetComicsForEvent(int EventId,
+            ComicFormat? Format = null, ComicFormatType? FormatType = null, bool? NoVariants = null,
+            DateDescriptor? DateDescript = null, DateTime? DateRangeBegin = null, DateTime? DateRangeEnd = null,
+            bool? HasDigitalIssue = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Creators = null, IEnumerable<int> Characters = null,
+            IEnumerable<int> Series = null, IEnumerable<int> Events = null,
+            IEnumerable<int> Stories = null, IEnumerable<int> SharedAppearances = null,
+            IEnumerable<int> Collaborators = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetComicsForEvent(new GetComicsForEvent
+            {
+                EventId = EventId,
+                Format = Format,
+                FormatType = FormatType,
+                NoVariants = NoVariants,
+                DateDescript = DateDescript,
+                DateRangeBegin = DateRangeBegin,
+                DateRangeEnd = DateRangeEnd,
+                HasDigitalIssue = HasDigitalIssue,
+                ModifiedSince = ModifiedSince,
+                Creators = Creators,
+                Characters = Characters,
+                Series = Series,
+                Events = Events,
+                Stories = Stories,
+                SharedAppearances = SharedAppearances,
+                Collaborators = Collaborators,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Comic> GetComicsForEvent(GetComicsForEvent model)
         {
             return Events.GetComicsForEvent(model);
         }
 
-        public IEnumerable<Creator> GetCreatorsForEvent(int EventId, string FirstName = null, string MiddleName = null, string LastName = null, string Suffix = null, string NameStartsWith = null, string FirstNameStartsWith = null, string MiddleNameStartsWith = null, string LastNameStartsWith = null, DateTime? ModifiedSince = null, IEnumerable<int> Comics = null, IEnumerable<int> Series = null, IEnumerable<int> Stories = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetCreatorsForEvent object")]
+        public IEnumerable<Creator> GetCreatorsForEvent(int EventId,
+            string FirstName = null, string MiddleName = null, string LastName = null, string Suffix = null,
+            string NameStartsWith = null,
+            string FirstNameStartsWith = null, string MiddleNameStartsWith = null, string LastNameStartsWith = null,
+            DateTime? ModifiedSince = null, IEnumerable<int> Comics = null,
+            IEnumerable<int> Series = null, IEnumerable<int> Stories = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetCreatorsForEvent(new GetCreatorsForEvent
+            {
+                EventId = EventId,
+                FirstName = FirstName,
+                MiddleName = MiddleName,
+                LastName = LastName,
+                Suffix = Suffix,
+                NameStartsWith = NameStartsWith,
+                FirstNameStartsWith = FirstNameStartsWith,
+                MiddleNameStartsWith = MiddleNameStartsWith,
+                LastNameStartsWith = LastNameStartsWith,
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Series = Series,
+                Stories = Stories,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Creator> GetCreatorsForEvent(GetCreatorsForEvent model)
         {
             return Events.GetCreatorsForEvent(model);
         }
 
-        public IEnumerable<Series> GetSeriesForEvent(int EventId, string Title = null, string TitleStartsWith = null, DateTime? ModifiedSince = null, IEnumerable<int> Comics = null, IEnumerable<int> Stories = null, IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, SeriesType? SeriesType = null, IEnumerable<ComicFormat> Contains = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetSeriesForEvent object")]
+        public IEnumerable<Series> GetSeriesForEvent(int EventId,
+            string Title = null, string TitleStartsWith = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Stories = null,
+            IEnumerable<int> Creators = null, IEnumerable<int> Characters = null,
+            SeriesType? SeriesType = null, IEnumerable<ComicFormat> Contains = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetSeriesForEvent(new GetSeriesForEvent
+            {
+                EventId = EventId,
+                Title = Title,
+                TitleStartsWith = TitleStartsWith,
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Stories = Stories,
+                Creators = Creators,
+                Characters = Characters,
+                SeriesType = SeriesType,
+                Contains = Contains,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Series> GetSeriesForEvent(GetSeriesForEvent model)
         {
             return Events.GetSeriesForEvent(model);
         }
 
-        public IEnumerable<Story> GetStoriesForEvent(int EventId, DateTime? ModifiedSince = null, IEnumerable<int> Comics = null, IEnumerable<int> Series = null, IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetStoriesForEvent object")]
+        public IEnumerable<Story> GetStoriesForEvent(int EventId, DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Series = null,
+            IEnumerable<int> Creators = null, IEnumerable<int> Characters = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetStoriesForEvent(new GetStoriesForEvent
+            {
+                EventId = EventId,
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Series = Series,
+                Creators = Creators,
+                Characters = Characters,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Story> GetStoriesForEvent(GetStoriesForEvent model)
         {
@@ -413,9 +727,29 @@ namespace MarvelAPI
         #endregion
 
         #region Series
-        public IEnumerable<Series> GetSeries(string Title = null, string TitleStartsWith = null, DateTime? ModifiedSince = null, IEnumerable<int> Comics = null, IEnumerable<int> Stories = null, IEnumerable<int> Events = null, IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, SeriesType? Type = null, ComicFormat? Contains = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetSeries object")]
+        public IEnumerable<Series> GetSeries(
+            string Title = null, string TitleStartsWith = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Stories = null, IEnumerable<int> Events = null,
+            IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, SeriesType? Type = null,
+            ComicFormat? Contains = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetSeries(new GetSeries
+            {
+                Title = Title,
+                TitleStartsWith = TitleStartsWith,
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Stories = Stories,
+                Events = Events,
+                Creators = Creators,
+                Characters = Characters,
+                Type = Type,
+                Contains = Contains,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Series> GetSeries(GetSeries model)
         {
@@ -427,45 +761,145 @@ namespace MarvelAPI
             return Series.GetSeries(SeriesId);
         }
 
-        public IEnumerable<Character> GetCharactersForSeries(int SeriesId, string Name = null, string NameStartsWith = null, DateTime? ModifiedSince = null, IEnumerable<int> Comics = null, IEnumerable<int> Events = null, IEnumerable<int> Stories = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetCharactersForSeries object")]
+        public IEnumerable<Character> GetCharactersForSeries(int SeriesId,
+            string Name = null, string NameStartsWith = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Events = null, IEnumerable<int> Stories = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetCharactersForSeries(new GetCharactersForSeries
+            {
+                SeriesId = SeriesId,
+                Name = Name,
+                NameStartsWith = NameStartsWith,
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Events = Events,
+                Stories = Stories,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Character> GetCharactersForSeries(GetCharactersForSeries model)
         {
             return Series.GetCharactersForSeries(model);
         }
 
-        public IEnumerable<Comic> GetComicsForSeries(int SeriesId, ComicFormat? Format = null, ComicFormatType? FormatType = null, bool? NoVariants = null, DateDescriptor? DateDescript = null, DateTime? DateRangeBegin = null, DateTime? DateRangeEnd = null, bool? HasDigitalIssue = null, DateTime? ModifiedSince = null, IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, IEnumerable<int> Events = null, IEnumerable<int> Stories = null, IEnumerable<int> SharedAppearances = null, IEnumerable<int> Collaborators = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetComicsForSeries object")]
+        public IEnumerable<Comic> GetComicsForSeries(int SeriesId,
+            ComicFormat? Format = null, ComicFormatType? FormatType = null, bool? NoVariants = null,
+            DateDescriptor? DateDescript = null, DateTime? DateRangeBegin = null, DateTime? DateRangeEnd = null,
+            bool? HasDigitalIssue = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, IEnumerable<int> Events = null,
+            IEnumerable<int> Stories = null, IEnumerable<int> SharedAppearances = null, IEnumerable<int> Collaborators = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetComicsForSeries(new GetComicsForSeries
+            {
+                SeriesId = SeriesId,
+                Format = Format,
+                FormatType = FormatType,
+                NoVariants = NoVariants,
+                DateDescript = DateDescript,
+                DateRangeBegin = DateRangeBegin,
+                DateRangeEnd = DateRangeEnd,
+                HasDigitalIssue = HasDigitalIssue,
+                ModifiedSince = ModifiedSince,
+                Creators = Creators,
+                Characters = Characters,
+                Events = Events,
+                Stories = Stories,
+                SharedAppearances = SharedAppearances,
+                Collaborators = Collaborators,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Comic> GetComicsForSeries(GetComicsForSeries model)
         {
             return Series.GetComicsForSeries(model);
         }
 
-        public IEnumerable<Creator> GetCreatorsForSeries(int SeriesId, string FirstName = null, string MiddleName = null, string LastName = null, string Suffix = null, string NameStartsWith = null, string FirstNameStartsWith = null, string MiddleNameStartsWith = null, string LastNameStartsWith = null, DateTime? ModifiedSince = null, IEnumerable<int> Comics = null, IEnumerable<int> Events = null, IEnumerable<int> Stories = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetCreatorsForSeries object")]
+        public IEnumerable<Creator> GetCreatorsForSeries(int SeriesId,
+            string FirstName = null, string MiddleName = null, string LastName = null, string Suffix = null,
+            string NameStartsWith = null, string FirstNameStartsWith = null, string MiddleNameStartsWith = null,
+            string LastNameStartsWith = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Events = null, IEnumerable<int> Stories = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetCreatorsForSeries(new GetCreatorsForSeries
+            {
+                SeriesId = SeriesId,
+                FirstName = FirstName,
+                MiddleName = MiddleName,
+                LastName = LastName,
+                Suffix = Suffix,
+                NameStartsWith = NameStartsWith,
+                FirstNameStartsWith = FirstNameStartsWith,
+                MiddleNameStartsWith = MiddleNameStartsWith,
+                LastNameStartsWith = LastNameStartsWith,
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Events = Events,
+                Stories = Stories,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Creator> GetCreatorsForSeries(GetCreatorsForSeries model)
         {
             return Series.GetCreatorsForSeries(model);
         }
 
-        public IEnumerable<Event> GetEventsForSeries(int SeriesId, string Name = null, string NameStartsWith = null, DateTime? ModifiedSince = null, IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, IEnumerable<int> Comics = null, IEnumerable<int> Stories = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetEventsForSeries object")]
+        public IEnumerable<Event> GetEventsForSeries(int SeriesId,
+            string Name = null, string NameStartsWith = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Creators = null, IEnumerable<int> Characters = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Stories = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetEventsForSeries(new GetEventsForSeries
+            {
+                SeriesId = SeriesId,
+                Name = Name,
+                NameStartsWith = NameStartsWith,
+                ModifiedSince = ModifiedSince,
+                Creators = Creators,
+                Characters = Characters,
+                Comics = Comics,
+                Stories = Stories,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Event> GetEventsForSeries(GetEventsForSeries model)
         {
             return Series.GetEventsForSeries(model);
         }
 
-        public IEnumerable<Story> GetStoriesForSeries(int SeriesId, DateTime? ModifiedSince = null, IEnumerable<int> Comics = null, IEnumerable<int> Events = null, IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetStoriesForSeries object")]
+        public IEnumerable<Story> GetStoriesForSeries(int SeriesId, DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Events = null,
+            IEnumerable<int> Creators = null, IEnumerable<int> Characters = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetStoriesForSeries(new GetStoriesForSeries
+            {
+                SeriesId = SeriesId,
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Events = Events,
+                Creators = Creators,
+                Characters = Characters,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Story> GetStoriesForSeries(GetStoriesForSeries model)
         {
@@ -474,9 +908,24 @@ namespace MarvelAPI
         #endregion
 
         #region Story
-        public IEnumerable<Story> GetStories(DateTime? ModifiedSince = null, IEnumerable<int> Comics = null, IEnumerable<int> Series = null, IEnumerable<int> Events = null, IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetStories object")]
+        public IEnumerable<Story> GetStories(DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Series = null, IEnumerable<int> Events = null,
+            IEnumerable<int> Creators = null, IEnumerable<int> Characters = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetStories(new GetStories
+            {
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Series = Series,
+                Events = Events,
+                Creators = Creators,
+                Characters = Characters,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Story> GetStories(GetStories model)
         {
@@ -488,36 +937,119 @@ namespace MarvelAPI
             return Stories.GetStory(StoryId);
         }
 
-        public IEnumerable<Character> GetCharactersForStory(int StoryId, string Name = null, string NameStartsWith = null, DateTime? ModifiedSince = null, IEnumerable<int> Comics = null, IEnumerable<int> Series = null, IEnumerable<int> Events = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetCharactersForStory object")]
+        public IEnumerable<Character> GetCharactersForStory(int StoryId, string Name = null, string NameStartsWith = null,
+            DateTime? ModifiedSince = null,
+            IEnumerable<int> Comics = null, IEnumerable<int> Series = null, IEnumerable<int> Events = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetCharactersForStory(new GetCharactersForStory
+            {
+                StoryId = StoryId,
+                Name = Name,
+                NameStartsWith = NameStartsWith,
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Series = Series,
+                Events = Events,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Character> GetCharactersForStory(GetCharactersForStory model)
         {
             return Stories.GetCharactersForStory(model);
         }
 
-        public IEnumerable<Comic> GetComicsForStory(int StoryId, ComicFormat? Format = null, ComicFormatType? FormatType = null, bool? NoVariants = null, DateDescriptor? DateDescript = null, DateTime? DateRangeBegin = null, DateTime? DateRangeEnd = null, bool? HasDigitalIssue = null, DateTime? ModifiedSince = null, IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, IEnumerable<int> Series = null, IEnumerable<int> Events = null, IEnumerable<int> SharedAppearances = null, IEnumerable<int> Collaborators = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetComicsForStory object")]
+        public IEnumerable<Comic> GetComicsForStory(int StoryId, ComicFormat? Format = null, ComicFormatType? FormatType = null,
+            bool? NoVariants = null, DateDescriptor? DateDescript = null, DateTime? DateRangeBegin = null, DateTime? DateRangeEnd = null,
+            bool? HasDigitalIssue = null, DateTime? ModifiedSince = null,
+            IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, IEnumerable<int> Series = null,
+            IEnumerable<int> Events = null,
+            IEnumerable<int> SharedAppearances = null, IEnumerable<int> Collaborators = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetComicsForStory(new GetComicsForStory
+            {
+                StoryId = StoryId,
+                Format = Format,
+                FormatType = FormatType,
+                NoVariants = NoVariants,
+                DateDescript = DateDescript,
+                DateRangeBegin = DateRangeBegin,
+                DateRangeEnd = DateRangeEnd,
+                HasDigitalIssue = HasDigitalIssue,
+                ModifiedSince = ModifiedSince,
+                Creators = Creators,
+                Characters = Characters,
+                Series = Series,
+                Events = Events,
+                SharedAppearances = SharedAppearances,
+                Collaborators = Collaborators,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Comic> GetComicsForStory(GetComicsForStory model)
         {
             return Stories.GetComicsForStory(model);
         }
 
-        public IEnumerable<Creator> GetCreatorsForStory(int StoryId, string FirstName = null, string MiddleName = null, string LastName = null, string Suffix = null, string NameStartsWith = null, string FirstNameStartsWith = null, string MiddleNameStartsWith = null, string LastNameStartsWith = null, DateTime? ModifiedSince = null, IEnumerable<int> Comics = null, IEnumerable<int> Series = null, IEnumerable<int> Events = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetCreatorsForStory object")]
+        public IEnumerable<Creator> GetCreatorsForStory(int StoryId,
+            string FirstName = null, string MiddleName = null, string LastName = null, string Suffix = null,
+            string NameStartsWith = null, string FirstNameStartsWith = null, string MiddleNameStartsWith = null, string LastNameStartsWith = null,
+            DateTime? ModifiedSince = null, IEnumerable<int> Comics = null, IEnumerable<int> Series = null, IEnumerable<int> Events = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetCreatorsForStory(new GetCreatorsForStory
+            {
+                StoryId = StoryId,
+                FirstName = FirstName,
+                MiddleName = MiddleName,
+                LastName = LastName,
+                Suffix = Suffix,
+                NameStartsWith = NameStartsWith,
+                FirstNameStartsWith = FirstNameStartsWith,
+                MiddleNameStartsWith = MiddleNameStartsWith,
+                LastNameStartsWith = LastNameStartsWith,
+                ModifiedSince = ModifiedSince,
+                Comics = Comics,
+                Series = Series,
+                Events = Events,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Creator> GetCreatorsForStory(GetCreatorsForStory model)
         {
             return Stories.GetCreatorsForStory(model);
         }
 
-        public IEnumerable<Event> GetEventsForStories(int StoryId, string Name = null, string NameStartsWith = null, DateTime? ModifiedSince = null, IEnumerable<int> Creators = null, IEnumerable<int> Characters = null, IEnumerable<int> Series = null, IEnumerable<int> Comics = null, IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
+        [Obsolete("Use method with GetEventsForStory object")]
+        public IEnumerable<Event> GetEventsForStories(int StoryId, string Name = null, string NameStartsWith = null,
+            DateTime? ModifiedSince = null, IEnumerable<int> Creators = null, IEnumerable<int> Characters = null,
+            IEnumerable<int> Series = null, IEnumerable<int> Comics = null,
+            IEnumerable<OrderBy> Order = null, int? Limit = null, int? Offset = null)
         {
-            throw new NotImplementedException();
+            return GetEventsForStory(new GetEventsForStory
+            {
+                StoryId = StoryId,
+                Name = Name,
+                NameStartsWith = NameStartsWith,
+                ModifiedSince = ModifiedSince,
+                Creators = Creators,
+                Characters = Characters,
+                Series = Series,
+                Comics = Comics,
+                Order = Order,
+                Limit = Limit,
+                Offset = Offset
+            });
         }
         public IEnumerable<Event> GetEventsForStory(GetEventsForStory model)
         {

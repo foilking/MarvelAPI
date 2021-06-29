@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>MarvelAPI</id>
-    <version>0.1.2.2</version>
+    <version>0.1.3.0</version>
     <title>MarvelAPI</title>
     <authors>Foilking</authors>
     <owners>Foilking</owners>
@@ -12,6 +12,6 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>RestSharp wrapper for Marvel's API.</description>
     <releaseNotes>Fixed issues with resource URL naming conventions.</releaseNotes>
-    <copyright>Copyright © 2014</copyright>
+    <copyright>Copyright © 2021</copyright>
   </metadata>
 </package>
