@@ -2,16 +2,23 @@
 <package >
   <metadata>
     <id>MarvelAPI</id>
-    <version>0.1.2.2</version>
+    <version>0.1.3.0</version>
     <title>MarvelAPI</title>
     <authors>Foilking</authors>
     <owners>Foilking</owners>
-    <licenseUrl>https://github.com/foilking/MarvelAPI/blob/master/license.txt</licenseUrl>
+    <license type="expression">MIT</license>
     <projectUrl>https://foilking.github.io/MarvelAPI/</projectUrl>
-    <iconUrl>https://foilking.github.io/assets/img/marvel-icon.gif</iconUrl>
+    <icon>images\icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>RestSharp wrapper for Marvel's API.</description>
     <releaseNotes>Fixed issues with resource URL naming conventions.</releaseNotes>
-    <copyright>Copyright © 2014</copyright>
+    <copyright>Copyright © 2021</copyright>
   </metadata>
+  <dependencies>
+    <dependency id="Newtonsoft.Json" version="6.0.1" />
+    <dependency id="RestSharp" version="104.4.0" />
+  </dependencies>
+  <files>
+    <file src="..\icon.png" target="images\" />
+  </files>
 </package>
