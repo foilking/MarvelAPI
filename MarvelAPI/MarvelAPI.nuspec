@@ -6,9 +6,9 @@
     <title>MarvelAPI</title>
     <authors>Foilking</authors>
     <owners>Foilking</owners>
-    <licenseUrl>https://github.com/foilking/MarvelAPI/blob/master/license.txt</licenseUrl>
+    <license type="expression">MIT</license>
     <projectUrl>https://foilking.github.io/MarvelAPI/</projectUrl>
-    <iconUrl>https://foilking.github.io/assets/img/marvel-icon.gif</iconUrl>
+    <icon>https://foilking.github.io/assets/img/marvel-icon.gif</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>RestSharp wrapper for Marvel's API.</description>
     <releaseNotes>Fixed issues with resource URL naming conventions.</releaseNotes>
