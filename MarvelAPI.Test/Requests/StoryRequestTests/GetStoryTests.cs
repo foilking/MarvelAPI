@@ -1,18 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+﻿using Moq;
 using RestSharp;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 
 namespace MarvelAPI.Test.Requests.StoryRequestTests
 {
-    [TestClass]
     public class GetStoryTests : StoryRequestTestBase
     {
-        [TestMethod]
+        [Fact]
         public void Success()
         {
             // arrange

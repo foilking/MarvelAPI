@@ -1,10 +1,9 @@
 ﻿using Moq;
-using MSTestExtensions;
 using RestSharp;
 
 namespace MarvelAPI.Test.Requests.CreatorRequestTests
 {
-    public class CreatorRequestTestBase : BaseTest
+    public class CreatorRequestTestBase
     {
         public string PublicApiKey { get; set; }
         public string PrivateApiKey { get; set; }

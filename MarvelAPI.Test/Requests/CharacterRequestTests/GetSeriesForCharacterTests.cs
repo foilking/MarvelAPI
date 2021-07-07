@@ -1,17 +1,16 @@
 ﻿using MarvelAPI.Parameters;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using MSTestExtensions;
 using RestSharp;
 using System.Collections.Generic;
 using System.Linq;
+using Xunit;
 
 namespace MarvelAPI.Test.Requests.CharacterRequestTests
 {
-    [TestClass]
+
     public class GetSeriesForCharacterTests : CharacterRequestTestBase
     {
-        [TestMethod]
+        [Fact]
         public void Success()
         {
             // arrange
@@ -40,7 +39,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(seriesList.Count, comics.Count());
+            Assert.Equal(seriesList.Count, comics.Count());
             RestClientMock.VerifyAll();
         }
     }

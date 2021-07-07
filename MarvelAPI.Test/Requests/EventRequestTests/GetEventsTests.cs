@@ -1,15 +1,14 @@
 ﻿using MarvelAPI.Parameters;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using RestSharp;
 using System.Collections.Generic;
+using Xunit;
 
 namespace MarvelAPI.Test.Requests.EventRequestTests
 {
-    [TestClass]
     public class GetEventsTests : EventRequestTestBase
     {
-        [TestMethod]
+        [Fact]
         public void Success()
         {
             // arrange

@@ -1,15 +1,9 @@
 ﻿using Moq;
-using MSTestExtensions;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarvelAPI.Test.Requests.ComicsRequestTests
 {
-    public class ComicRequestTestBase : BaseTest
+    public class ComicRequestTestBase
     {
         public string PublicApiKey { get; set; }
         public string PrivateApiKey { get; set; }

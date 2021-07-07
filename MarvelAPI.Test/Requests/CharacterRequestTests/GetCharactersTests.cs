@@ -1,20 +1,18 @@
 ﻿using MarvelAPI.Parameters;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using MSTestExtensions;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace MarvelAPI.Test.Requests.CharacterRequestTests
 {
-    [TestClass]
     public class GetCharactersTests : CharacterRequestTestBase
     {
-        [TestMethod]
+        [Fact]
         public void Success()
         {
             // arrange
@@ -45,11 +43,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(characterList.Count, characters.Count());
+            Assert.Equal(characterList.Count, characters.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void Name_Search()
         {
             // arrange
@@ -85,11 +83,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(characterList.Count, characters.Count());
+            Assert.Equal(characterList.Count, characters.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void NameStartsWith_Search()
         {
             // arrange
@@ -125,11 +123,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(characterList.Count, characters.Count());
+            Assert.Equal(characterList.Count, characters.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void ModifiedSince_Search()
         {
             // arrange
@@ -165,11 +163,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(characterList.Count, characters.Count());
+            Assert.Equal(characterList.Count, characters.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void Comics_Search()
         {
             // arrange
@@ -205,11 +203,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(characterList.Count, characters.Count());
+            Assert.Equal(characterList.Count, characters.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void Series_Search()
         {
             // arrange
@@ -245,11 +243,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(characterList.Count, characters.Count());
+            Assert.Equal(characterList.Count, characters.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void Events_Search()
         {
             // arrange
@@ -285,11 +283,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(characterList.Count, characters.Count());
+            Assert.Equal(characterList.Count, characters.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void Stories_Search()
         {
             // arrange
@@ -325,11 +323,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(characterList.Count, characters.Count());
+            Assert.Equal(characterList.Count, characters.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void OrderBy_Single()
         {
             // arrange
@@ -365,11 +363,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(characterList.Count, characters.Count());
+            Assert.Equal(characterList.Count, characters.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void OrderBy_ExcludeNonAvailable()
         {
             // arrange
@@ -406,11 +404,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(characterList.Count, characters.Count());
+            Assert.Equal(characterList.Count, characters.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void Limit_Search()
         {
             // arrange
@@ -446,11 +444,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(characterList.Count, characters.Count());
+            Assert.Equal(characterList.Count, characters.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void Offset_Search()
         {
             // arrange
@@ -486,7 +484,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(characterList.Count, characters.Count());
+            Assert.Equal(characterList.Count, characters.Count());
             RestClientMock.VerifyAll();
         }
     }

@@ -1,18 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+﻿using Moq;
 using RestSharp;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 
 namespace MarvelAPI.Test.Requests.BaseRequestTests
 {
-    [TestClass]
     public class CreateRequestTests
     {
-        [TestMethod]
+        [Fact]
         public void Success()
         {
             // arrange
@@ -26,23 +21,23 @@ namespace MarvelAPI.Test.Requests.BaseRequestTests
             var restRequest = baseRequest.CreateRequest(requestUrl);
 
             // assert
-            Assert.AreEqual(requestUrl, restRequest.Resource);
+            Assert.Equal(requestUrl, restRequest.Resource);
 
             var parameters = restRequest.Parameters;
-            Assert.IsNotNull(parameters.FirstOrDefault(p => p.Name == "ts"));
+            Assert.NotNull(parameters.FirstOrDefault(p => p.Name == "ts"));
 
             var apikeyParameter = parameters.FirstOrDefault(p => p.Name == "apikey");
-            Assert.IsNotNull(apikeyParameter);
-            Assert.AreEqual(publicApiKey, apikeyParameter.Value.ToString());
+            Assert.NotNull(apikeyParameter);
+            Assert.Equal(publicApiKey, apikeyParameter.Value.ToString());
 
-            Assert.IsNotNull(parameters.FirstOrDefault(p => p.Name == "hash"));
+            Assert.NotNull(parameters.FirstOrDefault(p => p.Name == "hash"));
 
             var acceptParameter = parameters.FirstOrDefault(p => p.Name == "Accept");
-            Assert.IsNotNull(acceptParameter);
-            Assert.AreEqual("*/*", acceptParameter.Value.ToString());
+            Assert.NotNull(acceptParameter);
+            Assert.Equal("*/*", acceptParameter.Value.ToString());
         }
 
-        [TestMethod]
+        [Fact]
         public void GZip_Success()
         {
             // arrange
@@ -56,20 +51,20 @@ namespace MarvelAPI.Test.Requests.BaseRequestTests
             var restRequest = baseRequest.CreateRequest(requestUrl);
 
             // assert
-            Assert.AreEqual(requestUrl, restRequest.Resource);
+            Assert.Equal(requestUrl, restRequest.Resource);
 
             var parameters = restRequest.Parameters;
-            Assert.IsNotNull(parameters.FirstOrDefault(p => p.Name == "ts"));
+            Assert.NotNull(parameters.FirstOrDefault(p => p.Name == "ts"));
 
             var apikeyParameter = parameters.FirstOrDefault(p => p.Name == "apikey");
-            Assert.IsNotNull(apikeyParameter);
-            Assert.AreEqual(publicApiKey, apikeyParameter.Value.ToString());
+            Assert.NotNull(apikeyParameter);
+            Assert.Equal(publicApiKey, apikeyParameter.Value.ToString());
 
-            Assert.IsNotNull(parameters.FirstOrDefault(p => p.Name == "hash"));
+            Assert.NotNull(parameters.FirstOrDefault(p => p.Name == "hash"));
 
             var acceptParameter = parameters.FirstOrDefault(p => p.Name == "Accept-Encoded");
-            Assert.IsNotNull(acceptParameter);
-            Assert.AreEqual("gzip", acceptParameter.Value.ToString());
+            Assert.NotNull(acceptParameter);
+            Assert.Equal("gzip", acceptParameter.Value.ToString());
         }
     }
 }
