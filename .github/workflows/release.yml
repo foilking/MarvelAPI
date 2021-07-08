@@ -1,0 +1,24 @@
+name: Upload package to Nuget
+on:
+  release:
+    types: [created]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+          source-url: https://nuget.pkg.github.com/foilking/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.NUGET_TOKEN}}
+      - run: dotnet build --configuration Release MarvelAPI
+      - name: Create the package
+        run: dotnet pack --configuration Release MarvelAPI
+      - name: Publish the package to GPR
+        run: dotnet nuget push MarvelAPI/bin/Release/*.nupkg
