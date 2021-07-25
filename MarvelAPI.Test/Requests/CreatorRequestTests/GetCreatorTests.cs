@@ -1,15 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+﻿using Moq;
 using RestSharp;
 using System.Collections.Generic;
+using Xunit;
 
 namespace MarvelAPI.Test.Requests.CreatorRequestTests
 {
-    [TestClass]
     public class GetCreatorTests : CreatorRequestTestBase
     {
-
-        [TestMethod]
+        [Fact]
         public void Success()
         {
             // Arrange

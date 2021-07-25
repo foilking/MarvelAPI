@@ -1,17 +1,15 @@
 ﻿using MarvelAPI.Parameters;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using MSTestExtensions;
 using RestSharp;
 using System.Collections.Generic;
 using System.Linq;
+using Xunit;
 
 namespace MarvelAPI.Test.Requests.EventRequestTests
 {
-    [TestClass]
     public class GetCreatorsForEventTests : EventRequestTestBase
     {
-        [TestMethod]
+        [Fact]
         public void Success()
         {
             // arrange
@@ -43,7 +41,7 @@ namespace MarvelAPI.Test.Requests.EventRequestTests
             });
 
             // assert
-            Assert.AreEqual(creatorList.Count, results.Count());
+            Assert.Equal(creatorList.Count, results.Count());
             RestClientMock.VerifyAll();
         }
     }

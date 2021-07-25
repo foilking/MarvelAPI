@@ -1,20 +1,16 @@
 ﻿using MarvelAPI.Parameters;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using MSTestExtensions;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 
 namespace MarvelAPI.Test.Requests.CharacterRequestTests
 {
-    [TestClass]
     public class GetComicsForCharacterTests : CharacterRequestTestBase
     {
-        [TestMethod]
+        [Fact]
         public void Success()
         {
             // arrange
@@ -43,11 +39,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(comicList.Count, comics.Count());
+            Assert.Equal(comicList.Count, comics.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void Format_Filter()
         {
             // arrange
@@ -81,11 +77,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(comicList.Count, comics.Count());
+            Assert.Equal(comicList.Count, comics.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void FormatType_Filter()
         {
             // arrange
@@ -119,11 +115,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(comicList.Count, comics.Count());
+            Assert.Equal(comicList.Count, comics.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void NoVariant_Filter()
         {
             // arrange
@@ -157,11 +153,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(comicList.Count, comics.Count());
+            Assert.Equal(comicList.Count, comics.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void DateDescriptor_Filter()
         {
             // arrange
@@ -195,11 +191,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(comicList.Count, comics.Count());
+            Assert.Equal(comicList.Count, comics.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void DateRange_Filter()
         {
             // arrange
@@ -236,11 +232,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(comicList.Count, comics.Count());
+            Assert.Equal(comicList.Count, comics.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void DateRange_Invalid()
         {
             // arrange
@@ -277,7 +273,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             }));
         }
 
-        [TestMethod]
+        [Fact]
         public void DateRange_MissingOne()
         {
             // arrange
@@ -313,7 +309,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             }));
         }
 
-        [TestMethod]
+        [Fact]
         public void HasDigitalIssue_Filter()
         {
             // arrange
@@ -347,11 +343,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(comicList.Count, comics.Count());
+            Assert.Equal(comicList.Count, comics.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void ModifiedSince_Filter()
         {
             // arrange
@@ -386,11 +382,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(comicList.Count, comics.Count());
+            Assert.Equal(comicList.Count, comics.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void Series_Filter()
         {
             // arrange
@@ -427,11 +423,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(comicList.Count, comics.Count());
+            Assert.Equal(comicList.Count, comics.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void Limit_Filter()
         {
             // arrange
@@ -465,11 +461,11 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(comicList.Count, comics.Count());
+            Assert.Equal(comicList.Count, comics.Count());
             RestClientMock.VerifyAll();
         }
 
-        [TestMethod]
+        [Fact]
         public void Offset_Filter()
         {
             // arrange
@@ -503,7 +499,7 @@ namespace MarvelAPI.Test.Requests.CharacterRequestTests
             });
 
             // assert
-            Assert.AreEqual(comicList.Count, comics.Count());
+            Assert.Equal(comicList.Count, comics.Count());
             RestClientMock.VerifyAll();
         }
     }

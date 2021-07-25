@@ -1,18 +1,16 @@
 ﻿using MarvelAPI.Exceptions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using MSTestExtensions;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Security.Authentication;
+using Xunit;
 
 namespace MarvelAPI.Test.Requests.BaseRequestTests
 {
-    [TestClass]
-    public class HandleResponseErrorsTests : BaseTest
+    public class HandleResponseErrorsTests
     {
-        [TestMethod]
+        [Fact]
         public void NonError_409()
         {
             // arrange
@@ -32,10 +30,11 @@ namespace MarvelAPI.Test.Requests.BaseRequestTests
             };
 
             // assert
-            Assert.Throws<ArgumentException>(() => baseRequest.HandleResponseErrors(response), message);
+            var error = Assert.Throws<ArgumentException>(() => baseRequest.HandleResponseErrors(response));
+            Assert.Equal(message, error.Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void Error_404()
         {
             // arrange
@@ -56,10 +55,11 @@ namespace MarvelAPI.Test.Requests.BaseRequestTests
             };
 
             // assert
-            Assert.Throws<NotFoundException>(() => baseRequest.HandleResponseErrors(response), message);
+            var error = Assert.Throws<NotFoundException>(() => baseRequest.HandleResponseErrors(response));
+            Assert.Equal(message, error.Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void Error_401()
         {
             // arrange
@@ -81,10 +81,11 @@ namespace MarvelAPI.Test.Requests.BaseRequestTests
             };
 
             // assert
-            Assert.Throws<InvalidCredentialException>(() => baseRequest.HandleResponseErrors(response), message);
+            var error = Assert.Throws<InvalidCredentialException>(() => baseRequest.HandleResponseErrors(response));
+            Assert.Equal(message, error.Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void Error_429()
         {
             // arrange
@@ -106,7 +107,8 @@ namespace MarvelAPI.Test.Requests.BaseRequestTests
             };
 
             // assert
-            Assert.Throws<LimitExceededException>(() => baseRequest.HandleResponseErrors(response), message);
+            var error = Assert.Throws<LimitExceededException>(() => baseRequest.HandleResponseErrors(response));
+            Assert.Equal(message, error.Message);
         }
     }
 }

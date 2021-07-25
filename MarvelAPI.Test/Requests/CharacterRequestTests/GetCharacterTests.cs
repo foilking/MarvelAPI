@@ -1,18 +1,13 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using System.Globalization;
-using Moq;
+﻿using Moq;
 using RestSharp;
+using System.Collections.Generic;
+using Xunit;
 
 namespace MarvelAPI.Test.Requests.CharacterRequestTests
 {
-    [TestClass]
     public class GetCharacterTests : CharacterRequestTestBase
     {
-        [TestMethod]
+        [Fact]
         public void Success()
         {
             // Arrange

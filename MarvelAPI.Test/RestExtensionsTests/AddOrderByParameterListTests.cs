@@ -1,14 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RestSharp;
+﻿using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 
 namespace MarvelAPI.Test.RestExtensionsTests
 {
-    [TestClass]
     public class AddOrderByParameterListTests
     {
         private IEnumerable<OrderBy> ValidOrderBy;
@@ -25,7 +22,7 @@ namespace MarvelAPI.Test.RestExtensionsTests
             AllOrderByOptions = ((OrderBy[])Enum.GetValues(typeof(OrderBy))).ToList();
         }
 
-        [TestMethod]
+        [Fact]
         public void AnyAvailableParameters()
         {
             // arrange
@@ -38,12 +35,12 @@ namespace MarvelAPI.Test.RestExtensionsTests
 
             // assert
             var orderByParameter = request.Parameters.FirstOrDefault(p => p.Name == "orderBy");
-            Assert.IsNotNull(orderByParameter);
+            Assert.NotNull(orderByParameter);
             var orderByValues = orderByParameter.Value.ToString();
-            Assert.AreEqual(validOrderByString, orderByValues);
+            Assert.Equal(validOrderByString, orderByValues);
         }
 
-        [TestMethod]
+        [Fact]
         public void NoAvailableParameters()
         {
             // arrange
@@ -56,7 +53,7 @@ namespace MarvelAPI.Test.RestExtensionsTests
 
             // assert
             var orderByParameter = request.Parameters.FirstOrDefault(p => p.Name == "orderBy");
-            Assert.IsNull(orderByParameter);
+            Assert.Null(orderByParameter);
         }
     }
 }

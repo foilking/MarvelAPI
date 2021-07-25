@@ -1,181 +1,28 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DC08D7E5-7F94-4A2C-8EF3-222EACF31CA7}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MarvelAPI.Test</RootNamespace>
-    <AssemblyName>MarvelAPI.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>net5.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="ApprovalTests">
-      <HintPath>..\packages\ApprovalTests.3.0.5\lib\net40\ApprovalTests.dll</HintPath>
-    </Reference>
-    <Reference Include="ApprovalUtilities">
-      <HintPath>..\packages\ApprovalUtilities.3.0.5\lib\net35\ApprovalUtilities.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.4.4.0\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Moq, Version=4.16.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\packages\Moq.4.16.1\lib\net45\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="MSTestExtensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MSTestExtensions.4.0.0\lib\MSTestExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="RestSharp" Version="106.12.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="3.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
-  <Choose>
-    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
+
   <ItemGroup>
-    <Compile Include="MarvelTests\GetCharactersTests.cs" />
-    <Compile Include="MarvelTests\MarvelTestBase.cs" />
-    <Compile Include="Requests\BaseRequestTests\CreateRequestTests.cs" />
-    <Compile Include="Requests\CharacterRequestTests\CharacterRequestTestBase.cs" />
-    <Compile Include="Requests\CharacterRequestTests\GetCharactersTests.cs" />
-    <Compile Include="Requests\CharacterRequestTests\GetCharacterTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Requests\BaseRequestTests\HandleResponseErrorsTests.cs" />
-    <Compile Include="Requests\CharacterRequestTests\GetComicsForCharacterTests.cs" />
-    <Compile Include="Requests\CharacterRequestTests\GetEventsForCharacterTests.cs" />
-    <Compile Include="Requests\CharacterRequestTests\GetSeriesForCharacterTests.cs" />
-    <Compile Include="Requests\CharacterRequestTests\GetStoriesForCharacterTests.cs" />
-    <Compile Include="Requests\ComicsRequestTests\ComicRequestTestBase.cs" />
-    <Compile Include="Requests\ComicsRequestTests\GetCharactersForComicTests.cs" />
-    <Compile Include="Requests\ComicsRequestTests\GetComicsTests.cs" />
-    <Compile Include="Requests\ComicsRequestTests\GetComicTests.cs" />
-    <Compile Include="Requests\ComicsRequestTests\GetCreatorsForComicTests.cs" />
-    <Compile Include="Requests\ComicsRequestTests\GetEventsForComicTests.cs" />
-    <Compile Include="Requests\ComicsRequestTests\GetStoriesForComicTests.cs" />
-    <Compile Include="Requests\CreatorRequestTests\CreatorRequestTestBase.cs" />
-    <Compile Include="Requests\CreatorRequestTests\GetComicsForCreatorTests.cs" />
-    <Compile Include="Requests\CreatorRequestTests\GetCreatorsTests.cs" />
-    <Compile Include="Requests\CreatorRequestTests\GetCreatorTests.cs" />
-    <Compile Include="Requests\CreatorRequestTests\GetEventsForCreatorTests.cs" />
-    <Compile Include="Requests\CreatorRequestTests\GetSeriesForCreatorTests.cs" />
-    <Compile Include="Requests\CreatorRequestTests\GetStoriesForCreatorTests.cs" />
-    <Compile Include="Requests\EventRequestTests\EventRequestTestBase.cs" />
-    <Compile Include="Requests\EventRequestTests\GetCharactersForEventTests.cs" />
-    <Compile Include="Requests\EventRequestTests\GetComicsForEventTests.cs" />
-    <Compile Include="Requests\EventRequestTests\GetCreatorsForEventTests.cs" />
-    <Compile Include="Requests\EventRequestTests\GetEventsTests.cs" />
-    <Compile Include="Requests\EventRequestTests\GetEventTests.cs" />
-    <Compile Include="Requests\EventRequestTests\GetSeriesForEventTests.cs" />
-    <Compile Include="Requests\EventRequestTests\GetStoriesForEventTests.cs" />
-    <Compile Include="Requests\SeriesRequestTests\GetCharactersForSeriesTests.cs" />
-    <Compile Include="Requests\SeriesRequestTests\GetComicsForSeriesTests.cs" />
-    <Compile Include="Requests\SeriesRequestTests\GetCreatorsForSeriesTests.cs" />
-    <Compile Include="Requests\SeriesRequestTests\GetEventsForSeriesTests.cs" />
-    <Compile Include="Requests\SeriesRequestTests\GetSeriesTests.cs" />
-    <Compile Include="Requests\SeriesRequestTests\GetSingleSeriesTest.cs" />
-    <Compile Include="Requests\SeriesRequestTests\GetStoriesForSeriesTests.cs" />
-    <Compile Include="Requests\SeriesRequestTests\SeriesRequestTestBase.cs" />
-    <Compile Include="Requests\StoryRequestTests\GetCharactersForStoryTests.cs" />
-    <Compile Include="Requests\StoryRequestTests\GetComicsForStoryTests.cs" />
-    <Compile Include="Requests\StoryRequestTests\GetCreatorsForStoryTests.cs" />
-    <Compile Include="Requests\StoryRequestTests\GetEventsForStoriesTests.cs" />
-    <Compile Include="Requests\StoryRequestTests\GetSeriesForStoryTests.cs" />
-    <Compile Include="Requests\StoryRequestTests\GetStoriesTests.cs" />
-    <Compile Include="Requests\StoryRequestTests\GetStoryTests.cs" />
-    <Compile Include="Requests\StoryRequestTests\StoryRequestTestBase.cs" />
-    <Compile Include="RestExtensionsTests\AddOrderByParameterListTests.cs" />
+    <ProjectReference Include="..\MarvelAPI\MarvelAPI.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MarvelAPI\MarvelAPI.csproj">
-      <Project>{c1e16dbb-372a-4b2c-9c35-0d9c5aedc5a7}</Project>
-      <Name>MarvelAPI</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Choose>
-    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Import Project="..\packages\OpenCover.4.7.1204\build\OpenCover.targets" Condition="Exists('..\packages\OpenCover.4.7.1204\build\OpenCover.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\OpenCover.4.7.1204\build\OpenCover.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCover.4.7.1204\build\OpenCover.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
